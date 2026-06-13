@@ -1,0 +1,16 @@
+torch>=2.2
+torchaudio>=2.2
+transformers>=4.44
+accelerate>=0.33
+peft>=0.12
+datasets>=2.20
+evaluate>=0.4
+jiwer>=3.0
+soundfile>=0.12
+librosa>=0.10
+numpy>=1.24
+pandas>=2.0
+PyYAML>=6.0
+tqdm>=4.66
+regex>=2024.5
+unidecode>=1.3

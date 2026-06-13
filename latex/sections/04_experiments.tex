@@ -1,0 +1,12 @@
+\section{Experiments}
+\subsection{Datasets}
+Report train/dev/test hours, speakers, utterances, average duration, and license. Separate clean train data from noisy evaluation data.
+
+\subsection{Baselines}
+Compare Whisper zero-shot, PhoWhisper zero-shot, clean LoRA, noisy LoRA, tone-aware LoRA, and enhancement plus best ASR.
+
+\subsection{Hardware and Training}
+Local debugging uses RTX 4060 8GB and 16GB RAM. Main local training uses PhoWhisper-base, FP16, gradient checkpointing, batch size 1, gradient accumulation, max audio length 15 seconds, and LoRA rank 8. PhoWhisper-small is reserved for cloud or short ablations.
+
+\subsection{Metrics}
+Report WER, CER, syllable error rate, tone error rate, diacritic error rate, final consonant error rate, short-word deletion rate, and number/name error rate.

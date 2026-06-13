@@ -1,0 +1,44 @@
+# Python / editor cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# Local environments
+.venv/
+venv/
+env/
+*.env
+
+# Datasets and generated audio are intentionally not committed.
+data/
+
+# Generated experiment artifacts
+outputs/
+experiments/
+runs/
+wandb/
+tensorboard/
+
+# Model checkpoints / large binaries
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.onnx
+
+# Audio archives and generated media
+*.wav
+*.flac
+*.mp3
+*.tar
+*.tar.gz
+*.zip
+
+# OS / Office temporary files
+Thumbs.db
+.DS_Store
+~$*

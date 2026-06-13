@@ -1,0 +1,12 @@
+\section{Introduction}
+Vietnamese is a tonal language, so ASR mistakes involving tone marks and diacritics may change lexical meaning even when the base character sequence is partially correct. Recent pretrained ASR models such as Whisper and PhoWhisper provide strong baselines, but their robustness under realistic Vietnamese noise and their tone-specific error behavior remain insufficiently understood.
+
+\textbf{Research question.} Does explicit tone supervision during parameter-efficient fine-tuning improve Vietnamese ASR robustness under controlled real-world noise?
+
+\textbf{Contributions.}
+\begin{itemize}
+    \item A reproducible noisy Vietnamese ASR benchmark protocol with fixed noise types, SNR levels, and manifest release.
+    \item A compute-aware LoRA adaptation framework for PhoWhisper with decoder-side tone supervision.
+    \item Vietnamese-specific evaluation metrics for tone, diacritic, final consonant, and short-word errors.
+    \item An analysis of whether speech enhancement improves WER/CER while harming or preserving tone-related metrics.
+\end{itemize}

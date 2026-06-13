@@ -1,0 +1,41 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage[utf8]{inputenc}
+\usepackage[T5]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\title{Tone-Aware Multi-Task Fine-Tuning for Noise-Robust Vietnamese Automatic Speech Recognition}
+
+\author{%
+\IEEEauthorblockN{Author 1, Author 2, Author 3, Author 4}
+\IEEEauthorblockA{FPT University, Ho Chi Minh City, Vietnam\\
+Email: \{...
+\}@fpt.edu.vn}
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Vietnamese automatic speech recognition remains difficult under real-world noise because lexical tone and diacritics are vulnerable to acoustic degradation. This paper investigates whether decoder-side tone supervision improves noise robustness when adapting Whisper/PhoWhisper with parameter-efficient LoRA fine-tuning. We construct a reproducible noisy Vietnamese ASR benchmark by mixing clean speech with public noise sources at controlled SNR levels, and evaluate standard WER/CER together with Vietnamese-specific tone, diacritic, final-consonant, and short-word deletion metrics. Experiments compare zero-shot Whisper/PhoWhisper, clean LoRA, noisy LoRA, tone-aware multi-task LoRA, and enhancement-based preprocessing. Results show ...
+\end{abstract}
+
+\begin{IEEEkeywords}
+Vietnamese ASR, Whisper, PhoWhisper, LoRA, tonal languages, noise robustness, multi-task learning.
+\end{IEEEkeywords}
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_method}
+\input{sections/04_experiments}
+\input{sections/05_results}
+\input{sections/06_conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+\end{document}

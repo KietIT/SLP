@@ -1,0 +1,24 @@
+\section{Method}
+\subsection{Noisy Benchmark Construction}
+Let $x$ denote clean speech and $n$ denote a sampled noise segment. For target SNR $s$, the noisy signal is
+\begin{equation}
+    \tilde{x} = x + \alpha n, \quad
+    \alpha = \sqrt{\frac{P_x}{10^{s/10} P_n}},
+\end{equation}
+where $P_x$ and $P_n$ are average signal powers.
+
+\subsection{Tone Label Extraction}
+Vietnamese syllables are mapped to six tone classes: ngang, sắc, huyền, hỏi, ngã, nặng. Tokens with digits, foreign words, acronyms, or ambiguous normalization are masked with $m_i=0$.
+
+\subsection{Tone-Aware Multi-Task Objective}
+The ASR model is optimized with
+\begin{equation}
+    \mathcal{L}=\mathcal{L}_{ASR}+\lambda \mathcal{L}_{tone},
+\end{equation}
+where
+\begin{equation}
+    \mathcal{L}_{tone}= -\frac{1}{N_{valid}} \sum_i m_i \sum_c y_{i,c}\log \hat{y}_{i,c}.
+\end{equation}
+
+\subsection{Token--Syllable Alignment}
+Because Whisper uses subword tokens, we assign each syllable-level tone target to either all subtokens or the final subtoken of the syllable, and mask special tokens. Both policies are treated as ablations.
