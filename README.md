@@ -2,13 +2,19 @@
 
 This repository contains the code scaffold for a Vietnamese noisy-ASR project:
 controlled VIVOS + MUSAN benchmark construction, Whisper/PhoWhisper inference,
-WER/CER scoring, prototype Vietnamese tone/diacritic metrics, and a prepared
-LoRA + tone-aware multi-task learning training path.
+WER/CER scoring, Vietnamese diagnostic metrics, and a PhoWhisper LoRA +
+tone-aware multi-task learning training path.
 
-The current reported numbers are **baseline results only**. No fine-tuned model
-has been trained yet. The next recommended step is to fine-tune PhoWhisper with
-LoRA on the VIVOS manifests and compare ordinary noisy LoRA against the
-tone-aware MTL variant.
+The current midterm run compares three systems on the same clean and noisy
+VIVOS manifests:
+
+1. `openai/whisper-base` zero-shot
+2. `vinai/PhoWhisper-base` zero-shot
+3. `vinai/PhoWhisper-base` tone-aware LoRA trained on VIVOS with MUSAN noise
+   augmentation
+
+All reported results use six metrics: `WER`, `CER`, `TER`, `DER`, `FCER`, and
+`SWDR`.
 
 ## What is included
 
@@ -16,21 +22,25 @@ tone-aware MTL variant.
 configs/                 Training/evaluation config files
 docs/                    Midterm runbook and experiment notes
 latex/                   Paper skeleton
-notebooks/               Colab demo notebook
-scripts/                 Download, manifest, noise, inference, scoring scripts
+notebooks/               Result analysis notebook
+scripts/                 Manifest, noise, inference, scoring, pipeline scripts
 src/vitonesr/            Dataset, model, tone, noise, and metric utilities
 evaluate.py              Evaluation entrypoint scaffold
 train.py                 LoRA + tone-aware MTL training entrypoint
 requirements.txt         Python dependencies
 ```
 
-Large files are intentionally excluded from Git:
+Large generated files are intentionally excluded from Git by default:
 
 ```text
 data/                    Downloaded VIVOS/MUSAN and generated noisy audio
 outputs/                 Generated CSV/report/slide artifacts
 experiments/             Fine-tuned checkpoints and training outputs
 ```
+
+For coursework submission, keep `data/` out of Git. If the team wants to share
+the generated result CSVs/checkpoints, add selected `outputs/` and
+`experiments/` files explicitly.
 
 ## Dataset links
 
@@ -86,6 +96,10 @@ python scripts/make_vivos_manifest.py \
   --vivos_root data/raw/vivos \
   --out_dir data/manifests/vivos
 
+python scripts/make_noise_manifest.py \
+  --noise_root data/raw/musan/musan/noise \
+  --out data/manifests/noise/musan_noise.jsonl
+
 python scripts/make_noisy_test.py \
   --manifest data/manifests/vivos/test.jsonl \
   --noise_manifest data/manifests/noise/musan_noise.jsonl \
@@ -110,108 +124,85 @@ Dataset statistics from the current midterm run:
 | `data/manifests/vivos/test_noisy.jsonl` | 5 dB | 50 | 0.046 | 3.31 |
 | `data/manifests/vivos/test_noisy.jsonl` | 0 dB | 50 | 0.046 | 3.31 |
 
-## Current baseline inference
+## Full midterm pipeline
 
-The current baseline uses `openai/whisper-base` with Vietnamese decoding forced
-in `scripts/infer.py` via `language=vi` and `task=transcribe`.
+Run the complete experiment pipeline with the active Python environment:
 
-Clean subset:
-
-```bash
-python scripts/infer.py \
-  --manifest data/manifests/vivos/test.jsonl \
-  --model openai/whisper-base \
-  --out outputs/whisper_clean_forced.csv \
-  --limit 30 \
-  --language vi \
-  --task transcribe
-
-python scripts/score_predictions.py \
-  --pred outputs/whisper_clean_forced.csv \
-  --out outputs/metrics_whisper_clean_forced.csv
+```powershell
+conda activate slp
+python scripts/run_full_midterm_pipeline.py
 ```
 
-Noisy subset:
+The pipeline performs these steps:
 
-```bash
-python scripts/infer.py \
-  --manifest data/manifests/vivos/test_noisy.jsonl \
-  --model openai/whisper-base \
-  --out outputs/whisper_noisy_forced.csv \
-  --limit 120 \
-  --language vi \
-  --task transcribe
+1. Create VIVOS clean manifests.
+2. Create the MUSAN noise manifest.
+3. Create a fixed noisy VIVOS test set with SNR `20/10/5/0`.
+4. Run Whisper-base and PhoWhisper-base zero-shot inference on clean/noisy sets.
+5. Train PhoWhisper tone-aware LoRA with `configs/phowhisper_base_lora.yaml`.
+6. Evaluate the LoRA checkpoint on the same clean/noisy sets.
+7. Score all predictions with six metrics.
+8. Build the final comparison table.
 
-python scripts/score_predictions.py \
-  --pred outputs/whisper_noisy_forced.csv \
-  --out outputs/metrics_whisper_noisy_forced_by_snr.csv \
-  --group_by snr
-```
-
-### Baseline result table
-
-All values are error rates, so lower is better. These results are from a small
-midterm subset, not a final benchmark.
-
-| Condition | N | WER | CER | TER simple | DER simple |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Clean, forced VI | 30 | 43.06% | 19.61% | 23.13% | 12.22% |
-| Noisy all, forced VI | 120 | 47.95% | 23.55% | 25.98% | 10.82% |
-
-Noisy results by SNR:
-
-| SNR | N | WER | CER | TER simple | DER simple |
-| ---: | ---: | ---: | ---: | ---: | ---: |
-| 20 dB | 30 | 43.42% | 20.02% | 21.00% | 10.17% |
-| 10 dB | 30 | 49.82% | 24.02% | 25.62% | 9.62% |
-| 5 dB | 30 | 45.55% | 22.39% | 25.62% | 11.24% |
-| 0 dB | 30 | 53.02% | 27.78% | 31.67% | 12.41% |
-
-Before/after decoder control:
-
-| Set | Metric | Before | Forced VI | Delta |
-| --- | --- | ---: | ---: | ---: |
-| Clean | WER | 43.42% | 43.06% | -0.36 pp |
-| Clean | CER | 20.26% | 19.61% | -0.65 pp |
-| Noisy all | WER | 48.31% | 47.95% | -0.36 pp |
-| Noisy all | CER | 24.08% | 23.55% | -0.53 pp |
-
-Interpretation: forcing Vietnamese decoding removes occasional non-Vietnamese
-outputs, but the aggregate improvement is small. The main remaining issue is
-model adaptation, not just decoder configuration.
-
-## Fast midterm reproduction
-
-For a quick run with synthetic demo noise:
-
-```bash
-bash scripts/run_midterm_demo.sh
-```
-
-For real MUSAN noise:
-
-```bash
-USE_MUSAN=1 bash scripts/run_midterm_demo.sh
-```
-
-To change the baseline model:
-
-```bash
-MODEL=vinai/PhoWhisper-base USE_MUSAN=1 bash scripts/run_midterm_demo.sh
-```
-
-After running, inspect:
+Main outputs:
 
 ```text
-outputs/dataset_stats.csv
-outputs/*_clean.csv
-outputs/*_noisy.csv
-outputs/metrics_*_clean.csv
-outputs/metrics_*_noisy_by_snr.csv
-outputs/midterm_summary.md
+outputs/metrics_whisper_clean.csv
+outputs/metrics_whisper_noisy_by_snr.csv
+outputs/metrics_phowhisper_clean.csv
+outputs/metrics_phowhisper_noisy_by_snr.csv
+outputs/metrics_phowhisper_lora_clean.csv
+outputs/metrics_phowhisper_lora_noisy_by_snr.csv
+outputs/model_comparison_6metrics.csv
+notebooks/midterm_results_analysis.ipynb
 ```
 
-`outputs/` is ignored by Git because it contains generated artifacts.
+## Metrics
+
+All metrics are error rates, so lower is better.
+
+| Metric | Meaning |
+| --- | --- |
+| WER | Word Error Rate |
+| CER | Character Error Rate |
+| TER simple | Simple Vietnamese tone error rate |
+| DER simple | Simple Vietnamese diacritic error rate |
+| FCER simple | Final consonant error rate for Vietnamese final consonants |
+| SWDR simple | Short word deletion rate for words with length `<= 2` |
+
+`TER`, `DER`, `FCER`, and `SWDR` are diagnostic metrics for this midterm
+project. They should be reported as simple/prototype Vietnamese ASR error
+indicators, not as external benchmark-standard metrics.
+
+## Current midterm results
+
+These results are from the current small midterm subset:
+
+| Model | Condition | N | WER | CER | TER | DER | FCER | SWDR |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Whisper-base zero-shot | Clean | 30 | 43.06% | 19.61% | 23.13% | 12.22% | 22.78% | 4.35% |
+| Whisper-base zero-shot | Noisy all | 120 | 48.04% | 23.69% | 26.07% | 10.56% | 30.54% | 3.26% |
+| PhoWhisper-base zero-shot | Clean | 30 | 8.19% | 4.66% | 2.49% | 0.39% | 4.43% | 0.00% |
+| PhoWhisper-base zero-shot | Noisy all | 120 | 11.83% | 6.41% | 3.29% | 0.71% | 6.01% | 0.00% |
+| PhoWhisper tone-aware LoRA | Clean | 30 | 9.25% | 4.49% | 1.42% | 0.00% | 5.06% | 0.00% |
+| PhoWhisper tone-aware LoRA | Noisy all | 120 | 11.39% | 5.82% | 2.76% | 0.70% | 6.01% | 0.00% |
+
+Noisy WER by SNR:
+
+| Model | 20 dB | 10 dB | 5 dB | 0 dB |
+| --- | ---: | ---: | ---: | ---: |
+| Whisper-base zero-shot | 43.42% | 49.82% | 45.91% | 53.02% |
+| PhoWhisper-base zero-shot | 8.90% | 9.25% | 11.74% | 17.44% |
+| PhoWhisper tone-aware LoRA | 9.61% | 9.96% | 11.03% | 14.95% |
+
+Interpretation:
+
+- PhoWhisper-base strongly outperforms Whisper-base for Vietnamese ASR.
+- Tone-aware LoRA slightly improves noisy overall WER compared with PhoWhisper
+  zero-shot.
+- The clearest LoRA gain appears at the hardest `0 dB` noisy condition.
+- LoRA does not improve every condition; clean WER is slightly worse than the
+  PhoWhisper zero-shot baseline.
 
 ## Fine-tuning configuration
 
@@ -271,37 +262,37 @@ python evaluate.py \
   --config configs/phowhisper_base_lora.yaml \
   --checkpoint experiments/phowhisper_base_lora_mtl \
   --split test_noisy \
-  --out outputs/phowhisper_mtl_noisy.csv
+  --out outputs/phowhisper_lora_noisy.csv
 ```
 
 Score the predictions by SNR:
 
 ```bash
 python scripts/score_predictions.py \
-  --pred outputs/phowhisper_mtl_noisy.csv \
-  --out outputs/metrics_phowhisper_mtl_noisy_by_snr.csv \
+  --pred outputs/phowhisper_lora_noisy.csv \
+  --out outputs/metrics_phowhisper_lora_noisy_by_snr.csv \
   --group_by snr
 ```
 
-## Recommended experiment order
+## Completed experiment order
 
-1. Reproduce the current `openai/whisper-base` baseline.
+1. Reproduce the `openai/whisper-base` zero-shot baseline.
 2. Run `vinai/PhoWhisper-base` zero-shot on the same clean/noisy subset.
-3. Fine-tune PhoWhisper with clean LoRA.
-4. Fine-tune PhoWhisper with noisy LoRA using MUSAN augmentation.
-5. Fine-tune tone-aware MTL with `lambda_tone` values such as `0.05`, `0.10`,
-   and `0.30`.
-6. Compare WER, CER, TER simple, and DER simple across clean/noisy/SNR splits.
-7. Replace simple TER/DER with edit-aligned syllable metrics after the core
-   LoRA-vs-MTL comparison is stable.
+3. Fine-tune PhoWhisper tone-aware LoRA using VIVOS train and MUSAN
+   augmentation.
+4. Evaluate all three systems on the same clean and noisy manifests.
+5. Compare WER, CER, TER, DER, FCER, and SWDR across clean/noisy/SNR splits.
+6. Build the final table at `outputs/model_comparison_6metrics.csv`.
 
 ## Current project claim
 
 At midterm, the correct claim is:
 
 > The project has a reproducible Vietnamese noisy-ASR pipeline, real VIVOS +
-> MUSAN baseline results, forced Vietnamese decoding, and prepared LoRA +
-> tone-aware MTL training code.
+> MUSAN evaluation data, Whisper/PhoWhisper zero-shot baselines, a trained
+> PhoWhisper tone-aware LoRA checkpoint, and six-metric comparison results.
 
-Do **not** claim that tone-aware MTL improves results until a fine-tuned model
-has been trained and evaluated on the same clean/noisy manifests.
+The strongest safe conclusion is that PhoWhisper is much better than
+Whisper-base for Vietnamese ASR, while tone-aware LoRA gives a small noisy-set
+gain and clearer improvement at severe `0 dB` noise, but does not improve every
+condition.
