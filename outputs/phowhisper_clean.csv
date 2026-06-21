@@ -1,0 +1,31 @@
+utt_id,audio,text,prediction,snr,noise_type,dataset
+VIVOSDEV01_R002,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R002.wav,TIẾNG CỌC CẠCH KHỰNG LẠI CỦA NHỮNG KHỚP SẮT,tiếng cọc cận lại của những khớp sắt.,clean,,vivos
+VIVOSDEV01_R003,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R003.wav,CŨNG LÊN TIẾNG ỦNG HỘ CÁC KIẾN NGHỊ NÀY,cũng lên tiếng ủng hộ các ký nghị này.,clean,,vivos
+VIVOSDEV01_R012,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R012.wav,NHỮNG CƠN GIÓ MẠNH VÀ MƯA ĐÓNG BĂNG GÂY TRƠN TRỢT,những cơn gió mạnh và mưa đóng băng ghi trơn trợt.,clean,,vivos
+VIVOSDEV01_R027,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R027.wav,DI TÍCH CÓ BẢY PHỖNG ÔNG VÀ HAI PHỖNG BÀ ĐƯỢC LÀM BẰNG GỖ MÍT,di tích có bảy phỏng ông và hai phỏng bài được làm bằng gỗ mít.,clean,,vivos
+VIVOSDEV01_R028,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R028.wav,CÁC CHÚ CŨNG THOẢI MÁI PHÓNG UẾ GIỮA CHỐN ĐÔNG NGƯỜI MÀ KHÔNG SỢ,các chú cũng thoải mái phóng ới giữa chốn đông người mà không sợ.,clean,,vivos
+VIVOSDEV01_R034,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R034.wav,NGƯỜI TA NÓI,người ta nói.,clean,,vivos
+VIVOSDEV01_R043,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R043.wav,ANH PHÚ CHƯA BÚ ĐƯỢC SỮA MẸ LẦN NÀO,anh phú chưa bú được sữa mẹ lần nào.,clean,,vivos
+VIVOSDEV01_R044,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R044.wav,NGỌN LỬA BẠO ĐỘNG Ở TRUNG ĐÔNG VÀ PHÁ VỠ LỘ TRÌNH HÒA BÌNH,ngọn lửa bạo động ở trung đông và phá vỡ loại trình quà bình.,clean,,vivos
+VIVOSDEV01_R055,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R055.wav,VÀ RẤT SÁNG TẠO,và góc sáng tạo.,clean,,vivos
+VIVOSDEV01_R057,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R057.wav,NHƯNG GIẤC NGỦ CHẬP CHỜN,nhưng giấc ngủ chập chờn.,clean,,vivos
+VIVOSDEV01_R058,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R058.wav,GIÁM ĐỐC SỞ GIÁO DỤC ĐÀO TẠO NINH THUẬN CHO BIẾT,giám đốc sở giáo dục đào tạo ninh thuận cho biết.,clean,,vivos
+VIVOSDEV01_R069,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R069.wav,ĐÈN BỊ HƯ RỒI BA,đèn bị hư gò ba.,clean,,vivos
+VIVOSDEV01_R071,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R071.wav,TRƯỞNG CÔNG AN XÃ CHẠY SANG CAN NGĂN CŨNG BỊ TUYẾN ĐÁNH TIẾP,trưởng công an xã trại sang can ngăn cũng bị tuyến đánh tiếp.,clean,,vivos
+VIVOSDEV01_R078,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R078.wav,NGHE CHÚNG TÔI HỎI ĐIỀU NÀY CHỊ NGÁT RÂN RẤN NƯỚC MẮT,nghe chúng tôi hỏi điều này chuyện ngát rưng rướn nước mắt.,clean,,vivos
+VIVOSDEV01_R086,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R086.wav,CÔNG VĂN ĐỀ NGHỊ TỈNH CON TUM XÂY DỰNG CỬA KHẨU,công văn đề nghị tỉnh con tum xây dựng cửa khẩu.,clean,,vivos
+VIVOSDEV01_R089,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R089.wav,NHƯNG TÌNH YÊU VẪN NỒNG NÀN VÀ SAY ĐẮM NHƯ BUỔI BAN ĐẦU,nhưng tình yêu vẫn nồng nàn và say đắm như buổi ban đầu.,clean,,vivos
+VIVOSDEV01_R092,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R092.wav,DO CHÍNH PHỦ MỸ TIẾN HÀNH Ở VIỆT NAM,do chính phủ mỹ tiến hành ở việt nam.,clean,,vivos
+VIVOSDEV01_R098,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R098.wav,TỈNH QUẢNG TRỊ ĐÃ PHÊ DUYỆT,tỉnh quảng trị đỡ phê duyệt.,clean,,vivos
+VIVOSDEV01_R099,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R099.wav,NHƯNG TÔI THÍCH XEM BỘ PHIM TRUYỆN PHÁT NGAY SAU CHƯƠNG TRÌNH NÀY,nhưng tôi thích xem bộ phim chuyển phát ngay sau chương trình này.,clean,,vivos
+VIVOSDEV01_R108,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R108.wav,KHI TRẪM KHỎI BỆNH THÌ SẼ CHÉM ĐẦU,khi trẫm khỏi bệnh thì sẽ chém đầu.,clean,,vivos
+VIVOSDEV01_R117,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R117.wav,VIỆC MỘT QUYỂN TIỂU THUYẾT NHƯ THẾ,việc một quyển tiểu huyết như thế.,clean,,vivos
+VIVOSDEV01_R130,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R130.wav,NÃO BỘ CHÚNG TA PHÁT TRIỂN NHỮNG RUNG ĐỘNG YÊU THƯƠNG,nỡ bộ chúng ta phát triển những rung động yêu hơn.,clean,,vivos
+VIVOSDEV01_R139,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R139.wav,TRỪ KHI BẠN BIẾT TÔN TRỌNG BẢN THÂN MÌNH,trừ khi bạn biết tôn trọng bản thân mình.,clean,,vivos
+VIVOSDEV01_R141,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R141.wav,NHỮNG CON ĐƯỜNG NGẮN NGỦN NHƯ NHỮNG NHÁT CẮT,những con đường ngắn ngủn như những nhát cắt.,clean,,vivos
+VIVOSDEV01_R146,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R146.wav,HIỆN RA TẬN PHÍA XA,hiện ra tận phía xa.,clean,,vivos
+VIVOSDEV01_R150,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R150.wav,XIN ĐƯỢC CHÂN KHUÂN VÁC,xin được chân khuân vác.,clean,,vivos
+VIVOSDEV01_R151,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R151.wav,NHƯNG KHI TIẾN GẦN VÀO VỊNH THÌ MẶT BIỂN BỊ RẠN VỠ,nhưng khi tiến rừng vào vịnh thì mặt biển bị rạn vỡ.,clean,,vivos
+VIVOSDEV01_R164,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R164.wav,MỘT BÀ NGOẠI GIẶT ĐỒ THUÊ,một bà ngoại giặt đồ hơi.,clean,,vivos
+VIVOSDEV01_R170,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R170.wav,ĐÔI BÀN TAY EM KHÔNG ĐƯỢC MỀM MẠI VÀ NÕN NÀ,đôi bàn tay em không được mềm mại và nõn nà.,clean,,vivos
+VIVOSDEV01_R172,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R172.wav,TÂY GIANG VẪN CÒN KHẮC KHOẢI KHÔNG THỂ VÀO XÃ A NÔNG,tây giang vẫn còn khắc khoải không thể vào xã a nông.,clean,,vivos

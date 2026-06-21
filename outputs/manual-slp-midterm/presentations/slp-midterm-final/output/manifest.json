@@ -1,0 +1,18 @@
+{
+  "outputPptx": "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\SLP - Midterm SU2026 - completed.pptx",
+  "finalPptx": "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\SLP - Midterm SU2026 - completed.pptx",
+  "slideCount": 10,
+  "previewPaths": [
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-01.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-02.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-03.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-04.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-05.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-06.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-07.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-08.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-09.png",
+    "D:\\FPT_UNIVERSITY\\Ky 7\\SLP301\\Midterm\\SLP\\outputs\\manual-slp-midterm\\presentations\\slp-midterm-final\\output\\previews\\slide-10.png"
+  ],
+  "contactError": "Traceback (most recent call last):\r\n  File \"C:\\Users\\phath\\.codex\\plugins\\cache\\openai-primary-runtime\\presentations\\26.601.10930\\skills\\presentations\\scripts\\make_contact_sheet.py\", line 9, in <module>\r\n    from PIL import Image, ImageDraw\r\nModuleNotFoundError: No module named 'PIL'\r\n"
+}

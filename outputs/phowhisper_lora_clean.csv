@@ -1,0 +1,31 @@
+utt_id,audio,text,prediction,snr,noise_type,dataset
+VIVOSDEV01_R002,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R002.wav,tiếng cọc cạch khựng lại của những khớp sắt,tiếng cọc cực lại cổ ở những khớp sắt,clean,,vivos
+VIVOSDEV01_R003,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R003.wav,cũng lên tiếng ủng hộ các kiến nghị này,cũng lên tiếng ủng hộ các kiến nghị này,clean,,vivos
+VIVOSDEV01_R012,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R012.wav,những cơn gió mạnh và mưa đóng băng gây trơn trợt,những cơn gió mạnh và mưa đóng băng ghi trơn trợt,clean,,vivos
+VIVOSDEV01_R027,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R027.wav,di tích có bảy phỗng ông và hai phỗng bà được làm bằng gỗ mít,di tích có bảy phỏng ông và hai phỏng bò được làm bằng gỗ mích,clean,,vivos
+VIVOSDEV01_R028,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R028.wav,các chú cũng thoải mái phóng uế giữa chốn đông người mà không sợ,các chú cũng thoải mái phóng ối giữa chốn đông người mà không sợ,clean,,vivos
+VIVOSDEV01_R034,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R034.wav,người ta nói,người ta nói,clean,,vivos
+VIVOSDEV01_R043,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R043.wav,anh phú chưa bú được sữa mẹ lần nào,anh phú chưa bú được sữa mẹ lần nào,clean,,vivos
+VIVOSDEV01_R044,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R044.wav,ngọn lửa bạo động ở trung đông và phá vỡ lộ trình hòa bình,ngọn lửa bọ động ở trung đông và phá vỡ loại trình quà bình,clean,,vivos
+VIVOSDEV01_R055,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R055.wav,và rất sáng tạo,và gấc sáng tạo,clean,,vivos
+VIVOSDEV01_R057,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R057.wav,nhưng giấc ngủ chập chờn,nhưng giấc ngủ chập chờn,clean,,vivos
+VIVOSDEV01_R058,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R058.wav,giám đốc sở giáo dục đào tạo ninh thuận cho biết,giám đốc sở giáo dục đào tạo ninh thuận cho biết,clean,,vivos
+VIVOSDEV01_R069,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R069.wav,đèn bị hư rồi ba,đèn bị hư gò ba,clean,,vivos
+VIVOSDEV01_R071,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R071.wav,trưởng công an xã chạy sang can ngăn cũng bị tuyến đánh tiếp,trưởng công an xã trại sang can ngăn cũng bị tuyến đánh tiếp,clean,,vivos
+VIVOSDEV01_R078,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R078.wav,nghe chúng tôi hỏi điều này chị ngát rân rấn nước mắt,nghe chúng tôi hỏi điều này chị ngác rưng rướn nước mắt,clean,,vivos
+VIVOSDEV01_R086,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R086.wav,công văn đề nghị tỉnh con tum xây dựng cửa khẩu,công văn đề nghị tỉnh con tum xây dựng cửa khẩu,clean,,vivos
+VIVOSDEV01_R089,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R089.wav,nhưng tình yêu vẫn nồng nàn và say đắm như buổi ban đầu,nhưng tình yêu vẫn nồng nàn và say đắm như buổi ban đầu,clean,,vivos
+VIVOSDEV01_R092,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R092.wav,do chính phủ mỹ tiến hành ở việt nam,do chính phủ mỹ tiến hành ở việt nam,clean,,vivos
+VIVOSDEV01_R098,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R098.wav,tỉnh quảng trị đã phê duyệt,tỉnh quảng trị đỡ phê duyệt,clean,,vivos
+VIVOSDEV01_R099,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R099.wav,nhưng tôi thích xem bộ phim truyện phát ngay sau chương trình này,nhưng tôi thích xem bộ phim chuyển phát ngay sau chương trình này,clean,,vivos
+VIVOSDEV01_R108,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R108.wav,khi trẫm khỏi bệnh thì sẽ chém đầu,khi trẫm khỏi bệnh thì sẽ chém đầu,clean,,vivos
+VIVOSDEV01_R117,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R117.wav,việc một quyển tiểu thuyết như thế,việc một quyển tiểu huyết như thế,clean,,vivos
+VIVOSDEV01_R130,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R130.wav,não bộ chúng ta phát triển những rung động yêu thương,nỡ bộ chúng ta phát triển những rung động yêu thương,clean,,vivos
+VIVOSDEV01_R139,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R139.wav,trừ khi bạn biết tôn trọng bản thân mình,trừ khi bạn biết tôn trọng bản thân mình,clean,,vivos
+VIVOSDEV01_R141,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R141.wav,những con đường ngắn ngủn như những nhát cắt,những con đường ngắn ngủn như những nhát cắt,clean,,vivos
+VIVOSDEV01_R146,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R146.wav,hiện ra tận phía xa,hiện ra tận phía xa,clean,,vivos
+VIVOSDEV01_R150,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R150.wav,xin được chân khuân vác,xin được chân khuân vác,clean,,vivos
+VIVOSDEV01_R151,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R151.wav,nhưng khi tiến gần vào vịnh thì mặt biển bị rạn vỡ,nhưng khi tiếng rừng vào vịnh thì mặt biển bị rạn vỡ,clean,,vivos
+VIVOSDEV01_R164,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R164.wav,một bà ngoại giặt đồ thuê,một bà ngoại giặt đồ hôi,clean,,vivos
+VIVOSDEV01_R170,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R170.wav,đôi bàn tay em không được mềm mại và nõn nà,đôi bàn tay em không được mềm mại và nõn nà,clean,,vivos
+VIVOSDEV01_R172,data\raw\vivos\vivos\test\waves\VIVOSDEV01\VIVOSDEV01_R172.wav,tây giang vẫn còn khắc khoải không thể vào xã a nông,tây giang vẫn còn khắc khoải không thể vào xã a nông,clean,,vivos

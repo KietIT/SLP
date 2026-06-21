@@ -1,0 +1,121 @@
+utt_id,audio,text,prediction,snr,noise_type,dataset
+VIVOSDEV01_R002_snr20,data\noisy\test\VIVOSDEV01_R002_snr20.wav,TIẾNG CỌC CẠCH KHỰNG LẠI CỦA NHỮNG KHỚP SẮT," Tiến cộp cận, cứng lại có những cấp sắc.",20.0,free-sound,vivos
+VIVOSDEV01_R002_snr10,data\noisy\test\VIVOSDEV01_R002_snr10.wav,TIẾNG CỌC CẠCH KHỰNG LẠI CỦA NHỮNG KHỚP SẮT, Tuyến cậu cận cựng lại có những cậu sắc.,10.0,free-sound,vivos
+VIVOSDEV01_R002_snr5,data\noisy\test\VIVOSDEV01_R002_snr5.wav,TIẾNG CỌC CẠCH KHỰNG LẠI CỦA NHỮNG KHỚP SẮT," Tiến cậu cắt, thần lại có những cấp sắc.",5.0,free-sound,vivos
+VIVOSDEV01_R002_snr0,data\noisy\test\VIVOSDEV01_R002_snr0.wav,TIẾNG CỌC CẠCH KHỰNG LẠI CỦA NHỮNG KHỚP SẮT," Tuyến cậu cận, cứng lại có ở những cấp sắc.",0.0,free-sound,vivos
+VIVOSDEV01_R003_snr20,data\noisy\test\VIVOSDEV01_R003_snr20.wav,CŨNG LÊN TIẾNG ỦNG HỘ CÁC KIẾN NGHỊ NÀY, Cùng lên tiếng ủng hộ các kí nghỉ này.,20.0,free-sound,vivos
+VIVOSDEV01_R003_snr10,data\noisy\test\VIVOSDEV01_R003_snr10.wav,CŨNG LÊN TIẾNG ỦNG HỘ CÁC KIẾN NGHỊ NÀY, Cũng lên tiếng ủng hộ các kí ngày này.,10.0,sound-bible,vivos
+VIVOSDEV01_R003_snr5,data\noisy\test\VIVOSDEV01_R003_snr5.wav,CŨNG LÊN TIẾNG ỦNG HỘ CÁC KIẾN NGHỊ NÀY, cũng lơm tiếng ủng hộ các kí nghỉ này,5.0,free-sound,vivos
+VIVOSDEV01_R003_snr0,data\noisy\test\VIVOSDEV01_R003_snr0.wav,CŨNG LÊN TIẾNG ỦNG HỘ CÁC KIẾN NGHỊ NÀY, cũng lên tiếng ổng hộ các kí nghỉ này,0.0,free-sound,vivos
+VIVOSDEV01_R012_snr20,data\noisy\test\VIVOSDEV01_R012_snr20.wav,NHỮNG CƠN GIÓ MẠNH VÀ MƯA ĐÓNG BĂNG GÂY TRƠN TRỢT, Những cơn gió mạnh và mưa đóng băng gây chân trợ.,20.0,free-sound,vivos
+VIVOSDEV01_R012_snr10,data\noisy\test\VIVOSDEV01_R012_snr10.wav,NHỮNG CƠN GIÓ MẠNH VÀ MƯA ĐÓNG BĂNG GÂY TRƠN TRỢT, Những cơn gió mạnh và mưa đóng băng gây chân trận.,10.0,free-sound,vivos
+VIVOSDEV01_R012_snr5,data\noisy\test\VIVOSDEV01_R012_snr5.wav,NHỮNG CƠN GIÓ MẠNH VÀ MƯA ĐÓNG BĂNG GÂY TRƠN TRỢT, Những cơn gió mạnh và mưa đóng băng gây chân chờ,5.0,free-sound,vivos
+VIVOSDEV01_R012_snr0,data\noisy\test\VIVOSDEV01_R012_snr0.wav,NHỮNG CƠN GIÓ MẠNH VÀ MƯA ĐÓNG BĂNG GÂY TRƠN TRỢT, Những cơn gió mạnh và mưa đóng bằng đi chân trợ,0.0,free-sound,vivos
+VIVOSDEV01_R027_snr20,data\noisy\test\VIVOSDEV01_R027_snr20.wav,DI TÍCH CÓ BẢY PHỖNG ÔNG VÀ HAI PHỖNG BÀ ĐƯỢC LÀM BẰNG GỖ MÍT, dì tích có 7 phẩm ông và 2 phẩm 3 được làm bằng ngộ mất,20.0,free-sound,vivos
+VIVOSDEV01_R027_snr10,data\noisy\test\VIVOSDEV01_R027_snr10.wav,DI TÍCH CÓ BẢY PHỖNG ÔNG VÀ HAI PHỖNG BÀ ĐƯỢC LÀM BẰNG GỖ MÍT, dì tích có 7 phẩm ông và 2 phẩm 3 được làm bằng lộm mất,10.0,free-sound,vivos
+VIVOSDEV01_R027_snr5,data\noisy\test\VIVOSDEV01_R027_snr5.wav,DI TÍCH CÓ BẢY PHỖNG ÔNG VÀ HAI PHỖNG BÀ ĐƯỢC LÀM BẰNG GỖ MÍT, Vì cách có 7 phổng ông và 2 phổng bà được làm bằng gồm mất,5.0,free-sound,vivos
+VIVOSDEV01_R027_snr0,data\noisy\test\VIVOSDEV01_R027_snr0.wav,DI TÍCH CÓ BẢY PHỖNG ÔNG VÀ HAI PHỖNG BÀ ĐƯỢC LÀM BẰNG GỖ MÍT, dì tất cả 7 phẩm ông và 2 phẩm và được làm bằng ngộ mất,0.0,free-sound,vivos
+VIVOSDEV01_R028_snr20,data\noisy\test\VIVOSDEV01_R028_snr20.wav,CÁC CHÚ CŨNG THOẢI MÁI PHÓNG UẾ GIỮA CHỐN ĐÔNG NGƯỜI MÀ KHÔNG SỢ, Các chú cũng hỏi máy phong oé dưới chú đông người mà không xợ.,20.0,free-sound,vivos
+VIVOSDEV01_R028_snr10,data\noisy\test\VIVOSDEV01_R028_snr10.wav,CÁC CHÚ CŨNG THOẢI MÁI PHÓNG UẾ GIỮA CHỐN ĐÔNG NGƯỜI MÀ KHÔNG SỢ, Các chú cũng hỏi máy phong ở dưới chú đông người mà không xợ.,10.0,free-sound,vivos
+VIVOSDEV01_R028_snr5,data\noisy\test\VIVOSDEV01_R028_snr5.wav,CÁC CHÚ CŨNG THOẢI MÁI PHÓNG UẾ GIỮA CHỐN ĐÔNG NGƯỜI MÀ KHÔNG SỢ, Các chú cũng hỏi máy phong ở dưới chỗ đông người mà không sợ.,5.0,free-sound,vivos
+VIVOSDEV01_R028_snr0,data\noisy\test\VIVOSDEV01_R028_snr0.wav,CÁC CHÚ CŨNG THOẢI MÁI PHÓNG UẾ GIỮA CHỐN ĐÔNG NGƯỜI MÀ KHÔNG SỢ, Các tứ cũng hỏi máy phong hơi dựa chỗ nông người mà không sợ.,0.0,free-sound,vivos
+VIVOSDEV01_R034_snr20,data\noisy\test\VIVOSDEV01_R034_snr20.wav,NGƯỜI TA NÓI, Người ta nói,20.0,free-sound,vivos
+VIVOSDEV01_R034_snr10,data\noisy\test\VIVOSDEV01_R034_snr10.wav,NGƯỜI TA NÓI, Người ta nói,10.0,free-sound,vivos
+VIVOSDEV01_R034_snr5,data\noisy\test\VIVOSDEV01_R034_snr5.wav,NGƯỜI TA NÓI, người ta nói,5.0,free-sound,vivos
+VIVOSDEV01_R034_snr0,data\noisy\test\VIVOSDEV01_R034_snr0.wav,NGƯỜI TA NÓI, Người ta nói,0.0,free-sound,vivos
+VIVOSDEV01_R043_snr20,data\noisy\test\VIVOSDEV01_R043_snr20.wav,ANH PHÚ CHƯA BÚ ĐƯỢC SỮA MẸ LẦN NÀO, Anh phú chưa bú được sữa mẹ lần nào.,20.0,free-sound,vivos
+VIVOSDEV01_R043_snr10,data\noisy\test\VIVOSDEV01_R043_snr10.wav,ANH PHÚ CHƯA BÚ ĐƯỢC SỮA MẸ LẦN NÀO, Anh phú chưa bú được sữa mẹ lần nào.,10.0,free-sound,vivos
+VIVOSDEV01_R043_snr5,data\noisy\test\VIVOSDEV01_R043_snr5.wav,ANH PHÚ CHƯA BÚ ĐƯỢC SỮA MẸ LẦN NÀO, Anh phú chưa bố được sữa mẹ lần nào?,5.0,free-sound,vivos
+VIVOSDEV01_R043_snr0,data\noisy\test\VIVOSDEV01_R043_snr0.wav,ANH PHÚ CHƯA BÚ ĐƯỢC SỮA MẸ LẦN NÀO, Anh cũng chưa bố được sữa mẹ lần nào,0.0,free-sound,vivos
+VIVOSDEV01_R044_snr20,data\noisy\test\VIVOSDEV01_R044_snr20.wav,NGỌN LỬA BẠO ĐỘNG Ở TRUNG ĐÔNG VÀ PHÁ VỠ LỘ TRÌNH HÒA BÌNH, Nóng lửa bỏ đồng ở Trung Đông và pháp ở Lòi Chinh qua Bình.,20.0,free-sound,vivos
+VIVOSDEV01_R044_snr10,data\noisy\test\VIVOSDEV01_R044_snr10.wav,NGỌN LỬA BẠO ĐỘNG Ở TRUNG ĐÔNG VÀ PHÁ VỠ LỘ TRÌNH HÒA BÌNH, Nóng lửa bỏ đồng ở Trung Đông và pháp ở Lòi Trung Qua Bình.,10.0,free-sound,vivos
+VIVOSDEV01_R044_snr5,data\noisy\test\VIVOSDEV01_R044_snr5.wav,NGỌN LỬA BẠO ĐỘNG Ở TRUNG ĐÔNG VÀ PHÁ VỠ LỘ TRÌNH HÒA BÌNH, Nóng lửa bỏ đồng ở Trung Đông và phá bỏ lỗi chinh qua bình.,5.0,free-sound,vivos
+VIVOSDEV01_R044_snr0,data\noisy\test\VIVOSDEV01_R044_snr0.wav,NGỌN LỬA BẠO ĐỘNG Ở TRUNG ĐÔNG VÀ PHÁ VỠ LỘ TRÌNH HÒA BÌNH, Nóng lữa bỏ đồng ở Trung Đông và phá bỏ ở Trung Qua Bình.,0.0,free-sound,vivos
+VIVOSDEV01_R055_snr20,data\noisy\test\VIVOSDEV01_R055_snr20.wav,VÀ RẤT SÁNG TẠO, và gức xanh tạo,20.0,sound-bible,vivos
+VIVOSDEV01_R055_snr10,data\noisy\test\VIVOSDEV01_R055_snr10.wav,VÀ RẤT SÁNG TẠO, và gốc xanh tạo,10.0,free-sound,vivos
+VIVOSDEV01_R055_snr5,data\noisy\test\VIVOSDEV01_R055_snr5.wav,VÀ RẤT SÁNG TẠO, và gức xanh tạo,5.0,sound-bible,vivos
+VIVOSDEV01_R055_snr0,data\noisy\test\VIVOSDEV01_R055_snr0.wav,VÀ RẤT SÁNG TẠO, và gức xanh tạo,0.0,free-sound,vivos
+VIVOSDEV01_R057_snr20,data\noisy\test\VIVOSDEV01_R057_snr20.wav,NHƯNG GIẤC NGỦ CHẬP CHỜN, Nhưng rất ngủ chấp chân,20.0,free-sound,vivos
+VIVOSDEV01_R057_snr10,data\noisy\test\VIVOSDEV01_R057_snr10.wav,NHƯNG GIẤC NGỦ CHẬP CHỜN, Nhưng giước nỗ chặp chân,10.0,free-sound,vivos
+VIVOSDEV01_R057_snr5,data\noisy\test\VIVOSDEV01_R057_snr5.wav,NHƯNG GIẤC NGỦ CHẬP CHỜN, Nhưng giúp ngủ chặt chờ,5.0,free-sound,vivos
+VIVOSDEV01_R057_snr0,data\noisy\test\VIVOSDEV01_R057_snr0.wav,NHƯNG GIẤC NGỦ CHẬP CHỜN, Nhưng nhất ngủ chặp cho,0.0,free-sound,vivos
+VIVOSDEV01_R058_snr20,data\noisy\test\VIVOSDEV01_R058_snr20.wav,GIÁM ĐỐC SỞ GIÁO DỤC ĐÀO TẠO NINH THUẬN CHO BIẾT, Giám đốc sợ giáo dục đào tạo nên hổng cho biết.,20.0,sound-bible,vivos
+VIVOSDEV01_R058_snr10,data\noisy\test\VIVOSDEV01_R058_snr10.wav,GIÁM ĐỐC SỞ GIÁO DỤC ĐÀO TẠO NINH THUẬN CHO BIẾT, Giám đốc sợ giáo dục đau tạo nên hổng cho biết.,10.0,free-sound,vivos
+VIVOSDEV01_R058_snr5,data\noisy\test\VIVOSDEV01_R058_snr5.wav,GIÁM ĐỐC SỞ GIÁO DỤC ĐÀO TẠO NINH THUẬN CHO BIẾT, Giám đốc sợ giáo dục đau đau nên hổng cho biết.,5.0,free-sound,vivos
+VIVOSDEV01_R058_snr0,data\noisy\test\VIVOSDEV01_R058_snr0.wav,GIÁM ĐỐC SỞ GIÁO DỤC ĐÀO TẠO NINH THUẬN CHO BIẾT, Giám đốc sợ giáo dục đào tạo nên hộng cho biết.,0.0,free-sound,vivos
+VIVOSDEV01_R069_snr20,data\noisy\test\VIVOSDEV01_R069_snr20.wav,ĐÈN BỊ HƯ RỒI BA, đèn bí hư gò 3,20.0,free-sound,vivos
+VIVOSDEV01_R069_snr10,data\noisy\test\VIVOSDEV01_R069_snr10.wav,ĐÈN BỊ HƯ RỒI BA, Bèng bí hư gò ba,10.0,free-sound,vivos
+VIVOSDEV01_R069_snr5,data\noisy\test\VIVOSDEV01_R069_snr5.wav,ĐÈN BỊ HƯ RỒI BA, Đèng bị hơi gò ba,5.0,free-sound,vivos
+VIVOSDEV01_R069_snr0,data\noisy\test\VIVOSDEV01_R069_snr0.wav,ĐÈN BỊ HƯ RỒI BA, Đèng bị hư gò ba,0.0,free-sound,vivos
+VIVOSDEV01_R071_snr20,data\noisy\test\VIVOSDEV01_R071_snr20.wav,TRƯỞNG CÔNG AN XÃ CHẠY SANG CAN NGĂN CŨNG BỊ TUYẾN ĐÁNH TIẾP," Chưởng công ăn sẽ trải xanh, cang ăn cũng bị tuyến đánh tiếp.",20.0,free-sound,vivos
+VIVOSDEV01_R071_snr10,data\noisy\test\VIVOSDEV01_R071_snr10.wav,TRƯỞNG CÔNG AN XÃ CHẠY SANG CAN NGĂN CŨNG BỊ TUYẾN ĐÁNH TIẾP," Chưởng công ăn sẽ trải xanh, cang ăn cũng bị tuyến đánh tiếp.",10.0,free-sound,vivos
+VIVOSDEV01_R071_snr5,data\noisy\test\VIVOSDEV01_R071_snr5.wav,TRƯỞNG CÔNG AN XÃ CHẠY SANG CAN NGĂN CŨNG BỊ TUYẾN ĐÁNH TIẾP," Chưởng công ăn sẽ trải xanh, càng ngăn cũng bị tuyến đánh tiếp.",5.0,free-sound,vivos
+VIVOSDEV01_R071_snr0,data\noisy\test\VIVOSDEV01_R071_snr0.wav,TRƯỞNG CÔNG AN XÃ CHẠY SANG CAN NGĂN CŨNG BỊ TUYẾN ĐÁNH TIẾP," Chưởng công ăn sẽ trải xanh, con bị tuyến đánh tiếp.",0.0,free-sound,vivos
+VIVOSDEV01_R078_snr20,data\noisy\test\VIVOSDEV01_R078_snr20.wav,NGHE CHÚNG TÔI HỎI ĐIỀU NÀY CHỊ NGÁT RÂN RẤN NƯỚC MẮT, Nghè chúng tôi hỏi đều này chỉ nghe gần gần nước mắt.,20.0,free-sound,vivos
+VIVOSDEV01_R078_snr10,data\noisy\test\VIVOSDEV01_R078_snr10.wav,NGHE CHÚNG TÔI HỎI ĐIỀU NÀY CHỊ NGÁT RÂN RẤN NƯỚC MẮT," Nghe chúng tôi hỏi đều này, chuyện nghe gần gần nước mắt.",10.0,free-sound,vivos
+VIVOSDEV01_R078_snr5,data\noisy\test\VIVOSDEV01_R078_snr5.wav,NGHE CHÚNG TÔI HỎI ĐIỀU NÀY CHỊ NGÁT RÂN RẤN NƯỚC MẮT, Nhiều chúng tôi hỏi đề này chỉ nghe gần gần nước mắt.,5.0,free-sound,vivos
+VIVOSDEV01_R078_snr0,data\noisy\test\VIVOSDEV01_R078_snr0.wav,NGHE CHÚNG TÔI HỎI ĐIỀU NÀY CHỊ NGÁT RÂN RẤN NƯỚC MẮT, Nghè chúng tôi hỏi đều này chỉ nghe gần gần nước mắt.,0.0,sound-bible,vivos
+VIVOSDEV01_R086_snr20,data\noisy\test\VIVOSDEV01_R086_snr20.wav,CÔNG VĂN ĐỀ NGHỊ TỈNH CON TUM XÂY DỰNG CỬA KHẨU, Còn văn đời nghĩ tính con tâm xây dẫn cửa khẩu.,20.0,free-sound,vivos
+VIVOSDEV01_R086_snr10,data\noisy\test\VIVOSDEV01_R086_snr10.wav,CÔNG VĂN ĐỀ NGHỊ TỈNH CON TUM XÂY DỰNG CỬA KHẨU, Còn quanh đời nghĩ tính con tâm xây dẫn cửa khẩu.,10.0,free-sound,vivos
+VIVOSDEV01_R086_snr5,data\noisy\test\VIVOSDEV01_R086_snr5.wav,CÔNG VĂN ĐỀ NGHỊ TỈNH CON TUM XÂY DỰNG CỬA KHẨU, Còn văn để nghĩ tính con cân xây dẫn cửa thấu.,5.0,free-sound,vivos
+VIVOSDEV01_R086_snr0,data\noisy\test\VIVOSDEV01_R086_snr0.wav,CÔNG VĂN ĐỀ NGHỊ TỈNH CON TUM XÂY DỰNG CỬA KHẨU, Công quang để nghĩ thống con tâm xây dựng cửa khẩu,0.0,free-sound,vivos
+VIVOSDEV01_R089_snr20,data\noisy\test\VIVOSDEV01_R089_snr20.wav,NHƯNG TÌNH YÊU VẪN NỒNG NÀN VÀ SAY ĐẮM NHƯ BUỔI BAN ĐẦU, Nhưng tình yêu vững nòng nèng và xây đắm như bối bán đầu.,20.0,free-sound,vivos
+VIVOSDEV01_R089_snr10,data\noisy\test\VIVOSDEV01_R089_snr10.wav,NHƯNG TÌNH YÊU VẪN NỒNG NÀN VÀ SAY ĐẮM NHƯ BUỔI BAN ĐẦU, Nhưng tình yêu vững nồng nèng và xây đắm như bối bán đầu.,10.0,free-sound,vivos
+VIVOSDEV01_R089_snr5,data\noisy\test\VIVOSDEV01_R089_snr5.wav,NHƯNG TÌNH YÊU VẪN NỒNG NÀN VÀ SAY ĐẮM NHƯ BUỔI BAN ĐẦU, Nhưng tình yêu vững nòng nèng và xây đắm như bối bán đầu.,5.0,free-sound,vivos
+VIVOSDEV01_R089_snr0,data\noisy\test\VIVOSDEV01_R089_snr0.wav,NHƯNG TÌNH YÊU VẪN NỒNG NÀN VÀ SAY ĐẮM NHƯ BUỔI BAN ĐẦU, Chính tịch yêu vực nổng mẹ và chay đám nghi vũ ban đầu.,0.0,sound-bible,vivos
+VIVOSDEV01_R092_snr20,data\noisy\test\VIVOSDEV01_R092_snr20.wav,DO CHÍNH PHỦ MỸ TIẾN HÀNH Ở VIỆT NAM, cho chính thủ Mỹ tiến hành ở Việt Nam.,20.0,free-sound,vivos
+VIVOSDEV01_R092_snr10,data\noisy\test\VIVOSDEV01_R092_snr10.wav,DO CHÍNH PHỦ MỸ TIẾN HÀNH Ở VIỆT NAM, cho chính phủ Mỹ tiến hành ở Việt Nam,10.0,free-sound,vivos
+VIVOSDEV01_R092_snr5,data\noisy\test\VIVOSDEV01_R092_snr5.wav,DO CHÍNH PHỦ MỸ TIẾN HÀNH Ở VIỆT NAM, cho chính phủ Mỹ tiến hành ở Việt Nam,5.0,free-sound,vivos
+VIVOSDEV01_R092_snr0,data\noisy\test\VIVOSDEV01_R092_snr0.wav,DO CHÍNH PHỦ MỸ TIẾN HÀNH Ở VIỆT NAM, cho chính phủ Mỹ tiến hạt nỡ Việt Nam.,0.0,free-sound,vivos
+VIVOSDEV01_R098_snr20,data\noisy\test\VIVOSDEV01_R098_snr20.wav,TỈNH QUẢNG TRỊ ĐÃ PHÊ DUYỆT, Tỉnh quán trị đã phê dịch.,20.0,free-sound,vivos
+VIVOSDEV01_R098_snr10,data\noisy\test\VIVOSDEV01_R098_snr10.wav,TỈNH QUẢNG TRỊ ĐÃ PHÊ DUYỆT, Tận quán kì đã phê dịp,10.0,free-sound,vivos
+VIVOSDEV01_R098_snr5,data\noisy\test\VIVOSDEV01_R098_snr5.wav,TỈNH QUẢNG TRỊ ĐÃ PHÊ DUYỆT, phẩm quán kỳ đã phơi việc,5.0,free-sound,vivos
+VIVOSDEV01_R098_snr0,data\noisy\test\VIVOSDEV01_R098_snr0.wav,TỈNH QUẢNG TRỊ ĐÃ PHÊ DUYỆT," Thật nguyen kế, áp và yếu",0.0,free-sound,vivos
+VIVOSDEV01_R099_snr20,data\noisy\test\VIVOSDEV01_R099_snr20.wav,NHƯNG TÔI THÍCH XEM BỘ PHIM TRUYỆN PHÁT NGAY SAU CHƯƠNG TRÌNH NÀY, Nhưng tôi hết xem bỏ phim chuyện phát ngay sao chương trình này.,20.0,sound-bible,vivos
+VIVOSDEV01_R099_snr10,data\noisy\test\VIVOSDEV01_R099_snr10.wav,NHƯNG TÔI THÍCH XEM BỘ PHIM TRUYỆN PHÁT NGAY SAU CHƯƠNG TRÌNH NÀY, Nhưng tôi hết xem bộ phim chuyện phát ngay sao chương trình này.,10.0,free-sound,vivos
+VIVOSDEV01_R099_snr5,data\noisy\test\VIVOSDEV01_R099_snr5.wav,NHƯNG TÔI THÍCH XEM BỘ PHIM TRUYỆN PHÁT NGAY SAU CHƯƠNG TRÌNH NÀY, Nhưng tôi hết xem bộ phim chuyện phát ngay sao chương trình này.,5.0,free-sound,vivos
+VIVOSDEV01_R099_snr0,data\noisy\test\VIVOSDEV01_R099_snr0.wav,NHƯNG TÔI THÍCH XEM BỘ PHIM TRUYỆN PHÁT NGAY SAU CHƯƠNG TRÌNH NÀY, Nhưng tôi hất xem bỏ phim tuyến phát ngay sao trung chình này.,0.0,free-sound,vivos
+VIVOSDEV01_R108_snr20,data\noisy\test\VIVOSDEV01_R108_snr20.wav,KHI TRẪM KHỎI BỆNH THÌ SẼ CHÉM ĐẦU, Khi chậm khỏi bệnh thì sẽ chếm đầu.,20.0,free-sound,vivos
+VIVOSDEV01_R108_snr10,data\noisy\test\VIVOSDEV01_R108_snr10.wav,KHI TRẪM KHỎI BỆNH THÌ SẼ CHÉM ĐẦU, Khi chẳng khỏi bệnh thì sẽ chếm đầu.,10.0,free-sound,vivos
+VIVOSDEV01_R108_snr5,data\noisy\test\VIVOSDEV01_R108_snr5.wav,KHI TRẪM KHỎI BỆNH THÌ SẼ CHÉM ĐẦU, khi chẳng khỏi bệnh thì sẽ chếm đầu,5.0,free-sound,vivos
+VIVOSDEV01_R108_snr0,data\noisy\test\VIVOSDEV01_R108_snr0.wav,KHI TRẪM KHỎI BỆNH THÌ SẼ CHÉM ĐẦU, Khi chậm khỏi bệnh thì sẽ chếm đầu.,0.0,free-sound,vivos
+VIVOSDEV01_R117_snr20,data\noisy\test\VIVOSDEV01_R117_snr20.wav,VIỆC MỘT QUYỂN TIỂU THUYẾT NHƯ THẾ, Ruyệt 1 quýến tạo hích như hơi.,20.0,free-sound,vivos
+VIVOSDEV01_R117_snr10,data\noisy\test\VIVOSDEV01_R117_snr10.wav,VIỆC MỘT QUYỂN TIỂU THUYẾT NHƯ THẾ," Vìa 1 quýa, đều hết như hơi.",10.0,free-sound,vivos
+VIVOSDEV01_R117_snr5,data\noisy\test\VIVOSDEV01_R117_snr5.wav,VIỆC MỘT QUYỂN TIỂU THUYẾT NHƯ THẾ, Vìa một quý lý tiêu hích như hơi.,5.0,free-sound,vivos
+VIVOSDEV01_R117_snr0,data\noisy\test\VIVOSDEV01_R117_snr0.wav,VIỆC MỘT QUYỂN TIỂU THUYẾT NHƯ THẾ, Vìa mọc quýến đều hết như hơi,0.0,sound-bible,vivos
+VIVOSDEV01_R130_snr20,data\noisy\test\VIVOSDEV01_R130_snr20.wav,NÃO BỘ CHÚNG TA PHÁT TRIỂN NHỮNG RUNG ĐỘNG YÊU THƯƠNG, Nã bộ chúng ta phát triển những gung đọng yêu hương.,20.0,free-sound,vivos
+VIVOSDEV01_R130_snr10,data\noisy\test\VIVOSDEV01_R130_snr10.wav,NÃO BỘ CHÚNG TA PHÁT TRIỂN NHỮNG RUNG ĐỘNG YÊU THƯƠNG, Nó bỏ chúng ta phát chuyện những gung đọng yêu hương.,10.0,free-sound,vivos
+VIVOSDEV01_R130_snr5,data\noisy\test\VIVOSDEV01_R130_snr5.wav,NÃO BỘ CHÚNG TA PHÁT TRIỂN NHỮNG RUNG ĐỘNG YÊU THƯƠNG, Nã bộ chúng ta phát triển những gung đọng yêu hương.,5.0,free-sound,vivos
+VIVOSDEV01_R130_snr0,data\noisy\test\VIVOSDEV01_R130_snr0.wav,NÃO BỘ CHÚNG TA PHÁT TRIỂN NHỮNG RUNG ĐỘNG YÊU THƯƠNG, Nã bộ chúng ta phát triển những gung đồng yêu hương.,0.0,free-sound,vivos
+VIVOSDEV01_R139_snr20,data\noisy\test\VIVOSDEV01_R139_snr20.wav,TRỪ KHI BẠN BIẾT TÔN TRỌNG BẢN THÂN MÌNH, Trời khi bạn biết tôn trọng bạn hơn mình.,20.0,free-sound,vivos
+VIVOSDEV01_R139_snr10,data\noisy\test\VIVOSDEV01_R139_snr10.wav,TRỪ KHI BẠN BIẾT TÔN TRỌNG BẢN THÂN MÌNH, Trời khi bạn biết tôn trọng bạn hơn mình.,10.0,free-sound,vivos
+VIVOSDEV01_R139_snr5,data\noisy\test\VIVOSDEV01_R139_snr5.wav,TRỪ KHI BẠN BIẾT TÔN TRỌNG BẢN THÂN MÌNH, Trời khi bạn biết tôn trọng bản hơn mình.,5.0,free-sound,vivos
+VIVOSDEV01_R139_snr0,data\noisy\test\VIVOSDEV01_R139_snr0.wav,TRỪ KHI BẠN BIẾT TÔN TRỌNG BẢN THÂN MÌNH, Trời khi bạn biết tôn trọng bản hơn mình.,0.0,free-sound,vivos
+VIVOSDEV01_R141_snr20,data\noisy\test\VIVOSDEV01_R141_snr20.wav,NHỮNG CON ĐƯỜNG NGẮN NGỦN NHƯ NHỮNG NHÁT CẮT, Những con đường ngắn nguồn như những nhét cắt.,20.0,free-sound,vivos
+VIVOSDEV01_R141_snr10,data\noisy\test\VIVOSDEV01_R141_snr10.wav,NHỮNG CON ĐƯỜNG NGẮN NGỦN NHƯ NHỮNG NHÁT CẮT, Nếu con đường nó ngủ như nhận nhất các,10.0,free-sound,vivos
+VIVOSDEV01_R141_snr5,data\noisy\test\VIVOSDEV01_R141_snr5.wav,NHỮNG CON ĐƯỜNG NGẮN NGỦN NHƯ NHỮNG NHÁT CẮT, Những con đường ngủ như những nhét cách.,5.0,sound-bible,vivos
+VIVOSDEV01_R141_snr0,data\noisy\test\VIVOSDEV01_R141_snr0.wav,NHỮNG CON ĐƯỜNG NGẮN NGỦN NHƯ NHỮNG NHÁT CẮT," Những con đường nắng bụng như vậy, nhất cách.",0.0,free-sound,vivos
+VIVOSDEV01_R146_snr20,data\noisy\test\VIVOSDEV01_R146_snr20.wav,HIỆN RA TẬN PHÍA XA, Hình gà tận phía sạch,20.0,free-sound,vivos
+VIVOSDEV01_R146_snr10,data\noisy\test\VIVOSDEV01_R146_snr10.wav,HIỆN RA TẬN PHÍA XA, Hẹn gặp đánh phía,10.0,free-sound,vivos
+VIVOSDEV01_R146_snr5,data\noisy\test\VIVOSDEV01_R146_snr5.wav,HIỆN RA TẬN PHÍA XA," Hẹn gian, tầm phía",5.0,free-sound,vivos
+VIVOSDEV01_R146_snr0,data\noisy\test\VIVOSDEV01_R146_snr0.wav,HIỆN RA TẬN PHÍA XA, Cái này là tập phía,0.0,free-sound,vivos
+VIVOSDEV01_R150_snr20,data\noisy\test\VIVOSDEV01_R150_snr20.wav,XIN ĐƯỢC CHÂN KHUÂN VÁC, xinh được chân quân vát.,20.0,free-sound,vivos
+VIVOSDEV01_R150_snr10,data\noisy\test\VIVOSDEV01_R150_snr10.wav,XIN ĐƯỢC CHÂN KHUÂN VÁC, Xinh đậu chân quân vát.,10.0,free-sound,vivos
+VIVOSDEV01_R150_snr5,data\noisy\test\VIVOSDEV01_R150_snr5.wav,XIN ĐƯỢC CHÂN KHUÂN VÁC, Xin lậu chân cùng bát,5.0,free-sound,vivos
+VIVOSDEV01_R150_snr0,data\noisy\test\VIVOSDEV01_R150_snr0.wav,XIN ĐƯỢC CHÂN KHUÂN VÁC," xin thật, chừng phục bát",0.0,free-sound,vivos
+VIVOSDEV01_R151_snr20,data\noisy\test\VIVOSDEV01_R151_snr20.wav,NHƯNG KHI TIẾN GẦN VÀO VỊNH THÌ MẶT BIỂN BỊ RẠN VỠ, nhưng khi tiếng gần vào vấn hề mặt biến bị gàng vỡ,20.0,free-sound,vivos
+VIVOSDEV01_R151_snr10,data\noisy\test\VIVOSDEV01_R151_snr10.wav,NHƯNG KHI TIẾN GẦN VÀO VỊNH THÌ MẶT BIỂN BỊ RẠN VỠ, Nhìn kia tính dần vào lẫn hề mặc biến về gian quá,10.0,free-sound,vivos
+VIVOSDEV01_R151_snr5,data\noisy\test\VIVOSDEV01_R151_snr5.wav,NHƯNG KHI TIẾN GẦN VÀO VỊNH THÌ MẶT BIỂN BỊ RẠN VỠ, nhưng khi tiếng gần vào vấn hề mặt biến bị gian bởi,5.0,free-sound,vivos
+VIVOSDEV01_R151_snr0,data\noisy\test\VIVOSDEV01_R151_snr0.wav,NHƯNG KHI TIẾN GẦN VÀO VỊNH THÌ MẶT BIỂN BỊ RẠN VỠ, Nhưng khi đến gần vào bánh hề mặt mế hề đàn vỡ,0.0,free-sound,vivos
+VIVOSDEV01_R164_snr20,data\noisy\test\VIVOSDEV01_R164_snr20.wav,MỘT BÀ NGOẠI GIẶT ĐỒ THUÊ, Một bà ngoài dạc đồ hơi,20.0,free-sound,vivos
+VIVOSDEV01_R164_snr10,data\noisy\test\VIVOSDEV01_R164_snr10.wav,MỘT BÀ NGOẠI GIẶT ĐỒ THUÊ," 1,3, ngoài dạc đồ thôi",10.0,free-sound,vivos
+VIVOSDEV01_R164_snr5,data\noisy\test\VIVOSDEV01_R164_snr5.wav,MỘT BÀ NGOẠI GIẶT ĐỒ THUÊ," Một bà ngoài, nhắc đồ thôi",5.0,free-sound,vivos
+VIVOSDEV01_R164_snr0,data\noisy\test\VIVOSDEV01_R164_snr0.wav,MỘT BÀ NGOẠI GIẶT ĐỒ THUÊ, Một bà mà nhắc đồ hơi,0.0,free-sound,vivos
+VIVOSDEV01_R170_snr20,data\noisy\test\VIVOSDEV01_R170_snr20.wav,ĐÔI BÀN TAY EM KHÔNG ĐƯỢC MỀM MẠI VÀ NÕN NÀ, Đói bạn tay em không được miềm mại và nổng nè,20.0,free-sound,vivos
+VIVOSDEV01_R170_snr10,data\noisy\test\VIVOSDEV01_R170_snr10.wav,ĐÔI BÀN TAY EM KHÔNG ĐƯỢC MỀM MẠI VÀ NÕN NÀ, Đói bạn tay em không được miềm mở và nổng nè,10.0,free-sound,vivos
+VIVOSDEV01_R170_snr5,data\noisy\test\VIVOSDEV01_R170_snr5.wav,ĐÔI BÀN TAY EM KHÔNG ĐƯỢC MỀM MẠI VÀ NÕN NÀ, Đói bạn tay em không được miệng mại và nổng nè,5.0,free-sound,vivos
+VIVOSDEV01_R170_snr0,data\noisy\test\VIVOSDEV01_R170_snr0.wav,ĐÔI BÀN TAY EM KHÔNG ĐƯỢC MỀM MẠI VÀ NÕN NÀ, Toi bạn tay em không được nhìn mở và nổng nè,0.0,free-sound,vivos
+VIVOSDEV01_R172_snr20,data\noisy\test\VIVOSDEV01_R172_snr20.wav,TÂY GIANG VẪN CÒN KHẮC KHOẢI KHÔNG THỂ VÀO XÃ A NÔNG, Tì gian vẫn còn khắc khỏi không hở vào sã An Commission.,20.0,free-sound,vivos
+VIVOSDEV01_R172_snr10,data\noisy\test\VIVOSDEV01_R172_snr10.wav,TÂY GIANG VẪN CÒN KHẮC KHOẢI KHÔNG THỂ VÀO XÃ A NÔNG, Tì gian vẫn còn khắc khỏi công hệ vào sã Anom.,10.0,free-sound,vivos
+VIVOSDEV01_R172_snr5,data\noisy\test\VIVOSDEV01_R172_snr5.wav,TÂY GIANG VẪN CÒN KHẮC KHOẢI KHÔNG THỂ VÀO XÃ A NÔNG, Tì gian vẫn còn khách khỏi công hệ vào sã Anong.,5.0,free-sound,vivos
+VIVOSDEV01_R172_snr0,data\noisy\test\VIVOSDEV01_R172_snr0.wav,TÂY GIANG VẪN CÒN KHẮC KHOẢI KHÔNG THỂ VÀO XÃ A NÔNG, Tì gian của khổ khắc phởi khổ khởi vào sở ai đóng,0.0,free-sound,vivos
