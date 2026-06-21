@@ -13,7 +13,7 @@ from src.vitonesr.metrics import compute_all
 
 
 def main() -> None:
-    p = argparse.ArgumentParser(description="Score prediction CSV with WER/CER/TER/DER, optionally grouped by a metadata column.")
+    p = argparse.ArgumentParser(description="Score prediction CSV with WER/CER/TER/DER/FCER/SWDR, optionally grouped by a metadata column.")
     p.add_argument("--pred", required=True)
     p.add_argument("--out", default=None)
     p.add_argument("--group_by", default="snr")
@@ -37,7 +37,7 @@ def main() -> None:
         metrics = compute_all(refs, hyps)
         summary.append({"group": group, "n": len(items), **metrics})
 
-    fieldnames = ["group", "n", "wer", "cer", "ter_simple", "der_simple"]
+    fieldnames = ["group", "n", "wer", "cer", "ter_simple", "der_simple", "fcer_simple", "swdr_simple"]
     if args.out:
         out = Path(args.out)
         out.parent.mkdir(parents=True, exist_ok=True)

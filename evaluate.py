@@ -8,12 +8,24 @@ import yaml
 
 import torch
 from torch.utils.data import DataLoader
+from peft import PeftModel
 from transformers import WhisperProcessor
+from transformers import WhisperForConditionalGeneration
 from tqdm.auto import tqdm
 
 from src.vitonesr.data import ASRManifestDataset, DataCollatorSpeechSeq2SeqWithTone
-from src.vitonesr.model import build_model
 from src.vitonesr.metrics import compute_all
+
+
+def load_generation_model(checkpoint: str, base_model_name: str):
+    ckpt_path = Path(checkpoint)
+    if ckpt_path.is_dir() and (ckpt_path / "adapter_config.json").exists():
+        base = WhisperForConditionalGeneration.from_pretrained(base_model_name)
+        base.config.use_cache = False
+        return PeftModel.from_pretrained(base, checkpoint)
+    model = WhisperForConditionalGeneration.from_pretrained(checkpoint)
+    model.config.use_cache = False
+    return model
 
 
 @torch.no_grad()
@@ -31,8 +43,9 @@ def main():
     ckpt = args.checkpoint or cfg["model"]["name_or_path"]
     language = cfg["model"].get("language", "vi")
     task = cfg["model"].get("task", "transcribe")
-    processor = WhisperProcessor.from_pretrained(ckpt, language=language, task=task)
-    model = build_model(ckpt, use_lora=False, lambda_tone=0.0)
+    processor_source = ckpt if Path(ckpt).exists() else cfg["model"]["name_or_path"]
+    processor = WhisperProcessor.from_pretrained(processor_source, language=language, task=task)
+    model = load_generation_model(ckpt, cfg["model"]["name_or_path"])
     device = torch.device("cuda" if args.device == "auto" and torch.cuda.is_available() else ("cpu" if args.device == "auto" else args.device))
     model.eval().to(device)
     manifest = cfg["data"].get(f"{args.split}_manifest", cfg["data"].get("test_manifest"))
