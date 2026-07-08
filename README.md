@@ -157,6 +157,102 @@ outputs/model_comparison_6metrics.csv
 notebooks/midterm_results_analysis.ipynb
 ```
 
+## Robust benchmark and zero-shot baseline
+
+The larger benchmark pipeline keeps the midterm outputs untouched and writes new
+artifacts under `outputs/benchmark/`, `outputs/zero_shot/`, and
+`data/noisy_eval/`.
+
+Build a typed MUSAN manifest:
+
+```bash
+python scripts/make_musan_noise_manifest_typed.py \
+  --musan_root data/raw/musan/musan \
+  --out data/manifests/noise/musan_noise_typed.jsonl \
+  --seed 42
+```
+
+Build the fixed benchmark:
+
+```bash
+python scripts/build_robust_benchmark.py \
+  --vivos_manifest data/manifests/vivos/test.jsonl \
+  --noise_manifest data/manifests/noise/musan_noise_typed.jsonl \
+  --out_manifest outputs/benchmark/benchmark_manifest.csv \
+  --pool_manifest outputs/benchmark/benchmark_pool_manifest.csv \
+  --report_out outputs/benchmark/benchmark_report.md \
+  --out_noisy_dir data/noisy_eval \
+  --pool_size 500 \
+  --eval_size 300 \
+  --snrs 20 10 5 0 \
+  --seed 42 \
+  --sample_rate 16000
+```
+
+Run one zero-shot model:
+
+```bash
+python scripts/infer_zero_shot.py \
+  --benchmark_manifest outputs/benchmark/benchmark_manifest.csv \
+  --model_name_or_path openai/whisper-tiny \
+  --model whisper \
+  --model_size tiny \
+  --out outputs/zero_shot/pred_whisper_tiny.csv \
+  --batch_size 4 \
+  --device auto \
+  --resume
+```
+
+Run the full zero-shot pipeline:
+
+```bash
+python scripts/run_zero_shot_pipeline.py \
+  --vivos_root data/raw/vivos \
+  --musan_root data/raw/musan/musan \
+  --seed 42 \
+  --pool_size 500 \
+  --eval_size 300 \
+  --batch_size 4 \
+  --device auto
+```
+
+Smoke test with a small benchmark and one model:
+
+```bash
+python scripts/run_zero_shot_pipeline.py \
+  --vivos_root data/raw/vivos \
+  --musan_root data/raw/musan/musan \
+  --seed 42 \
+  --pool_size 10 \
+  --eval_size 3 \
+  --snrs 20 0 \
+  --models whisper_tiny \
+  --batch_size 1 \
+  --device auto \
+  --smoke_test
+```
+
+Aggregate and validate after predictions are available:
+
+```bash
+python scripts/aggregate_zero_shot.py \
+  --pred_dir outputs/zero_shot \
+  --out_by_snr outputs/zero_shot/zero_shot_results_by_snr.csv \
+  --out_by_noise_type outputs/zero_shot/zero_shot_results_by_noise_type.csv
+
+python scripts/validate_robust_benchmark.py \
+  --benchmark_manifest outputs/benchmark/benchmark_manifest.csv \
+  --pool_manifest outputs/benchmark/benchmark_pool_manifest.csv \
+  --pred_dir outputs/zero_shot \
+  --expected_eval_size 300 \
+  --expected_pool_size 500 \
+  --snrs 20 10 5 0
+```
+
+The benchmark manifest has 1500 rows for the full run: 300 clean utterances and
+300 noisy utterances at each SNR level. Prediction CSV files use the schema
+`utt_id,dataset,model,model_size,snr,noise_type,ref,hyp`.
+
 ## Metrics
 
 All metrics are error rates, so lower is better.
