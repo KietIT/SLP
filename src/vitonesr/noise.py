@@ -4,12 +4,12 @@ import random
 from pathlib import Path
 from typing import Sequence, Tuple
 
-import numpy as np
-import soundfile as sf
-import librosa
-
 
 def read_audio(path: str, sr: int = 16000) -> np.ndarray:
+    import numpy as np
+    import librosa
+    import soundfile as sf
+
     wav, in_sr = sf.read(path, always_2d=False)
     if wav.ndim > 1:
         wav = wav.mean(axis=1)
@@ -19,7 +19,9 @@ def read_audio(path: str, sr: int = 16000) -> np.ndarray:
     return wav
 
 
-def _fit_noise(noise: np.ndarray, length: int, rng: random.Random) -> np.ndarray:
+def fit_noise(noise: np.ndarray, length: int, rng: random.Random) -> np.ndarray:
+    import numpy as np
+
     if len(noise) == 0:
         return np.zeros(length, dtype=np.float32)
     if len(noise) < length:
@@ -29,7 +31,13 @@ def _fit_noise(noise: np.ndarray, length: int, rng: random.Random) -> np.ndarray
     return noise[start:start + length].astype(np.float32)
 
 
+def _fit_noise(noise: np.ndarray, length: int, rng: random.Random) -> np.ndarray:
+    return fit_noise(noise, length, rng)
+
+
 def mix_at_snr(clean: np.ndarray, noise: np.ndarray, snr_db: float, eps: float = 1e-8) -> np.ndarray:
+    import numpy as np
+
     clean = clean.astype(np.float32)
     noise = noise.astype(np.float32)
     clean_power = np.mean(clean ** 2) + eps

@@ -1,0 +1,501 @@
+source_utt_id,dataset,split,clean_path,transcript,duration,seed,pool_rank
+VIVOSDEV16_266,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_266.wav,PHÍA DƯỚI VÀ XUNG QUANH KỆ LÀ NƯỚC BẨN LÊNH LÁNG CHẢY QUA,5.061875,42,1
+VIVOSDEV12_076,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_076.wav,TỚ ĐI KIẾM NHÀ TRỌ RỒI NHƯNG KHÓ QUÁ,3.562500,42,2
+VIVOSDEV16_196,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_196.wav,SỰ GIÚP ĐỠ CỦA BÀ LÀ VÔ CÙNG QUÍ BÁU CHO CHÚNG TÔI,4.124375,42,3
+VIVOSDEV02_R154,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R154.wav,BỌN BUÔN DỰ ÁN CHẠY CHỌT BÀY RA CÁC DỰ ÁN ĐỂ KIẾM CHÁC,5.187500,42,4
+VIVOSDEV12_197,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_197.wav,SAU ĐÓ BÀ HÀNG XÓM TÍNH TÌNH XỞI LỞI CHẠY QUA KỂ VỚI TÔI,4.687500,42,5
+VIVOSDEV06_040,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_040.wav,VÀ HÍT VÀO MŨI LÀM CHẤT NÀY LOÃNG RA,3.687500,42,6
+VIVOSDEV10_239,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_239.wav,TÁM MƯƠI BỐN TÁM MƯƠI LĂM,1.875000,42,7
+VIVOSDEV15_194,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_194.wav,NẰM TRÊN GIƯỜNG GẦN CẢ THÁNG BẤT GIÁC TÔI CẢM THẤY MÌNH THẬT CÔ ĐỘC,4.374375,42,8
+VIVOSDEV18_051,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_051.wav,NHƯNG NHIỀU DU KHÁCH THẤY THẤT VỌNG KHI LÊN ĐẾN NƠI,2.874375,42,9
+VIVOSDEV16_120,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_120.wav,SẼ LÀM CHÚNG TA NGỦ KHÔNG ĐỦ KHÔNG ĐÚNG QUY LUẬT,3.780625,42,10
+VIVOSDEV16_182,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_182.wav,NHỮNG NGƯỜI CÔ LẬP MÌNH CÓ THỂ GẶP PHẢI CHỨNG TRẦM CẢM HOẶC LO LẮNG,4.905625,42,11
+VIVOSDEV11_038,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_038.wav,MÀ PHẢI CHUYỂN QUA HÌNH THỨC GIAO DỊCH,2.312500,42,12
+VIVOSDEV07_030,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_030.wav,NHỮNG NHƯỢC ĐIỂM CỦA MÌNH,2.312500,42,13
+VIVOSDEV08_002,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_002.wav,ĐỪNG ĐỂ CON SÂU ĂN,2.375000,42,14
+VIVOSDEV06_241,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_241.wav,TÁM MƯƠI TÁM TÁM MƯƠI CHÍN,2.812500,42,15
+VIVOSDEV10_030,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_030.wav,NUÔI MÔ HÌNH TINH HOÀN RỒI TẠO RA TINH HOÀN VỚI ĐẦY ĐỦ HÌNH HÀI,5.312500,42,16
+VIVOSDEV19_071,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_071.wav,TRONG NGẮN HẠN THỊ TRƯỜNG VẬN HÀNH NHƯ MỘT CỖ MÁY BẦU CỬ,6.061875,42,17
+VIVOSDEV07_190,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_190.wav,NƠI CÓ MẤY TÊN TRÔNG RẤT GẤU,2.437500,42,18
+VIVOSDEV08_271,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_271.wav,QUÁ TỐT RỒI,2.375000,42,19
+VIVOSDEV01_T030,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_T030.wav,XUÂN NÀY EM KHÔNG VỀ,1.937500,42,20
+VIVOSDEV12_100,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_100.wav,PHỤ HUYNH VÀ HỌC SINH ĐANG PHẢI È CỔ VÌ SÁCH GIÁ CAO,4.812500,42,21
+VIVOSDEV03_R057,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R057.wav,CHỨ KHÔNG PHẢI TÀI NĂNG THIÊN BẨM NÀO,2.281250,42,22
+VIVOSDEV18_211,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_211.wav,HÌNH ẢNH QUẢNG CÁO ĐIẾU THUỐC ĐIỆN TỬ ĐƯỢC CÔNG TY T,4.093125,42,23
+VIVOSDEV15_253,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_253.wav,VẢ LẠI THEO QUY CHẾ ĐÂY LÀ TRÁCH NHIỆM CỦA MỖI THÍ SINH,3.561875,42,24
+VIVOSDEV17_239,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_239.wav,BA TÔI HÃNH DIỆN NÓI CHUYỆN VỚI SỐ HỌC SINH CÙNG LÊN XE ĐÒ,5.186875,42,25
+VIVOSDEV16_058,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_058.wav,ĐẦU TƯ TIÊU DÙNG VÀ XUẤT KHẨU ĐỀU SẼ TĂNG MẠNH,3.311875,42,26
+VIVOSDEV19_056,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_056.wav,VỀ NGUYÊN TẮC VÀO HỌC LÀ SINH VIÊN PHẢI ĐÓNG HỌC PHÍ,4.061875,42,27
+VIVOSDEV18_183,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_183.wav,BẢO THẰNG QUYẾT NÓ BẮT CON GÀ SỐNG NÂU MÀ THỊT,2.936875,42,28
+VIVOSDEV13_054,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_054.wav,GIÀ LÀNG NGUYỄN MẠNH TƯỜNG TRẢ LỜI PHỎNG VẤN BÁO GIỚI ẢNH TRUNG DÂN,5.624375,42,29
+VIVOSDEV18_171,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_171.wav,TỐI QUA NGƯỜI TA ĐẾN BẮT TÔI GIỮA ĐÊM HÔM KHUYA KHOẮT,3.499375,42,30
+VIVOSDEV03_R163,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R163.wav,NHƯNG OÁI ĂM THAY,1.625000,42,31
+VIVOSDEV01_R078,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R078.wav,NGHE CHÚNG TÔI HỎI ĐIỀU NÀY CHỊ NGÁT RÂN RẤN NƯỚC MẮT,3.750000,42,32
+VIVOSDEV12_182,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_182.wav,VÀ ĐÃ HIẾN MÁU BA LẦN,2.562500,42,33
+VIVOSDEV03_R046,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R046.wav,CỦA CHÍNH SÁCH ĐỐI VỚI QUY MÔ CỦA THỊ TRƯỜNG,2.937500,42,34
+VIVOSDEV01_R055,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R055.wav,VÀ RẤT SÁNG TẠO,2.593750,42,35
+VIVOSDEV18_297,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_297.wav,HOA PHƯỢNG VẪN NỞ ĐỎ TRỜI TRONG TIẾNG VE XAO XÁC KHÔN NGUÔI,3.280625,42,36
+VIVOSDEV01_R057,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R057.wav,NHƯNG GIẤC NGỦ CHẬP CHỜN,2.937500,42,37
+VIVOSDEV10_294,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_294.wav,EM SỢ CÓ MỘT NGÀY ANH GẶP NGƯỜI CON GÁI KHÁC TỐT HƠN EM RỒI ANH BỎ EM,5.781250,42,38
+VIVOSDEV09_015,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_015.wav,LÀM RỜM RỢP BIỂN MÂY LAU LÁCH PHẤT PHƠ,3.312500,42,39
+VIVOSDEV01_R089,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R089.wav,NHƯNG TÌNH YÊU VẪN NỒNG NÀN VÀ SAY ĐẮM NHƯ BUỔI BAN ĐẦU,4.062500,42,40
+VIVOSDEV02_T043,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_T043.wav,ĐI KIỂM TRA LẠI BÁC SĨ KHUYÊN NÊN MỔ NỘI SOI,3.781250,42,41
+VIVOSDEV06_078,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_078.wav,Ở LỚP NẤU ĂN GIA ĐÌNH,2.906250,42,42
+VIVOSDEV15_208,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_208.wav,MẤY NGÀY ĐẦU THÚY HÀ PHẢI NHỜ KIM DẪN ĐI GIỚI THIỆU TRƯỜNG,4.186875,42,43
+VIVOSDEV11_137,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_137.wav,NHỮNG NGƯỜI NÀY ĐỀU ĐƯỢC ĐÀO TẠO VỀ HỘI HỌA,3.562500,42,44
+VIVOSDEV06_222,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_222.wav,NĂM MƯƠI NĂM MƯƠI MỐT,2.750000,42,45
+VIVOSDEV18_056,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_056.wav,TRÊN MẶT AI CŨNG CÓ KHĂN TAY KHẨU TRANG CHE MIỆNG,2.999375,42,46
+VIVOSDEV11_182,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_182.wav,ĐẶC ĐIỂM CỦA PHẨY TRÙNG TẢ,2.750000,42,47
+VIVOSDEV06_285,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_285.wav,CÔNG TY TRÁCH NHIỆM HỮU HẠN ĂN UỐNG,3.562500,42,48
+VIVOSDEV03_R109,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R109.wav,PHÙ HỢP CHO MỌI CÂN NẶNG,1.656250,42,49
+VIVOSDEV09_289,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_289.wav,PHƯƠNG CHÂM SỐNG CỦA TÔI LÀ NGƯỜI KHÔNG VÌ MÌNH TRỜI TRU ĐẤT DIỆT,4.250000,42,50
+VIVOSDEV05_136,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_136.wav,RA HIỆU CHO TÔI IM LẶNG,2.125000,42,51
+VIVOSDEV15_137,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_137.wav,THẢN NHIÊN GIÁ ĐÓ THÌ CHỈ CÓ THỂ LÀM VẬY THÔI,3.999375,42,52
+VIVOSDEV01_R034,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R034.wav,NGƯỜI TA NÓI,1.937500,42,53
+VIVOSDEV15_213,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_213.wav,MÔ HÌNH CẤU TRÚC CHỨC NĂNG VÀ KHOA HỌC XÃ HỘI MANG TÍNH GIÁO DỤC,4.561875,42,54
+VIVOSDEV16_193,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_193.wav,THỰC TẾ VAI TRÒ CỦA BẠN VÀ NGƯỜI PHỎNG VẤN ĐỐI CHIẾU NHAU,4.343125,42,55
+VIVOSDEV11_298,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_298.wav,CHUẨN BỊ CHO NGÀY KHAI TRƯƠNG CỬA HÀNG ĐẦU TIÊN,3.906250,42,56
+VIVOSDEV03_R148,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R148.wav,MỘT VỤ CHẬP ĐIỆN ĐÃ KHIẾN NGỌN LỬA BÙNG LÊN,3.000000,42,57
+VIVOSDEV07_064,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_064.wav,CỨ CHỤM CÁC ĐẦU NGÓN TAY LẠI MỘT CHỖ,4.562500,42,58
+VIVOSDEV18_021,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_021.wav,VẤN ĐỀ ĐẶT RA Ở ĐÂY LÀ LÀM THẾ NÀO ĐỂ,2.561875,42,59
+VIVOSDEV01_R146,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R146.wav,HIỆN RA TẬN PHÍA XA,2.031250,42,60
+VIVOSDEV15_200,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_200.wav,NÓI CHUYỆN MỘT HỒI ÔNG LÀM BỘ ĐỂ TAY LÊN TAY EM TRÊN CẦN SỐ,4.874375,42,61
+VIVOSDEV10_266,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_266.wav,TỪ TRÊN NÓC NHÀ NHÌN XUỐNG CÓ KHÁC,2.687500,42,62
+VIVOSDEV13_069,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_069.wav,NHỮNG ĐIẾU THUỐC VÔ Ý ĐỐT CHÁY VÀI CHỖ TRÊN CHIẾC SÔ PHA BỌC VẢI,4.999375,42,63
+VIVOSDEV04_R187,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R187.wav,THỨ ÂM THANH KHÔNG CHỈ CẢM NHẬN BẰNG THÍNH GIÁC,3.250000,42,64
+VIVOSDEV02_R122,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R122.wav,CŨNG KHIẾN CHO HỌ DÈ DẶT,2.562500,42,65
+VIVOSDEV14_108,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_108.wav,NGƯỜI PHÁP ĐÃ ĐỒNG Ý VỚI CÁCH QUẢN LÝ LĨNH VỰC DÀNH RIÊNG,2.905625,42,66
+VIVOSDEV11_242,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_242.wav,CHÍN MƯƠI CHÍN MƯƠI MỐT,2.875000,42,67
+VIVOSDEV05_125,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_125.wav,ĐANG LÀM VIỆC KHÔNG NGỪNG NGHỈ,2.250000,42,68
+VIVOSDEV01_R187,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R187.wav,THẬT SỰ MÀ LÀ BỞI LÒNG HẬN THÙ,2.750000,42,69
+VIVOSDEV16_273,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_273.wav,CHÚNG TÔI ĐÃ ĐIỀU TRA NHỮNG TRƯỜNG HỢP CÓ NGHI VẤN GIAN DỐI,4.468125,42,70
+VIVOSDEV09_022,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_022.wav,TRỨNG MỰC QUYẾN RŨ CÁC NGƯ DÂN,2.375000,42,71
+VIVOSDEV14_027,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_027.wav,BẠN CÓ THỂ THAM KHẢO MỘT SƠ YẾU LÝ LỊCH ĐIỆN TỬ SAU ĐÂY,5.061875,42,72
+VIVOSDEV01_R098,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R098.wav,TỈNH QUẢNG TRỊ ĐÃ PHÊ DUYỆT,2.875000,42,73
+VIVOSDEV06_296,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_296.wav,CÔ ẤY ĐÃ QUÁ CHÉN,2.562500,42,74
+VIVOSDEV01_R058,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R058.wav,GIÁM ĐỐC SỞ GIÁO DỤC ĐÀO TẠO NINH THUẬN CHO BIẾT,3.781250,42,75
+VIVOSDEV08_208,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_208.wav,HAI MƯƠI HAI HAI MƯƠI BA,2.250000,42,76
+VIVOSDEV08_214,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_214.wav,BA MƯƠI BỐN BA MƯƠI LĂM,2.812500,42,77
+VIVOSDEV07_093,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_093.wav,PHỤC VỤ CHO MÙA THI ĐẠI HỌC ĐANG ĐẾN SÁT SẠT,3.312500,42,78
+VIVOSDEV05_286,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_286.wav,THẾ NHƯNG KHI GIÁ PHÔI THÉP THẾ GIỚI CAO DẦN,3.625000,42,79
+VIVOSDEV13_227,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_227.wav,TẠI ĐÂY CÓ MỘT ÔNG TRƯỞNG PHÒNG NHÂN SỰ CÔNG TY,3.249375,42,80
+VIVOSDEV07_182,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_182.wav,NHỮNG NGƯỜI HOÀI NGHI NÓI RẰNG GIỮ ĐƯỢC VẬT TREO LỦNG LẲNG TRÊN NGƯỜI,4.031250,42,81
+VIVOSDEV06_001,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_001.wav,ĐƠN GIẢN LÀ TÁN GẪU VỚI NHAU,2.687500,42,82
+VIVOSDEV09_297,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_297.wav,THẾ NÀO LÀ HOÀN HẢO,2.187500,42,83
+VIVOSDEV15_121,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_121.wav,TRẢI DÀI HÀNG CHỤC CÂY SỐ ĐỀU THU GỌN VÀO TẦM MẮT,3.999375,42,84
+VIVOSDEV15_209,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_209.wav,HỌ THÍCH NGHI VỚI VĂN HÓA CÔNG TY NHƯ THẾ NÀO,3.186875,42,85
+VIVOSDEV11_036,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_036.wav,TÔI CÓ THỂ CĂM GIẬN ĐỦ THỨ,2.250000,42,86
+VIVOSDEV04_R100,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R100.wav,BÀ NÓI,1.375000,42,87
+VIVOSDEV11_048,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_048.wav,VÀNG ÓNG ĐÔI GHỆT CAO CỔ CỦA NGỰ LÂM QUÂN,3.343750,42,88
+VIVOSDEV17_213,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_213.wav,ĐOÀN ĐI THUYỀN ĐẾN MỘT KHU LÀNG DÂN TỘC THIỂU SỐ,4.030625,42,89
+VIVOSDEV16_067,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_067.wav,HÌNH NHƯ KHÔNG CÓ CẢ MỘT TRONG HAI TÀI VÀ ĐỨC,3.561875,42,90
+VIVOSDEV18_198,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_198.wav,MẤY NGÀY NAY CHÚNG TÔI ĐÃ TỊCH THU ĐƯỢC KHÁ NHIỀU GÀ CHẾT,2.811875,42,91
+VIVOSDEV12_135,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_135.wav,ÔNG ĐƯỢC NHIỀU NGƯỜI BIẾT ĐẾN,2.500000,42,92
+VIVOSDEV05_055,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_055.wav,NHƯNG MỨC ÁN TỬ HÌNH ĐỐI VỚI CÁC BỊ CÁO LÀ TƯƠNG XỨNG,3.343750,42,93
+VIVOSDEV14_116,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_116.wav,MỘT GÓC CÂU CÁ TRÊN CẦU SÀI GÒN ẢNH MAI VINH,2.874375,42,94
+VIVOSDEV05_155,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_155.wav,NỬA VÒNG TRÁI ĐẤT HƠN BẢY NĂM,2.375000,42,95
+VIVOSDEV01_R170,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R170.wav,ĐÔI BÀN TAY EM KHÔNG ĐƯỢC MỀM MẠI VÀ NÕN NÀ,3.281250,42,96
+VIVOSDEV12_275,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_275.wav,TÔI KHÔNG THẤY GÌ LÀ ĐÚNG KHI TĂNG GIÁ XE VÀO CÁC DỊP TẾT,4.593750,42,97
+VIVOSDEV18_114,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_114.wav,LÀM ĐƯỢC HẾT KHỐI CÔNG VIỆC ẤY LÀ MỘT NỖ LỰC RẤT LỚN,3.030625,42,98
+VIVOSDEV18_282,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_282.wav,NHƯNG CUỐI CÙNG CHẲNG AI CHỊU NỔI CÁI TÍNH HAM VUI CỦA TÔI,3.249375,42,99
+VIVOSDEV12_054,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_054.wav,THIẾU SỰ QUAN TÂM ĐÚNG MỨC TỪ CÁC CƠ QUAN CHỨC NĂNG,4.875000,42,100
+VIVOSDEV10_129,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_129.wav,ĐIỀU NÀY ĐÚNG VỚI MỌI CẤP ĐỘ VÀ TRONG MỌI LĨNH VỰC CỦA ĐỜI SỐNG,4.812500,42,101
+VIVOSDEV16_228,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_228.wav,XEN KẼ GIỮA NHỮNG MÀN BIỂU DIỄN LÀ NHỮNG PHÚT VUI CHƠI TẬP THỂ,4.811875,42,102
+VIVOSDEV18_265,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_265.wav,SAU ĐÓ HỌ LÂN LA SANG CHƠI RỒI ĐÁNH CẮP ĐỨA BÉ,3.999375,42,103
+VIVOSDEV14_123,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_123.wav,MỘT VÀI NGƯỜI TRONG BỌN HỌ ĐƯA MẮT NHÌN MẢNH GIẤY,3.124375,42,104
+VIVOSDEV12_271,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_271.wav,BÀ CON RANG TRÍ CÀNH ĐÀO ĐỂ CHUẨN BỊ ĐÓN TẾT,3.968750,42,105
+VIVOSDEV19_257,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_257.wav,NHƯNG NẾU CHỈ NÓI CÁI GIỎI KHÔNG THÔI THÌ THẬT CHƯA ĐỦ VỀ CHÚ TƯ,5.280625,42,106
+VIVOSDEV18_126,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_126.wav,VÀI LẦN TRIỂN LÃM TRANH TƯỢNG KHÔNG LỜI NHƯ THẾ HẮN SẼ NHẬN RA,4.436875,42,107
+VIVOSDEV16_299,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_299.wav,VÀO ĐƯỢC NHÀ ANH ĐẤY SỬA CỬA ĐI NGUY HIỂM ĐẤY,4.436875,42,108
+VIVOSDEV18_195,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_195.wav,ĐẦU TIÊN LÀ MỘT TẤM ÂM BẢN SAU ĐÓ MỚI ĐẾN DƯƠNG BẢN,2.749375,42,109
+VIVOSDEV18_240,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_240.wav,MỜI THAM DỰ CUỘC THI VIẾT NGẮN MỘT GIỜ KHÔNG ĐIỆN,3.499375,42,110
+VIVOSDEV17_107,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_107.wav,HỌ ĐƯỢC BỌN ĐẦU NẬU NHỮNG TAY TRÙM THUÊ VỚI GIÁ RẺ MẠT,4.905625,42,111
+VIVOSDEV19_094,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_094.wav,TRANG VIẾT CỦA HỌ HƠN HẲN THỜI TUỔI TRẺ CỦA TÔI,3.936875,42,112
+VIVOSDEV01_R012,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R012.wav,NHỮNG CƠN GIÓ MẠNH VÀ MƯA ĐÓNG BĂNG GÂY TRƠN TRỢT,4.187500,42,113
+VIVOSDEV19_227,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_227.wav,TỪ ĐẤY ÔNG CÀNG THÔNG CẢM SÂU SẮC TÂM TRẠNG CỦA NGUYỄN THIẾP,6.780625,42,114
+VIVOSDEV02_T013,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_T013.wav,TỐNG CỔ HẮN ĐI KHÔNG ĐƯỢC ĐỂ HẮN VÀO ĐÂY NỮA,3.687500,42,115
+VIVOSDEV13_255,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_255.wav,CÓ LẼ ĐÂY LÀ LỜI QUẢNG CÁO KHÔNG CÔNG HAY NHẤT CHO DU LỊCH LÀO,4.124375,42,116
+VIVOSDEV04_R189,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R189.wav,TỪ NỖI CÔ ĐƠN CỦA MỘT CÔ BÉ BỊ CHA MẸ BỎ QUÊN,3.375000,42,117
+VIVOSDEV07_170,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_170.wav,NHƯ LẦN NÀY ĐƯỢC NẾM MÓN GIÒ THỦ HOÀN TOÀN LÀM TỪ TAI HEO,4.281250,42,118
+VIVOSDEV11_129,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_129.wav,ĐI BỘ LEO NÚI ĐẾN NHỪ CHÂN,2.875000,42,119
+VIVOSDEV10_051,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_051.wav,KHUNG RĂNG HÀM TRÊN KHUM,1.906250,42,120
+VIVOSDEV09_293,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_293.wav,NÓ TRỐN MẤT TIÊU RỒI CÒN ĐÂU,2.250000,42,121
+VIVOSDEV13_164,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_164.wav,HIỆN CƠ QUAN CHỨC NĂNG ĐANG TIẾP TỤC ĐIỀU TRA VỤ VIỆC,3.655625,42,122
+VIVOSDEV15_003,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_003.wav,ĐIỀU NÀY KHÓ HƠN KHI BẠN VÀO BÀN TIỆC TOÀN NGƯỜI XA LẠ,3.624375,42,123
+VIVOSDEV05_115,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_115.wav,THỜI HẠN SỬ DỤNG VÀ LOẠI SẢN PHẨM BỘT,3.875000,42,124
+VIVOSDEV04_R114,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R114.wav,CŨNG CHẲNG CÒN XÚNG XÍNH QUẦN ÁO MỚI,2.812500,42,125
+VIVOSDEV02_R015,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R015.wav,TẤT CẢ MỌI THỨ ĐỀU KỲ LẠ MỘT CÁCH PHI THƯỜNG,3.375000,42,126
+VIVOSDEV17_173,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_173.wav,TRÌNH ĐỘ CHUYÊN MÔN CỦA CÔ KHIẾN CÔ QUÁ THỪA TƯ CÁCH,3.249375,42,127
+VIVOSDEV13_167,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_167.wav,KHI BỊ PHÁT HIỆN HỌ ĐÃ TRẢ LỜI NHƯ THẾ NÀO,3.843125,42,128
+VIVOSDEV01_R092,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R092.wav,DO CHÍNH PHỦ MỸ TIẾN HÀNH Ở VIỆT NAM,3.031250,42,129
+VIVOSDEV14_180,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_180.wav,ĂN CÁ NGỪ CÁ THU VÀ CÁ MÒI VỚI RAU TRỘN,2.874375,42,130
+VIVOSDEV01_T048,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_T048.wav,THẰNG ĐÓ CÓ CÁI MIỆNG NHƯ ĐÀN BÀ,2.375000,42,131
+VIVOSDEV05_200,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_200.wav,LÀM ĐƯỜNG DÂY ĐỂ NỐI CÁC MẢNH ĐỜI,2.750000,42,132
+VIVOSDEV12_071,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_071.wav,NÓ ĐƯỢC ĐẶT TRONG MỘT HỘP ĐỰNG TRANG SỨC BỌC DA ĐỎ,3.937500,42,133
+VIVOSDEV09_158,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_158.wav,SỢ NHẤT LÀ MÙA MƯA SẤM SÉT ĐÙNG ĐOÀNG TRÊN NÚI,3.562500,42,134
+VIVOSDEV07_211,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_211.wav,HAI MƯƠI TÁM HAI MƯƠI CHÍN,2.375000,42,135
+VIVOSDEV09_047,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_047.wav,NGÀY CĂN BẬC HAI CHỈ DIỄN RA CHÍN LẦN TRONG MỘT THẾ KỶ,4.312500,42,136
+VIVOSDEV19_011,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_011.wav,MONG ANH HÃY HIỂU CHO EM EM THƯƠNG NHỚ VÀ YÊU ANH NHIỀU,4.124375,42,137
+VIVOSDEV13_088,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_088.wav,NHỮNG CHIẾC LỒNG ĐÈN ĐỒ CHƠI VIỆT VẪN LẶNG LẼ MANG HỒN VIỆT XUỐNG PHỐ,5.030625,42,138
+VIVOSDEV14_235,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_235.wav,THAM GIA THIẾT KẾ LĂNG CHỦ TỊCH HỒ CHÍ MINH THÌ CÓ NHIỀU NGƯỜI,3.374375,42,139
+VIVOSDEV14_140,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_140.wav,CÓ NHƯNG PHẢI LÀ THUỐC ĐẶC TRỊ CỦA PHÁP HIẾM VÀ CỰC KỲ ĐẮT,3.499375,42,140
+VIVOSDEV07_025,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_025.wav,CHO NHỮNG CHUYẾN DÃ NGOẠI CỦA DU KHÁCH,3.062500,42,141
+VIVOSDEV18_082,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_082.wav,HÀNG CHÂN MÀY ĐEN VÀ XẾCH KHÔNG LẪN VÀO ĐÂU ĐƯỢC,2.624375,42,142
+VIVOSDEV16_239,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_239.wav,VÀ MỘT ĐIỀU SÂU XA LÀ MÌNH ĐÃ THẬT SỰ YÊU BẠN,4.249375,42,143
+VIVOSDEV13_263,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_263.wav,MỘT SỐ ĐIỂM NƯỚC PHUN ĐẾN ĐÂU BAY HƠI HẾT ĐẾN ĐÓ,3.186875,42,144
+VIVOSDEV11_282,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_282.wav,THÔI THÌ CỨ SẮP XẾP NHƯ VẬY,3.062500,42,145
+VIVOSDEV04_R013,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R013.wav,NGHĨA LÀ KÉM CỎI NAM TÍNH HAY SAO,3.841000,42,146
+VIVOSDEV13_226,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_226.wav,VẬY MỚI CÓ MỤC TIÊU ĐỂ MÀ PHẤN ĐẤU NÊN NGƯỜI CÓ Ý THỨC,3.593125,42,147
+VIVOSDEV15_173,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_173.wav,HÌNH THỨC KỶ LUẬT NÀO CŨNG CHỈ CÓ TÍNH ĐỊNH HƯỚNG RĂN ĐE,4.749375,42,148
+VIVOSDEV05_199,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_199.wav,LẦN LỮA MÃI MỚI GẶP ĐƯỢC TUYÊN,2.937500,42,149
+VIVOSDEV09_222,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_222.wav,NĂM MƯƠI NĂM MƯƠI MỐT,3.187500,42,150
+VIVOSDEV03_T023,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_T023.wav,CƯỚP ĐẦY ĐƯỜNG CÔNG AN CHỈ LO HẠCH SÁCH,2.812500,42,151
+VIVOSDEV05_249,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_249.wav,TÔI NGHĨ THỦ TƯỚNG SẼ KHÔNG NÉ TRÁNH BẤT CỨ CÂU HỎI NÀO,4.125000,42,152
+VIVOSDEV02_R005,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R005.wav,NẾU TƯỞNG TƯỢNG BẢY TÁM NĂM NỮA,2.625000,42,153
+VIVOSDEV15_239,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_239.wav,THẬT RA THÌ CŨNG KHÔNG THỂ LÀM CẦU KÌ NHƯ Ở NHÀ ĐƯỢC,4.374375,42,154
+VIVOSDEV16_101,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_101.wav,TÔI KHẼ CHỚP MẮT VÀ THẦM CẦU NGUYỆN XIN CHÚA GIÚP CON,3.936875,42,155
+VIVOSDEV11_015,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_015.wav,NỮ DIỄN VIÊN XINH ĐẸP PHẠM BĂNG BĂNG,2.687500,42,156
+VIVOSDEV04_R056,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R056.wav,GÍ HÒN THAN VÀO RƠM,3.093750,42,157
+VIVOSDEV06_103,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_103.wav,CÁC EM NHỎ SẼ KHÔNG CÒN PHẢI ĐI TRÊN NHỮNG CHUYẾN ĐÒ NGUY HIỂM,4.812500,42,158
+VIVOSDEV06_157,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_157.wav,SỐ KHÁC SUY ĐOÁN RẰNG ANH TA HÀNH ĐỘNG ÁC TÂM VẬY,4.718750,42,159
+VIVOSDEV08_201,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_201.wav,KHÔNG MỘT HAI BA BỐN,2.250000,42,160
+VIVOSDEV04_T003,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_T003.wav,NHẬN ĐƯỢC TIN NÀY GỌI LẠI CHO TÔI GẤP,2.968750,42,161
+VIVOSDEV13_276,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_276.wav,ĐÓ LÀ CÂU HỎI MÀ ĐẾN NAY VẪN CHƯA CÓ CÂU TRẢ LỜI,3.124375,42,162
+VIVOSDEV18_257,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_257.wav,NGỒI NGHE TIẾNG BIỂN VÀ THƯ THẢ ĐẾM TỪNG GIỌT ĐEN RƠI,3.499375,42,163
+VIVOSDEV13_098,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_098.wav,HẦU NHƯ CÁC PHẢN ỨNG PHỤ NẶNG NỀ LÀ RẤT HIẾM GẶP,4.249375,42,164
+VIVOSDEV13_230,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_230.wav,CHỈ MỘT ĐIỀU ĐƠN GIẢN VẬY MÀ ANH ẤY KHÔNG BAO GIỜ THỰC HIỆN ĐƯỢC,4.186875,42,165
+VIVOSDEV05_226,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_226.wav,MỘT CÚ NGOẶT KHÔNG CHÍNH XÁC,2.062500,42,166
+VIVOSDEV16_048,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_048.wav,PHẢI CHĂNG XÂY DỰNG NIỀM TIN VÀO TÌNH YÊU KHÓ THẾ,3.968125,42,167
+VIVOSDEV10_014,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_014.wav,SAU KHI ĐỌC NHỮNG THÔNG TIN TRÊN BÁO,3.062500,42,168
+VIVOSDEV11_193,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_193.wav,VÌ BAN ĐÊM CHỊ NGỦ KHÔNG NGON,2.687500,42,169
+VIVOSDEV08_128,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_128.wav,CÓ LẼ PHẢI MẤT NHIỀU THỜI GIAN,2.625000,42,170
+VIVOSDEV03_T047,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_T047.wav,TRONG PHIM CÓ NHIỀU CẢNH CHÉM GIẾT,2.281250,42,171
+VIVOSDEV04_R086,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R086.wav,TAY KIA XÁCH MỘT TAY GIÓNG MANG CHIẾC VỊM LỚN,5.125000,42,172
+VIVOSDEV02_R032,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R032.wav,Y TẾ BÌNH HƯNG HÒA BỊ HƯ HỎNG,3.437500,42,173
+VIVOSDEV02_R099,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R099.wav,ỔNG NÓI Ở SÀI GÒN ỔNG ĐÃ LÀM ÔNG HỘI ĐỒNG NHƯ THẾ NÀO,5.062500,42,174
+VIVOSDEV19_222,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_222.wav,MẮT TỰ NHIÊN HOA LÊN TRÍ CHỤP MỘT CÁI LY QUẬT MẠNH XUỐNG SÀN,6.061875,42,175
+VIVOSDEV19_142,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_142.wav,HỌ CHỈ THÍCH NHỮNG MÔN GÌ MẠNH BẠO BẠO LỰC VÀ KIẾM RA TIỀN THÔI,4.749375,42,176
+VIVOSDEV18_272,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_272.wav,ANH NHƠN BẢO TÔI VỀ TRƯỚC CÒN ANH ĐI THEO CÔ GÁI,3.124375,42,177
+VIVOSDEV12_227,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_227.wav,SÁU MƯƠI SÁU MƯƠI MỐT,2.531250,42,178
+VIVOSDEV14_285,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_285.wav,TÔI ĐÃ NHIỀU LẦN PHẢN ĐỐI QUYẾT LIỆT VIỆC NƯỚC THẢI TUỒN RA NGOÀI,3.374375,42,179
+VIVOSDEV11_075,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_075.wav,DÃI DẦU NẮNG GIÓ TRƯỜNG SƠN,3.062500,42,180
+VIVOSDEV14_145,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_145.wav,MỘT SỐ BẠN TRẺ CŨNG CÓ Ý NGHĨ NHƯ CAO CƯỜNG,2.686875,42,181
+VIVOSDEV08_163,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_163.wav,CHƯƠNG TRÌNH ĐÃ TẠO ĐƯỢC HIỆU ỨNG TỐT TỪ PHÍA KHÁN GIẢ NHÍ,4.593750,42,182
+VIVOSDEV16_079,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_079.wav,TẤT CẢ ĐỂ CHO NGƯỜI BỆNH VÀ THÂN NHÂN HÀI LÒNG KHI ĐẾN BỆNH VIỆN,4.999375,42,183
+VIVOSDEV08_127,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_127.wav,VỀ VIỆC MANG ĐẾN CHO CÁC EM NIỀM VUI HỌC,3.187500,42,184
+VIVOSDEV17_070,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_070.wav,HÀ CŨNG CHẲNG NHỚ MÌNH CÓ NÓI HAY KHÔNG ĐỂ CÃI LẠI ÔNG ẤY,4.030625,42,185
+VIVOSDEV09_204,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_204.wav,MƯỜI MỘT MƯỜI HAI MƯỜI BA,3.031250,42,186
+VIVOSDEV13_104,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_104.wav,SỐ TIỀN QUÁ LỚN KHIẾN GIA ĐÌNH HƯƠNG PHẠM VÀ LÊ CHOÁNG VÁNG,4.374375,42,187
+VIVOSDEV04_R182,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R182.wav,HOẶC CHỈ BIỂU HIỆN BẰNG CÁC RỐI LOẠN CO BÓP,3.562500,42,188
+VIVOSDEV17_170,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_170.wav,VÀ ĐỘI TUYỂN PHÁP ĐANG LÀ ĐỘI CHIẾM ƯU THẾ HƠN SO VỚI THỤY SĨ,3.843125,42,189
+VIVOSDEV03_R180,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R180.wav,SAU CẢI CÁCH,1.562500,42,190
+VIVOSDEV08_141,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_141.wav,KHI SỨC ÉP BIẾN MẤT CHÚNG TRỞ LẠI TÌNH TRẠNG MỀM DẺO BÌNH THƯỜNG,4.812500,42,191
+VIVOSDEV09_139,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_139.wav,NẾU CHỦ ĐẦU TƯ KHÔNG TỰ PHÁ DỠ THÌ BỊ CƯỠNG CHẾ,3.500000,42,192
+VIVOSDEV09_110,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_110.wav,KHI MIỆNG VẪN NGẬM BẦU VÚ QUẮT QUEO,3.625000,42,193
+VIVOSDEV19_279,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_279.wav,NỢ MỘT CUỘC CHIẾN CHỐNG THAM NHŨNG VẪN CHƯA VÀO ĐÂU,3.624375,42,194
+VIVOSDEV17_268,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_268.wav,VÌ CHÚNG CÓ THỂ LÀM RĂNG CỦA BẠN DỄ BỊ Ố VÀNG,4.093125,42,195
+VIVOSDEV16_161,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_161.wav,TRUNG QUỐC ĐƯA RA HÌNH PHẠT CỤ THỂ ĐỐI VỚI TỘI THAM NHŨNG,4.655625,42,196
+VIVOSDEV19_030,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_030.wav,PHÙ SA BỒI ĐẮP RUỘNG VƯỜN CHO XÓM LÀNG TRÙ PHÚ,3.593125,42,197
+VIVOSDEV11_033,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_033.wav,MÀ PHẢI CHE CHÁI Ở TẠM BÊN HÔNG NHÀ CHA RUỘT,3.093750,42,198
+VIVOSDEV13_225,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_225.wav,HAI LOẠI VĂN NÀY NÊN ĐƯỢC COI TRỌNG NHƯ NHAU TRONG CÁC KỲ THI,3.686875,42,199
+VIVOSDEV12_128,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_128.wav,TRONG CUỘC BỎ PHIẾU TẠI HỘI ĐỒNG BẢO AN HAI NGÀY TRƯỚC ĐÓ,3.968750,42,200
+VIVOSDEV17_100,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_100.wav,ĐẾN ĐÀ LẠT BẠN PHẢI CHUẨN BỊ ĐÔI CHÂN ĐỂ ĐI BỘ,3.968125,42,201
+VIVOSDEV07_168,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_168.wav,MÀ CHO ĐẾN LÚC ĐÓ ĐƯỢC XEM LÀ CỦA TƯ NHÂN,3.500000,42,202
+VIVOSDEV17_212,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_212.wav,CÓ MẤY NGƯỜI ĐỤNG PHẢI NÓ SUÝT NGÃ CHÚI XUỐNG ĐƯỜNG,4.686875,42,203
+VIVOSDEV05_238,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_238.wav,CỘNG ĐỒNG NGƯỜI MÊ TOÁN HỌC TRÊN TOÀN THẾ GIỚI,3.062500,42,204
+VIVOSDEV01_R141,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R141.wav,NHỮNG CON ĐƯỜNG NGẮN NGỦN NHƯ NHỮNG NHÁT CẮT,3.281250,42,205
+VIVOSDEV13_106,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_106.wav,CẢM GIÁC ĐƯỢC CHIA SẺ VỚI BẠN ĐỜI CÙNG SỞ THÍCH THÚ VỊ LẮM,4.561875,42,206
+VIVOSDEV07_127,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_127.wav,CÓ HAI TÁC DỤNG TÍCH CỰC,2.125000,42,207
+VIVOSDEV05_037,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_037.wav,ÔNG NHẶT NÓ LÊN,1.937500,42,208
+VIVOSDEV11_083,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_083.wav,MỘT SINH VIÊN ĐƯỢC VAY VỐN TÍN DỤNG HỌC TẬP,3.625000,42,209
+VIVOSDEV15_147,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_147.wav,BẮT ĐẦU CUỘC CHẠY ĐUA MÙA KINH DOANH TẾT GIỮA BÁNH NỘI VÀ BÁNH NGOẠI,4.249375,42,210
+VIVOSDEV14_199,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_199.wav,KHÓ SAO DUYÊN DÁM CHO ANH UỐNG RƯỢU TRONG ĐÁM CƯỚI,3.061875,42,211
+VIVOSDEV13_239,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_239.wav,CHẲNG CẦN NHÌN VỀ PHƯƠNG TÂY QUÊ HƯƠNG CỦA HÀNG HIỆU,3.124375,42,212
+VIVOSDEV08_093,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_093.wav,THÌ BỖNG NGHE MẤY TIẾNG OÁC OÁC TỪ VẠT RỪNG PHI LAO,4.250000,42,213
+VIVOSDEV02_R027,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R027.wav,CÓ THỂ LÀNH LẶN MÀ KHÔNG ĐỂ LẠI VẾT SẸO,3.406250,42,214
+VIVOSDEV05_209,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_209.wav,TÊN GỌI TẠI ĐỊA PHƯƠNG LÀ TRẮC THỐI,3.187500,42,215
+VIVOSDEV09_286,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_286.wav,CÓ CÒN HƠN KHÔNG,1.500000,42,216
+VIVOSDEV16_033,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_033.wav,ĐỘI NÀO THÀNH TÍCH CÀNG CAO THÌ QUẢN LÝ CÀNG KHÓ,3.561875,42,217
+VIVOSDEV15_047,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_047.wav,MỘT TÌNH HUỐNG ỨNG XỬ SƯ PHẠM TÔI LÀM BỘ TỈNH RỤI ĐƯỢC CÔ DUYỆT,5.374375,42,218
+VIVOSDEV07_194,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_194.wav,NHIỀU TRỤ ĐÁ DI TÍCH NẰM NGHIÊNG NGẢ VÀ VỠ NÁT,2.937500,42,219
+VIVOSDEV13_257,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_257.wav,TỪ ĐÓ ĐẾN NAY GIA ĐÌNH CHỊ VẪN SỐNG TRONG CĂN NHÀ LỤP XỤP,3.561875,42,220
+VIVOSDEV05_119,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_119.wav,MÀ CÒN BỊ NHỮNG BỘ MẶT LẠNH TE KIA HOẠNH HỌE,3.937500,42,221
+VIVOSDEV13_210,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_210.wav,RÀ SOÁT CHẤT LƯỢNG CÔNG TRÌNH XÂY DỰNG TRÊN CẢ NƯỚC,3.311875,42,222
+VIVOSDEV08_166,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_166.wav,DỊCH VỤ KIỂM TRA SỨC KHỎE ĐỊNH KỲ LÀ MỘT Ý KIẾN HAY,3.625000,42,223
+VIVOSDEV03_T048,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_T048.wav,DIỄN VIÊN CHÍNH ĐỨNG NHƯ KHÚC GỖ,2.250000,42,224
+VIVOSDEV14_079,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_079.wav,VẬY AI SẼ CHỊU TRÁCH NHIỆM VỀ NHỮNG TRƯỜNG HỢP NÀY,3.374375,42,225
+VIVOSDEV17_245,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_245.wav,ĐƯỢC BÀY TRÊN NHỮNG BỆ THỜ BÊN CẠNH NHỮNG BÓ SEN HUỆ THƠM NỨC,5.311875,42,226
+VIVOSDEV04_T018,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_T018.wav,NHỮNG SAI LẦM KHI ĐI CHỌN KHÁCH SẠN,2.593750,42,227
+VIVOSDEV04_R186,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R186.wav,NHẰM TẠO RA SỰ HẤP DẪN,1.937500,42,228
+VIVOSDEV06_006,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_006.wav,MÀ DO LỐI SỐNG CHUI NHỦI CỦA CHÚNG,3.250000,42,229
+VIVOSDEV03_R195,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R195.wav,KHÔNG MỘT CHIẾC XE LẠ NÀO CÓ THỂ MON MEN VÀO ĐƯỢC,3.062500,42,230
+VIVOSDEV10_130,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_130.wav,CAO NGỒNG NGỒNG,1.375000,42,231
+VIVOSDEV17_297,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_297.wav,TRONG DÒNG THÁC NGƯỜI CHỈ NHÌN ĐƯỢC MẮT KÍNH VÀ KHẨU TRANG,4.311875,42,232
+VIVOSDEV06_286,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_286.wav,PHÍ CHUYỂN GIAO CÔNG NGHỆ LÀ BA CHỤC NGÀN ĐỒNG,3.843750,42,233
+VIVOSDEV07_185,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_185.wav,CHÍU CHÍT GỢI TÌNH MẸ CON SUM HỌP,2.562500,42,234
+VIVOSDEV06_079,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_079.wav,MÀ BẠN CÓ THỂ THAM KHẢO ĐỂ LÀM ĐẸP GIAN BẾP,4.437500,42,235
+VIVOSDEV04_R126,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R126.wav,TÔI KHÔNG NỠ LÀM CÔ BÉ THẤT VỌNG,2.406250,42,236
+VIVOSDEV15_013,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_013.wav,CŨNG ĐỀU TRONG TƯ THẾ NGÕ NHỎ PHỐ NHỎ PHỞ TÔI Ở ĐÓ,3.686875,42,237
+VIVOSDEV16_059,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_059.wav,ĐỒ CỔ KHÔNG CÔNG KHAI NGUỒN GỐC PHẢI BỊ COI LÀ HÀNG GIẢ,4.093125,42,238
+VIVOSDEV10_245,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_245.wav,CHÍN MƯƠI SÁU CHÍN MƯƠI BẢY,1.656250,42,239
+VIVOSDEV09_077,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_077.wav,ĐỂ CÓ THỂ VẬN HÀNH CHÚNG ĐƯỢC HIỆU QUẢ HƠN,2.843750,42,240
+VIVOSDEV18_259,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_259.wav,MUỐN CÔNG NHẬN NGAY PHA BÓNG ẤY THÌ PHẢI SỬA LUẬT,3.436875,42,241
+VIVOSDEV06_248,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_248.wav,MỘT BA NĂM BẢY CHÍN,3.062500,42,242
+VIVOSDEV05_231,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_231.wav,MỚI ĐÂY NHẤT LÀ CÁC TIỂU VƯƠNG QUỐC Ả RẬP THỐNG NHẤT,3.625000,42,243
+VIVOSDEV05_120,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_120.wav,NHƯNG MÙI HÔI VẪN XỘC VÀO TẬN ÓC,3.031250,42,244
+VIVOSDEV16_064,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_064.wav,TỪNG LÀ CHỦ TẾ HÀNG TRĂM LỄ AN TÁNG MỘ GIÓ,3.624375,42,245
+VIVOSDEV08_180,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_180.wav,CHÍNH SỰ LÊN SÀN Ồ ẠT ĐÓ,3.125000,42,246
+VIVOSDEV08_222,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_222.wav,NĂM MƯƠI NĂM MƯƠI MỐT,2.375000,42,247
+VIVOSDEV09_039,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_039.wav,THỊT NGỌT LỪ ẤY LẠI MANG THEO TRÙNG SÁN GÂY BỆNH,3.437500,42,248
+VIVOSDEV02_R069,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R069.wav,LÀM ĐẸP KHÔNG ĐÚNG CÁCH,2.500000,42,249
+VIVOSDEV16_153,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_153.wav,CẢ ĐỜI CHƯA BAO GIỜ TÔI CÓ CẢM GIÁC SUNG SƯỚNG NHƯ VẬY,3.749375,42,250
+VIVOSDEV09_280,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_280.wav,XUÂN NÀY EM KHÔNG VỀ,3.187500,42,251
+VIVOSDEV13_211,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_211.wav,KHÔNG NẢN NGHĨA TIN RẰNG SẼ CÓ MỘT GIẢI PHÁP NÀO ĐÓ,3.686875,42,252
+VIVOSDEV10_262,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_262.wav,THUA XA TIỆM TẠP HOÁ NHÀ TAO,2.750000,42,253
+VIVOSDEV18_102,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_102.wav,CẢ NGÀY TRỜI KHÔNG NẮNG GIÓ LẠNH NÊN THƯA VẮNG DU KHÁCH,2.780625,42,254
+VIVOSDEV08_274,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_274.wav,TÔI CHẾT CÙNG VỚI ÁNH TRĂNG,1.812500,42,255
+VIVOSDEV06_054,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_054.wav,DÙ LÀ ĐẬU SỨC MẠNH HOẶC CẢI BÔNG KHỦNG LONG,3.687500,42,256
+VIVOSDEV04_T035,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_T035.wav,ANH KHEN EM ĐẸP EM CHÊ ANH GIÀ,2.687500,42,257
+VIVOSDEV10_156,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_156.wav,CHÍNH PHỦ ĐỒNG THỜI CŨNG LẬP THÊM CỤC XÚC TIẾN TIÊU THỤ DẦU CỌ,5.500000,42,258
+VIVOSDEV02_R149,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R149.wav,CHÚNG CỨ CỐ LÙI LẠI MẶC DÙ VƯỚNG VÍU GÔNG XIỀNG,4.750000,42,259
+VIVOSDEV13_258,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_258.wav,BẠN CẦN TRUNG THỰC VỚI NHÂN VIÊN CỦA MÌNH TRONG MỌI HOÀN CẢNH,3.186875,42,260
+VIVOSDEV12_224,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_224.wav,NĂM MƯƠI BỐN NĂM MƯƠI LĂM,2.812500,42,261
+VIVOSDEV08_085,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_085.wav,VIỆC ĐƯA TÍN HIỆU TRUYỀN HÌNH TRỰC TIẾP BẰNG HỆ THỐNG CÁP QUANG,4.156250,42,262
+VIVOSDEV19_091,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_091.wav,SỐ ĐƠN VỊ THAM GIA HỘI CHỢ VIỆC LÀM TĂNG ĐÁNG KỂ QUA CÁC NĂM,5.780625,42,263
+VIVOSDEV09_055,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_055.wav,RỒI RƠM RẠ KHÔ THEO THÂN HÌNH GẦY NGẲNG,3.437500,42,264
+VIVOSDEV14_086,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_086.wav,EM SỢ MẤT ANH ẤY NHƯNG LẠI CẢM THẤY MÌNH BỊ XÚC PHẠM,3.186875,42,265
+VIVOSDEV15_255,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_255.wav,CÔNG NHÂN ĐANG THI CÔNG HAI NHÁNH CẦU RẠCH CHIẾC ẢNH THUẬN THẮNG,4.561875,42,266
+VIVOSDEV19_158,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_158.wav,NHỮNG NGƯỜI TRẺ ẤY THẬT ĐÁNG PHÊ PHÁN ĐÁNG LÊN ÁN,4.811875,42,267
+VIVOSDEV09_268,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_268.wav,THÚ THẬT TUI CHƯA TỪNG CHƠI GÁI,3.593750,42,268
+VIVOSDEV04_R063,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R063.wav,CHÁU SỐT NÊN RẸO RỌC SUỐT ĐÊM,3.875000,42,269
+VIVOSDEV12_186,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_186.wav,TIẾNG HÉT ĐỒNG THANH CỦA MẤY CHỤC CON NGƯỜI,3.312500,42,270
+VIVOSDEV05_270,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_270.wav,CHƯA RỤC RỊCH GÌ,2.187500,42,271
+VIVOSDEV15_265,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_265.wav,HỌ KHÔNG BIẾT CHƠI PHÒNG NGỰ LÀ GÌ TRỪ KHI BỊ ĐỐI THỦ VÂY ÉP,4.374375,42,272
+VIVOSDEV07_156,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_156.wav,ĐẦU TIÊN LÀ BÀ CON MÌNH VẬT VÃ LÀM ĂN,2.875000,42,273
+VIVOSDEV19_167,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_167.wav,CÁC QUI ĐỊNH CỦA PHÁP LUẬT KHÔNG THỂ ĐƯỢC BAN HÀNH THEO KIỂU ĐÁNH LÉN,5.749375,42,274
+VIVOSDEV11_131,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_131.wav,THÌ CHỦ ĐẦU TƯ PHẢI TỰ PHÁ DỠ PHẦN NỘI DUNG SAI PHÉP ĐÓ,5.375000,42,275
+VIVOSDEV05_135,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_135.wav,KHI CÔ THỂ HIỆN KHÔNG MẤY THÀNH CÔNG Ở LỄ KHAI MẠC,3.500000,42,276
+VIVOSDEV06_168,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_168.wav,LÀM KHUNG,1.625000,42,277
+VIVOSDEV08_196,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_196.wav,PHẦN LỚN HỌC SINH GIÀU CÓ NGƯỜI NƯỚC NGOÀI,2.812500,42,278
+VIVOSDEV14_113,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_113.wav,HẮN THAY ĐỔI LẦM LÌ SAU KHI THEO GIA ĐÌNH ĐẾN XỨ NGƯỜI,3.343125,42,279
+VIVOSDEV14_114,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_114.wav,YẾU TỐ HẤP DẪN MỚI THU HÚT ĐẦU TƯ NƯỚC NGOÀI VÀO VIỆT NAM,3.436875,42,280
+VIVOSDEV08_224,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_224.wav,NĂM MƯƠI BỐN NĂM MƯƠI LĂM,2.375000,42,281
+VIVOSDEV11_160,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_160.wav,NGỤ ẤP HÒN NGANG,2.500000,42,282
+VIVOSDEV10_090,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_090.wav,VỪA ĐƯỢC TRAO TẶNG GIẢI THƯỞNG NHÀ NƯỚC,2.718750,42,283
+VIVOSDEV01_R086,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R086.wav,CÔNG VĂN ĐỀ NGHỊ TỈNH CON TUM XÂY DỰNG CỬA KHẨU,4.125000,42,284
+VIVOSDEV15_117,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_117.wav,TRÊN THỰC TẾ MỘT CUỘC ĐIỀU TRA ĐÃ ĐƯỢC TIẾN HÀNH,3.686875,42,285
+VIVOSDEV17_169,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_169.wav,HỌ BẢO TÔI GIỐNG NGƯỜI HÀN THÌ TÔI LẠI THẤY HỌ GIỐNG NGƯỜI VIỆT,4.874375,42,286
+VIVOSDEV08_100,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_100.wav,HAY ĐẢM BẢO RẰNG NGÀY NÀO CHÚNG CŨNG ĐƯỢC ĐI NHỮNG ĐÔI TẤT SẠCH,3.750000,42,287
+VIVOSDEV12_065,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_065.wav,THÌ ĐỌC ĐƯỢC HỒI KÝ KHÔNG THỂ CHUỘC LỖI TRÊN BÁO TUỔI TRẺ,4.500000,42,288
+VIVOSDEV12_080,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_080.wav,CHÍNH THỨC ĐÃ LÂY LAN RA BÊN NGOÀI,3.531250,42,289
+VIVOSDEV12_075,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_075.wav,NHÓM THANH LONG TRẺ DIỄN TIỂU PHẨM HÀI HẮC BẠCH TRANH HÙNG,4.906250,42,290
+VIVOSDEV10_257,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_257.wav,TIỀN ĐIỆN THÁNG NÀY BAO NHIÊU,2.187500,42,291
+VIVOSDEV17_071,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_071.wav,BẢN THÂN TÔI CŨNG THAM GIA MỘT VAI RẤT NHỎ NỮA,3.718125,42,292
+VIVOSDEV05_097,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_097.wav,THU CHẠM NGÕ RẤT HIỀN,2.125000,42,293
+VIVOSDEV06_022,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_022.wav,LÍNH CỨU HỎA KHÓ TIẾP CẬN HIỆN TRƯỜNG,3.125000,42,294
+VIVOSDEV03_R136,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R136.wav,NÀY BÓN CHO CON THƯƠNG ĐỠ YẾU ĐAU CÒI CỌC,3.437500,42,295
+VIVOSDEV10_196,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_196.wav,CHỈ MUỐN LÀM MỘT HƠI CHO ĐÃ CÁI MIỆNG,2.875000,42,296
+VIVOSDEV18_192,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_192.wav,NHỮNG KIỂU VẾT THƯƠNG MÀ TRẺ THƯỜNG MANG THEO CÓ THỂ LÀ GÌ,3.186875,42,297
+VIVOSDEV03_T035,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_T035.wav,MẸ ƠI CÓ MUA ĐỒ CHO CON KHÔNG,2.312500,42,298
+VIVOSDEV16_026,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_026.wav,CÙNG VỢ ĂN VỘI CHÉN CƠM THÀNH LẠI LO ÔN BÀI LÀM BÀI TẬP,6.374375,42,299
+VIVOSDEV05_150,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_150.wav,NGỒI CHỒM CHỒM CÁCH CHỈ MẤY MÉT,2.687500,42,300
+VIVOSDEV14_286,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_286.wav,NHIỀU GIA ĐÌNH HIỆN NAY THÍCH TỰ GIỚI THIỆU CHƯƠNG TRÌNH,2.905625,42,301
+VIVOSDEV03_R149,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R149.wav,BÀ CON CHÒM XÓM,1.562500,42,302
+VIVOSDEV03_T017,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_T017.wav,BÁC VẪN CHƯA TRẢ TIỀN CHO TÔI ĐÂY NHÉ,2.406250,42,303
+VIVOSDEV07_002,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_002.wav,HẰNG NĂM CHÚNG TA THẢI RA HÀNG TỈ THIẾT BỊ ĐIỆN TỬ,3.468750,42,304
+VIVOSDEV15_220,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_220.wav,ĐÂY LÀ THÁNG CÓ SỐ ĐĂNG KÝ THẤP NHẤT TỪ ĐẦU NĂM ĐẾN NAY,3.749375,42,305
+VIVOSDEV05_261,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_261.wav,LẠI QUAY RA TẬP VIẾT BÁO RỒI GỬI VU VƠ,3.562500,42,306
+VIVOSDEV14_093,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_093.wav,TRÒ ĐÙA ĐỐI VỚI THẦY NHƯNG LẠI LÀ CHÂN THẬT CHÂN THẬT VỚI MỘT NGƯỜI,4.374375,42,307
+VIVOSDEV19_245,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_245.wav,LÚC ĐÓ NẠN KẸT XE CHẮC SẼ KINH KHỦNG GẤP NHIỀU LẦN HÔM NAY,4.374375,42,308
+VIVOSDEV04_R097,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R097.wav,NGOÀI VIỆC PHÁT HIỆN KẺ THÙ,2.375000,42,309
+VIVOSDEV13_019,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_019.wav,ĐƠN VỊ MÌNH KHÔNG NGHE AI NÓI GÌ CHƯA HẲN ĐÃ TỐT,4.124375,42,310
+VIVOSDEV06_061,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_061.wav,VÌ NÓ KHÔNG NHẮC ĐẾN NHỮNG CUỘC TẤN CÔNG NHẮM VÀO NGƯỜI DO THÁI,4.562500,42,311
+VIVOSDEV10_024,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_024.wav,NGOÀI TRỜI MƯA CỨ LAY PHAY RẮC HẠT,2.937500,42,312
+VIVOSDEV03_R092,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R092.wav,ĐỂ CHỌN MÁY IN CHO PHÙ HỢP,2.500000,42,313
+VIVOSDEV01_R071,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R071.wav,TRƯỞNG CÔNG AN XÃ CHẠY SANG CAN NGĂN CŨNG BỊ TUYẾN ĐÁNH TIẾP,4.562500,42,314
+VIVOSDEV06_070,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_070.wav,RỒI KHỀ KHÀ ĐÔI CÂU VỌNG CỔ VỚI CHÂN CHUỘT,3.812500,42,315
+VIVOSDEV03_R082,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R082.wav,GHÉP CÀNH MAI GIẢO VÀO THÂN CỔ THỤ CHO HOA CÁNH LỚN,3.937500,42,316
+VIVOSDEV03_R029,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R029.wav,NÊN HAI MỐ CẦU BỊ SỤP ĐẤT KHIẾN LỐI ĐI BỘ QUÁ NGUY HIỂM,4.687500,42,317
+VIVOSDEV13_136,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_136.wav,TÔI VÀO QUẦY GIẢI KHÁT ĐẦU TIÊN VÀ GỌI MỘT CỐC NƯỚC CAM,4.249375,42,318
+VIVOSDEV10_072,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_072.wav,TÔI THẤY ĐỒNG LƯƠNG CỦA MÌNH NĂM NĂM RỒI VẪN ĐỨNG NGUYÊN,4.468750,42,319
+VIVOSDEV11_246,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_246.wav,CHÍN MƯƠI TÁM CHÍN MƯƠI CHÍN,2.687500,42,320
+VIVOSDEV13_105,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_105.wav,NHÓC ĐỎ MẶT TÍA TAI NHÓC THUA CHỊ MỘT TUỔI THÔI ĐẤY,7.843125,42,321
+VIVOSDEV08_057,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_057.wav,NÓ LẬT ĐẬT ĐẠP CHIẾC XE CÀ TÀNG BĂNG NGAY RA ĐẦU ĐƯỜNG,4.312500,42,322
+VIVOSDEV05_170,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_170.wav,CHẬM NẮM BẮT XU HƯỚNG PHÁT TRIỂN CÔNG NGHỆ MỚI,3.875000,42,323
+VIVOSDEV02_R079,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R079.wav,HẦU HẾT NANG NÀY CÓ NGUỒN GỐC TỪ GÂN CƠ CHÂN NGỖNG,4.031250,42,324
+VIVOSDEV18_250,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_250.wav,LẦN ĐẦU TIÊN MỘT NHÂN VIÊN NGƯỜI VIỆT THÁCH THỨC VIỆC TÁC NGHIỆP CỦA TÔI,4.530625,42,325
+VIVOSDEV10_045,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_045.wav,TÔI LỚN LÊN TRONG SỰ GHẺ LẠNH CỦA NGƯỜI MẸ KẾ,4.281250,42,326
+VIVOSDEV05_189,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_189.wav,MỖI NGƯỜI MỘT SỐ PHẬN EM À,2.437500,42,327
+VIVOSDEV19_161,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_161.wav,THÔNG THƯỜNG ÁN KỶ LUẬT NẾU CÓ THƯỜNG BAN HÀNH VÀO CUỐI TUẦN,5.749375,42,328
+VIVOSDEV05_202,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_202.wav,CHỊ HAI CHỦ QUÁN NGHE BÀN TÁN RÔM RẢ CŨNG RA GÓP CHUYỆN,3.843750,42,329
+VIVOSDEV04_T032,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_T032.wav,CAM SÀNH LỘT VỎ CÒN CHUA,2.000000,42,330
+VIVOSDEV14_289,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_289.wav,TÔI LÀ MỘT NGƯỜI MIỀN TÂY ĐANG LÀ NGHIÊN CỨU SINH Ở MỸ,3.686875,42,331
+VIVOSDEV14_294,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_294.wav,MONG BẠN BÌNH TÂM SUY NGHĨ VÀ CHỌN ĐƯỢC CÁCH GIẢI QUYẾT TỐT NHẤT,3.311875,42,332
+VIVOSDEV19_008,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_008.wav,TỪ ĐÓ LẠI SA ĐÀ VÀO NHIỀU NGHỊCH CẢNH ĐÁNG TIẾC,4.811875,42,333
+VIVOSDEV02_T015,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_T015.wav,HẮN CHƠI VỢ ANH THÌ SAO ANH KHÔNG CHƠI VỢ HẮN,3.375000,42,334
+VIVOSDEV12_006,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_006.wav,TỪ SỰ DƯ THỪA QUÁ MỨC CỦA LUỒNG TIỀN NÀY,4.125000,42,335
+VIVOSDEV11_198,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_198.wav,LƠ LỬNG TRÊN ĐẦU LÀ NHỮNG CHIẾC BẪY ĐÁ HÀNG TRĂM KHỐI,4.812500,42,336
+VIVOSDEV10_247,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_247.wav,MỘT TRĂM MỘT HAI BA,1.812500,42,337
+VIVOSDEV01_R099,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R099.wav,NHƯNG TÔI THÍCH XEM BỘ PHIM TRUYỆN PHÁT NGAY SAU CHƯƠNG TRÌNH NÀY,3.875000,42,338
+VIVOSDEV07_295,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_295.wav,CHỦ TÀU CHO BIẾT SẼ TIẾP TỤC THƯƠNG THUYẾT VỀ SỐ CHI PHÍ NÀY,3.750000,42,339
+VIVOSDEV02_T022,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_T022.wav,THÁNG TRƯỚC CHỒNG VỀ MẤY NGÀY MÌNH NẰM NGỦ THẤY ẤM KINH KHỦNG,4.250000,42,340
+VIVOSDEV01_T043,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_T043.wav,NÓ TRỐN MẤT TIÊU RỒI CÒN ĐÂU,2.437500,42,341
+VIVOSDEV17_192,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_192.wav,ĐÓ CŨNG LÀ SỰ TIẾP XÚC GẦN GŨI NHẤT CỦA BỌN EM,4.061875,42,342
+VIVOSDEV10_176,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_176.wav,TRONG TÌNH THẾ ẤY CHỈ ĐÁM TRẺ VEN SÔNG,3.062500,42,343
+VIVOSDEV08_062,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_062.wav,HOẶC CHỈ BIỂU HIỆN BẰNG CÁC RỐI LOẠN CO BÓP,3.250000,42,344
+VIVOSDEV06_126,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_126.wav,THẬM CHÍ CÀNG GIỐNG ÁO QUÍ NÀNG CÀNG MỐT,3.937500,42,345
+VIVOSDEV08_014,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_014.wav,VÀ NẾU BẠN TRÓT LÀM LỘN XỘN MÀN HÌNH NỀN,3.625000,42,346
+VIVOSDEV06_212,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_212.wav,BA MƯƠI BA MƯƠI MỐT,2.250000,42,347
+VIVOSDEV03_R020,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R020.wav,BÊN TRONG TRÁI VẢ KHI BỔ RA SẼ RỖNG CHỨ KHÔNG ĐẶC NHƯ TRÁI SUNG,4.625000,42,348
+VIVOSDEV04_R092,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R092.wav,BỊ CÁC CÔ GÁI BAO VÂY RÁO RIẾT,3.062500,42,349
+VIVOSDEV09_041,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_041.wav,HIỆN TRONG NHIỀU LOẠI TỎI CÓ MẶT TRÊN THỊ TRƯỜNG,3.125000,42,350
+VIVOSDEV02_R170,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R170.wav,RỒI CHẠY SANG GÕ CỬA PHÒNG BA LE HAI DẤM DÚI,4.937500,42,351
+VIVOSDEV05_109,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_109.wav,DOANH NGHIỆP TUYỂN DỤNG LAO ĐỘNG NƯỚC NGOÀI,2.562500,42,352
+VIVOSDEV13_058,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_058.wav,ĐÓ LÀ GIAI ĐOẠN THỜI TIẾT ÍT BIẾN ĐỘNG VÀ NHIỆT ĐỘ KHÔNG QUÁ THẤP,4.343125,42,353
+VIVOSDEV01_R139,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R139.wav,TRỪ KHI BẠN BIẾT TÔN TRỌNG BẢN THÂN MÌNH,3.187500,42,354
+VIVOSDEV16_279,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_279.wav,VẬY CHỪNG NÀO MỚI TỚI XIN LỖI NHÂN DÂN TẬP CUỐI,4.186875,42,355
+VIVOSDEV12_248,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_248.wav,MỘT BA NĂM BẢY CHÍN,4.625000,42,356
+VIVOSDEV18_017,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_017.wav,TUY NHIÊN HỢP ĐỒNG NÀY CHỈ CÓ GIÁ TRỊ TRONG NHỮNG NGÀY BÌNH THƯỜNG,2.811875,42,357
+VIVOSDEV13_147,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_147.wav,KHÔNG AI MUỐN CÓ TIÊU CỰC CẢ VÀ CŨNG ĐỪNG TUYỆT ĐỐI HÓA VẤN ĐỀ,4.593125,42,358
+VIVOSDEV01_R151,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R151.wav,NHƯNG KHI TIẾN GẦN VÀO VỊNH THÌ MẶT BIỂN BỊ RẠN VỠ,3.656250,42,359
+VIVOSDEV15_154,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_154.wav,CÁI NHÀ HÁT BỊ ĐẬP TAN TÀNH ÔNG KHOÁI LẮM À,3.749375,42,360
+VIVOSDEV17_254,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_254.wav,CÁC BƯỚC SAU ĐÂY SẼ GIÚP BẠN TÌM RA ỨNG CỬ VIÊN THÍCH HỢP,4.811875,42,361
+VIVOSDEV07_138,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_138.wav,ĐÓ HẲN LÀ MỘT MÓN QUÀ,2.375000,42,362
+VIVOSDEV12_144,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_144.wav,TRẢ LỜI TÔI BIẾT,2.062500,42,363
+VIVOSDEV09_038,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_038.wav,PHÒNG TRÀ KHIÊU VŨ CÁNH QUẠT CỐI XAY ĐỎ,3.718750,42,364
+VIVOSDEV09_246,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_246.wav,CHÍN MƯƠI TÁM CHÍN MƯƠI CHÍN,2.031250,42,365
+VIVOSDEV11_147,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_147.wav,GẮN LÔNG CHIM HỘT ĐÁ LÓNG LÁNH HAY BÈO DÚN TÙA LUA ĐẦY CỔ,6.218750,42,366
+VIVOSDEV17_271,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_271.wav,GIẢI NHẤT HUY CHƯƠNG VÀNG THUỘC VỀ NHÀ NHIẾP ẢNH CỦA CỘNG HÒA SÉC,5.468125,42,367
+VIVOSDEV17_099,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_099.wav,CHỊ TÌM NHÀ CHO EM Ở TRỌ NGAY CỔNG TRƯỜNG CHỊ HỌC,4.593125,42,368
+VIVOSDEV03_R182,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R182.wav,MỘT KẾ HOẠCH TƯƠNG TỰ ĐƯỢC ÁP DỤNG Ở ANH,2.750000,42,369
+VIVOSDEV08_210,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_210.wav,HAI MƯƠI SÁU HAI MƯƠI BẢY,2.375000,42,370
+VIVOSDEV04_R149,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R149.wav,MỘT CÔ GÁI VÁY NGẮN CŨN CỠN CHẠY LÊN HỎI,4.722313,42,371
+VIVOSDEV04_R118,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R118.wav,TRẺ EM ĐÂU CÓ CHƯỚNG NGẠI VẬT,2.406250,42,372
+VIVOSDEV12_192,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_192.wav,TRANG THỨ HAI CỦA TỜ BÁO,2.750000,42,373
+VIVOSDEV10_162,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_162.wav,CŨNG LÀ TIN VUI CHO TẤT CẢ NHỮNG AI,3.156250,42,374
+VIVOSDEV02_R089,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R089.wav,CÓ HẲN MỘT LOẠT BÀI VIẾT CHUYÊN ĐỀ VỀ QUẢN TRỊ THƯƠNG HIỆU,4.750000,42,375
+VIVOSDEV15_204,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_204.wav,SÁNG CHÚNG TÔI TẠM BIỆT THUNG NAI VÀ NHỮNG CHỦ NHÂN MẾN KHÁCH MỘC MẠC,4.343125,42,376
+VIVOSDEV10_278,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_278.wav,TỘI NGHIỆP ĐỨA NHỎ KHÔNG AI CHĂM SÓC,2.437500,42,377
+VIVOSDEV02_R181,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R181.wav,NÀNG CÓ ĐÔI MẮT TO SÂU VÀ VẦNG TRÁN RỘNG MÊNH MÔNG,4.125000,42,378
+VIVOSDEV02_R087,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R087.wav,TIẾNG MÃ TẤU SẮC LẠNH CHẠM NHAU VÀ CẢ TIẾNG RÊN RỈ,4.687500,42,379
+VIVOSDEV09_144,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_144.wav,ĐƯỢC CẮT TỪ VỎ CHĂN BỘ ĐỘI CŨ CỦA CÁC ÔNG BỐ RA,3.937500,42,380
+VIVOSDEV14_080,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_080.wav,TUY PHÍA TRƯỚC CÒN VÔ VÀ KHÓ KHĂN ĐỐI VỚI CON,4.124375,42,381
+VIVOSDEV08_025,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_025.wav,ĐẠO DIỄN TRẺ NÀY CÓ NHIỀU ĐIỀU NGẪM NGỢI VỀ NGHỀ,3.687500,42,382
+VIVOSDEV09_159,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_159.wav,TỨC LẤY SỤN LÀNH TỪ NƠI KHÔNG PHẢI CHỊU LỰC GHÉP VÀO NƠI HƯ,4.312500,42,383
+VIVOSDEV11_057,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_057.wav,NẾU VÌ CHÚNG TÔI,2.156250,42,384
+VIVOSDEV18_263,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_263.wav,QUẢN LÝ NHÀ NƯỚC VỀ GIAO THÔNG VẬN TẢI ĐÔ THỊ,3.374375,42,385
+VIVOSDEV09_106,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_106.wav,RỒI CHÌM LỈM MỘT THỜI GIAN,2.000000,42,386
+VIVOSDEV08_233,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_233.wav,BẢY MƯƠI HAI BẢY MƯƠI BA,3.250000,42,387
+VIVOSDEV04_T015,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_T015.wav,MỘT LÀ GẶP LẠI TẤT CẢ CÁC EM PHÒ,3.343750,42,388
+VIVOSDEV10_010,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_010.wav,KHI BỊ CÔNG AN THỘP CỔ KHẨN CẤP,2.812500,42,389
+VIVOSDEV07_266,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_266.wav,NÓNG GIẬN TÔI ĐÃ LĂNG MẠ ANH,2.562500,42,390
+VIVOSDEV16_298,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_298.wav,HÔM NÀO TAN CA SỚM HẠNH ĐƯỢC GIAO NHIỆM VỤ ĐI CHỢ CHO BỮA TỐI,5.249375,42,391
+VIVOSDEV12_068,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_068.wav,KHÔNG MỘT CHÚT TRẦY TRỤA MÀ ĐỀN CÁI GÌ,3.125000,42,392
+VIVOSDEV04_R152,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R152.wav,SẼ KHÔNG KHIẾN BẠN TRÔNG GẦY NHƯ NHỮNG TRANG PHỤC MỘT MÀU,4.531250,42,393
+VIVOSDEV05_212,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_212.wav,BỐN CHIẾC TRỐNG ĐẠI PHÈNG LA,2.625000,42,394
+VIVOSDEV04_R023,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R023.wav,CHÍNH BÀ CŨNG LÀ NGƯỜI NUNG NẤU NIỀM ĐAM MÊ DIỄN XUẤT CỦA CÔ CON GÁI,6.375000,42,395
+VIVOSDEV12_032,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_032.wav,CÁC LOẠI CÂY TRỒNG Ở RỪNG NÀY TOÀN CÂY KÉM GIÁ TRỊ,4.281250,42,396
+VIVOSDEV05_143,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_143.wav,NHỎ ĐƯA TAY RA CÀO HẾT BÙN KHÔ TRÊN CỔ TỚ,4.343750,42,397
+VIVOSDEV11_095,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_095.wav,MỌI THỨ ĐỀU ĐƯỢC MỔ XẺ LẠI,3.250000,42,398
+VIVOSDEV11_123,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_123.wav,CÁC CÔNG TY DU LỊCH PHẢI XÁC ĐỊNH,2.875000,42,399
+VIVOSDEV07_141,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_141.wav,VÀ KHI THẤY TÔI VẪN KIÊN ĐỊNH TRẢ LỜI TRỚT QUỚT,3.437500,42,400
+VIVOSDEV13_097,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_097.wav,CUỘC THI CÒN CÓ HAI GIẢI NHÌ BA GIẢI BA VÀ BỐN GIẢI KHUYẾN KHÍCH,7.374375,42,401
+VIVOSDEV07_236,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_236.wav,BẢY MƯƠI TÁM BẢY MƯƠI CHÍN,2.281250,42,402
+VIVOSDEV15_038,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_038.wav,MỘT CƠ QUAN CHÍNH THỨC ĐỂ KHÁCH HÀNG KHIẾU NẠI THAM KHẢO VÀ TIN TƯỞNG,4.311875,42,403
+VIVOSDEV02_R076,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R076.wav,THAY VÌ BỐN GIỜ NHƯ TRƯỚC ĐÂY,2.968750,42,404
+VIVOSDEV08_071,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_071.wav,KHI TÔI LÀ CON BÉ LỚP BỐN THÌ CÂY VẢ ĐÃ CAO QUÁ NÓC NHÀ,4.468750,42,405
+VIVOSDEV08_295,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_295.wav,GIÀU ĐỔI BẠN SANG ĐỔI VỢ,2.875000,42,406
+VIVOSDEV11_077,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_077.wav,VỚI SỰ XUẤT HIỆN CỦA QUÁI THÚ VÀ RỒNG,3.875000,42,407
+VIVOSDEV01_R028,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R028.wav,CÁC CHÚ CŨNG THOẢI MÁI PHÓNG UẾ GIỮA CHỐN ĐÔNG NGƯỜI MÀ KHÔNG SỢ,4.562500,42,408
+VIVOSDEV01_T038,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_T038.wav,CHẮC SẮP TỚI THU XẾP ĐI DU LỊCH THÔI,2.500000,42,409
+VIVOSDEV10_189,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_189.wav,NẾU ĐI TIẾP NHA TRANG,1.750000,42,410
+VIVOSDEV11_164,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_164.wav,ÍT NHẤT Ở HƠN BA MƯƠI TRƯỜNG THUỘC CÁC ĐỊA PHƯƠNG NÓI TRÊN,5.375000,42,411
+VIVOSDEV17_060,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_060.wav,BÓNG MÀU XANH LÀ VÙNG TÂM BÃO CÓ THỂ ĐI QUA,3.468125,42,412
+VIVOSDEV04_T009,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_T009.wav,CHO TÔI NHẮN ĐẠI TIN NÀO CŨNG ĐƯỢC,2.562500,42,413
+VIVOSDEV09_081,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_081.wav,ĐƯỢC MỸ RÁO RIẾT TUNG RA,2.312500,42,414
+VIVOSDEV09_166,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_166.wav,THÍ SINH TỰ DO CẦN QUAN TÂM ĐẾN ĐỘ VÊNH KIẾN THỨC CÁC MÔN,4.250000,42,415
+VIVOSDEV17_147,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_147.wav,VỚI CÁC DÁT MÀU CÀ PHÊ SỮA KHÔNG CẦN ĐIỀU TRỊ,3.686875,42,416
+VIVOSDEV06_016,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_016.wav,RÂU RIA ĐÃ BA NGÀY KHÔNG CẠO,3.187500,42,417
+VIVOSDEV13_026,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_026.wav,KHÔNG AI ĐƯỢC NGƯỢC ĐÃI CÁC EM VÌ CÁC EM HỌC CHẬM,4.186875,42,418
+VIVOSDEV04_R008,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R008.wav,NHỮNG NGÀY ĐẦU VẮNG BÓNG BA VIỆT CỨ THỪ NGƯỜI NGHĨ NGỢI,6.437500,42,419
+VIVOSDEV12_116,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_116.wav,DƯỚI ÁNH ĐÈN MỜ MỜ ẢO ẢO,2.843750,42,420
+VIVOSDEV10_035,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_035.wav,CÓ THỂ GIÚP TA QUÊN ĐI NHỮNG NỖI ƯU PHIỀN,2.562500,42,421
+VIVOSDEV09_163,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_163.wav,ĐIỀU VÔ CÙNG QUAN TRỌNG TRONG THỜI ĐẠI CÓ QUÁ NHIỀU HOẠT ĐỘNG,4.312500,42,422
+VIVOSDEV19_083,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_083.wav,NHƯNG RỒI CÁI TÌNH VỚI BÀ CON CỨ NẮM NÍU KHÔNG DỨT RA ĐƯỢC,5.749375,42,423
+VIVOSDEV04_R089,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R089.wav,NGỦ TRÊN NỆM KHÔNG PHÙ HỢP,2.312500,42,424
+VIVOSDEV16_074,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_074.wav,CHÚNG NÓ YÊU NHAU RẤT TỰ NHIÊN GHÉT NHAU CŨNG RẤT TỰ NHIÊN,3.999375,42,425
+VIVOSDEV07_192,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_192.wav,NHIỀU NGƯỜI CHO BIẾT,1.906250,42,426
+VIVOSDEV08_077,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_077.wav,BUỔI ĐẦU THẬT KHÓ KHĂN THEO ĐUỔI CHƯƠNG TRÌNH HỌC,3.000000,42,427
+VIVOSDEV08_143,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_143.wav,THAM GIA GIẢNG DẠY LÀ LỰC LƯỢNG ĐOÀN VIÊN,3.062500,42,428
+VIVOSDEV09_134,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_134.wav,CÂU TRẢ LỜI CỦA ÔNG TA RẤT KHIẾM NHÃ,3.187500,42,429
+VIVOSDEV18_012,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_012.wav,VÀ GIÁO DỤC CON NGƯỜI TRỞ THÀNH VIỆC LUYỆN TRÍ NHỚ,2.593125,42,430
+VIVOSDEV12_057,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_057.wav,KHÔNG PHẢI VÌ TÔI KHÔNG COI TRỌNG CHẤT LƯỢNG,4.312500,42,431
+VIVOSDEV08_277,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_277.wav,ĐÀN ÔNG CÓ HAI THỨ ĐỂ BUỒN,2.500000,42,432
+VIVOSDEV01_R117,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R117.wav,VIỆC MỘT QUYỂN TIỂU THUYẾT NHƯ THẾ,2.750000,42,433
+VIVOSDEV13_089,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_089.wav,NHÀ VĂN NGUYÊN NGỌC SINH VIÊN CÓ QUYỀN HOÀI NGHI VÀ TRANH CÃI,6.436875,42,434
+VIVOSDEV13_078,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_078.wav,KHẮP NƠI QUANH CHÚNG TÔI VƯƠNG VÃI XÁC CHẾT CỦA NGƯỜI DÂN VÔ TỘI,4.561875,42,435
+VIVOSDEV04_R047,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R047.wav,NHÓM SINH VIÊN TẠI TRƯỜNG CÙNG HỌP MẶT ĂN TẾT CHUNG,4.281250,42,436
+VIVOSDEV08_090,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_090.wav,VÌ KHÔNG CÓ TIỀN ĐÓNG HỌC PHÍ,2.375000,42,437
+VIVOSDEV02_R135,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R135.wav,CŨNG THUỘC LOẠI DÀY ĐẶC NHẤT TRONG HỆ MẶT TRỜI,3.718750,42,438
+VIVOSDEV06_037,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_037.wav,ĐỪNG BUỒN VÌ TỰ GIẰN VẶT MÌNH NỮA,2.812500,42,439
+VIVOSDEV04_R002,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R002.wav,ĐÓ CŨNG LÀ ĐỘNG LỰC THÚC ĐẨY TÔI,3.375000,42,440
+VIVOSDEV09_178,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_178.wav,VÀ THẬM CHÍ BẠN CŨNG KHÔNG NÊN CỐ GẮNG,3.000000,42,441
+VIVOSDEV01_R188,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R188.wav,VIỆC QUY TỘI ĐỂ BÙNG NỔ LOẠI SÁCH NÀY LÀ DO,3.437500,42,442
+VIVOSDEV08_182,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_182.wav,KẾT QUẢ CHỈ CÓ VỎN VẸN BA NGƯỜI CÒN BIẾT DỆT,3.375000,42,443
+VIVOSDEV01_T002,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_T002.wav,CŨNG CHƯA BIẾT NỮA,1.968750,42,444
+VIVOSDEV19_169,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_169.wav,NHANH QUÁ ĐÃ LÀ LẦN THỨ BA XA NHÀ RỒI ĐẤY,4.061875,42,445
+VIVOSDEV11_273,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_273.wav,TRỌNG TÀI PHẠT THẺ ĐỎ,2.687500,42,446
+VIVOSDEV02_R009,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R009.wav,BÀ QUẢNG VẪN ĐANG BẬN RỘN,3.343750,42,447
+VIVOSDEV07_151,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_151.wav,RÔ BÓT THÔNG MINH,2.000000,42,448
+VIVOSDEV12_101,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_101.wav,KHI CHÍNH PHỦ LÚC ĐẦU ĐỀ NGHỊ ÂN XÁ CHO NHỮNG NGƯỜI NỔI DẬY,4.875000,42,449
+VIVOSDEV15_198,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_198.wav,NHẢM NHÍ KHI GIỜ HỌC CHÁN PHÈO BUỒN NGỦ QUÁ Ờ BUỒN NGỦ,4.874375,42,450
+VIVOSDEV17_062,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_062.wav,SAU MỘT NGÀY LAO ĐỘNG CĂNG MỆT BẠN ƯU TIÊN CHỌN,3.593125,42,451
+VIVOSDEV11_274,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_274.wav,KIỂU NÀY CHẮC PHẢI CẮT GIẢM BIÊN CHẾ,3.031250,42,452
+VIVOSDEV16_173,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_173.wav,NHƯNG CÔ QUYẾT CHỨNG MINH NGƯỜI MÙ KHÔNG PHẢI VÔ DỤNG,4.374375,42,453
+VIVOSDEV07_039,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_039.wav,GIÓ TRỜI KHÔNG THỂ THÔNG THỐC THỔI VÀO KHAI TRUNG,3.812500,42,454
+VIVOSDEV08_145,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV08/VIVOSDEV08_145.wav,VÀ VẢI HOẶC CÓI NHIỀU MÀU,2.687500,42,455
+VIVOSDEV16_267,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_267.wav,TÔI ĐỨNG TRƯỚC HAI LỐI RẼ VÀ TÔI CHỌN CON ĐƯỜNG ÍT NGƯỜI ĐI HƠN,4.999375,42,456
+VIVOSDEV12_169,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_169.wav,ÁO RÁCH LƯƠM BƯƠM,2.312500,42,457
+VIVOSDEV05_004,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_004.wav,HÃY TƯỞNG TƯỢNG RẰNG BẠN LÀ LÀ GIÁM ĐỐC DỰ ÁN TRONG MỘT CÔNG TY LỚN,4.062500,42,458
+VIVOSDEV16_168,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_168.wav,HAI CHÁU NGẠC NHIÊN ĐÓN KHÁCH LẠ SUNG SƯỚNG ÔM CẶP MỚI,4.061875,42,459
+VIVOSDEV01_R176,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R176.wav,ĐỂ TÀU KHÔNG PHẢI CƯỠI CẦU TÀU,3.437500,42,460
+VIVOSDEV07_264,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_264.wav,BUỔI SÁNG THÀNH PHỐ Ô NHIỄM HƠN BUỔI TRƯA,2.812500,42,461
+VIVOSDEV10_117,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_117.wav,CÁI KHÓ LÀ,1.375000,42,462
+VIVOSDEV18_120,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_120.wav,BẠN KHÔNG BAO GIỜ RA NGOÀI MÀ KHÔNG DÙNG KEM LÓT,2.436875,42,463
+VIVOSDEV01_R172,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R172.wav,TÂY GIANG VẪN CÒN KHẮC KHOẢI KHÔNG THỂ VÀO XÃ A NÔNG,3.718750,42,464
+VIVOSDEV14_035,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_035.wav,NHẠC SĨ LA HỐI VỚI CA KHÚC XUÂN VÀ TUỔI TRẺ,3.311875,42,465
+VIVOSDEV04_T002,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_T002.wav,CÓ TRẢ TIỀN CHO BỐ KHÔNG THÌ BẢO,3.000000,42,466
+VIVOSDEV03_R125,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R125.wav,MỖI KHI CƠN GIÓ ĐẾN,1.843750,42,467
+VIVOSDEV02_T050,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_T050.wav,ANH BỊ ĐẨY TỪ HÀ NỘI VÀO SÀI GÒN,3.312500,42,468
+VIVOSDEV07_067,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV07/VIVOSDEV07_067.wav,CHẠM VÀO PHẦN THÓP MỀM TRÊN ĐẦU BÉ,3.375000,42,469
+VIVOSDEV19_027,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_027.wav,NHỮNG BIẾN DẠNG NÀY THƯỜNG THẤY RÕ KHI DƯƠNG VẬT CƯƠNG,3.999375,42,470
+VIVOSDEV14_225,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_225.wav,ÔNG DƯƠNG ĐỨC LÂN PHÓ TỔNG CỤC TRƯỞNG TỔNG CỤC DẠY NGHỀ,4.249375,42,471
+VIVOSDEV18_065,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_065.wav,CHÚC BẠN ĐỌC CÓ THẬT NHIỀU THỜI GIAN THƯ GIÃN THOẢI MÁI,2.343125,42,472
+VIVOSDEV15_021,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_021.wav,MÀU SON TRÔNG THẬT TUYỆT TRÊN BẤT KÌ MÀU DA NÀO,3.436875,42,473
+VIVOSDEV10_076,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_076.wav,LÀM ĐƯỜNG SÁ NGẬP XẮP XẮP QUANH NĂM SUỐT THÁNG,3.750000,42,474
+VIVOSDEV09_288,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV09/VIVOSDEV09_288.wav,CHẮC SẮP TỚI THU XẾP ĐI DU LỊCH THÔI,3.125000,42,475
+VIVOSDEV15_066,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_066.wav,KẼM CÓ NHIỀU TRONG GAN SÒ THỊT ĐỎ CÁ ÓC TRỨNG,4.374375,42,476
+VIVOSDEV17_285,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV17/VIVOSDEV17_285.wav,ĐỂ XIN THỊ THỰC CÔNG TÁC VỀ CƠ BẢN BẠN PHẢI CÓ,4.249375,42,477
+VIVOSDEV06_252,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_252.wav,NÓI TRƯỚC BƯỚC KHÔNG QUA,3.031250,42,478
+VIVOSDEV18_155,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV18/VIVOSDEV18_155.wav,NGƯỜI ĐÀN ÔNG TRÊN GIƯỜNG THÌNH LÌNH RÊN LÊN MỘT TIẾNG RỒI MỞ MẮT,3.936875,42,479
+VIVOSDEV11_022,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_022.wav,SẼ LÀM GIẢM TÌNH TRẠNG ÓI ỌC CỦA TRẺ,2.750000,42,480
+VIVOSDEV13_146,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV13/VIVOSDEV13_146.wav,CÓ NGÀY CÁC BÁC SĨ ĐIỀU DƯỠNG MỔ MẮT CHO HÀNG TRĂM NGƯỜI MÙ NGHÈO,5.124375,42,481
+VIVOSDEV16_175,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV16/VIVOSDEV16_175.wav,HỌ ĐÃ TRAO NHAU LỜI HẸN ƯỚC NÊN DUYÊN CHỒNG VỢ,3.811875,42,482
+VIVOSDEV05_295,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV05/VIVOSDEV05_295.wav,LÀM HỎNG CÁC THIẾT BỊ CỦA TÊN LỬA,2.812500,42,483
+VIVOSDEV01_R003,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV01/VIVOSDEV01_R003.wav,CŨNG LÊN TIẾNG ỦNG HỘ CÁC KIẾN NGHỊ NÀY,3.687500,42,484
+VIVOSDEV14_018,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_018.wav,BIÊN CHẾ NÀY NHÀ THANH GỌI LÀ AN NAM QUỐC NHẠC,3.124375,42,485
+VIVOSDEV03_R041,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R041.wav,LUÔN ỔN ĐỊNH VÀ CÁC XE TRẤU KHÁ NẶNG,2.937500,42,486
+VIVOSDEV19_179,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV19/VIVOSDEV19_179.wav,ĐỖ ĐỨC THUẦN NGUYÊN KẾ TOÁN TRƯỞNG CÔNG TY TIẾP THỊ ĐẦU TƯ,4.405625,42,487
+VIVOSDEV15_020,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_020.wav,CÂU CHUYỆN CỦA QUÁ KHỨ ÔNG KỂ KHÔNG BIẾT BAO NHIÊU LẦN,2.843125,42,488
+VIVOSDEV15_050,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_050.wav,CHẲNG LẼ ĂN CƠM NHÀ NGƯỜI MÀ LẠI KHÔNG CHĂM CHÚ LẮNG NGHE NGƯỜI NÓI,4.311875,42,489
+VIVOSDEV12_015,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_015.wav,TRẢ LẠI ĐẤT CHO RỪNG,2.562500,42,490
+VIVOSDEV03_R193,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R193.wav,ÔI DÀO,1.437500,42,491
+VIVOSDEV15_203,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV15/VIVOSDEV15_203.wav,CÒN ANH TRAI TÔI TRONG NHẬT KÝ CỦA MÌNH CŨNG LINH CẢM ĐIỀU ĐÓ,4.186875,42,492
+VIVOSDEV14_151,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV14/VIVOSDEV14_151.wav,TÔI ĐÃ CÓ THỜI GIAN TUYỆT VỜI KHI CHƠI CHO ĐỘI TUYỂN,3.093125,42,493
+VIVOSDEV06_042,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV06/VIVOSDEV06_042.wav,ĐANG HẤP DẪN CÁC TẬP ĐOÀN PHÂN PHỐI ĐA QUỐC GIA,3.687500,42,494
+VIVOSDEV03_R044,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV03/VIVOSDEV03_R044.wav,VÀ KHI HỌ VẠCH TÓC RA,2.937500,42,495
+VIVOSDEV04_R004,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV04/VIVOSDEV04_R004.wav,ĐÔI KHI BẠN CŨNG CÓ THỂ LÀM NHỮNG ĐIỀU ĐÓ,3.562500,42,496
+VIVOSDEV11_269,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV11/VIVOSDEV11_269.wav,CHÚNG TÔI YÊU NHAU ĐƯỢC HAI NĂM THÌ GIA ĐÌNH TÔI XẢY RA CHUYỆN,4.656250,42,497
+VIVOSDEV10_194,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV10/VIVOSDEV10_194.wav,TỨC CHANH CÓ THỂ TRỊ ĐƯỢC BỆNH,3.375000,42,498
+VIVOSDEV12_244,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV12/VIVOSDEV12_244.wav,CHÍN MƯƠI BỐN CHÍN MƯƠI LĂM,2.687500,42,499
+VIVOSDEV02_R067,vivos,test,data/raw/vivos/vivos/test/waves/VIVOSDEV02/VIVOSDEV02_R067.wav,ÔNG CHỦ TỊCH TUYÊN BỐ NHƯ THẾ NÀO,3.937500,42,500

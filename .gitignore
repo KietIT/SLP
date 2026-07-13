@@ -5,6 +5,7 @@ __pycache__/
 .ipynb_checkpoints/
 .vscode/
 .idea/
+.codegraph/
 
 # Local environments
 .venv/
@@ -42,3 +43,8 @@ tensorboard/
 Thumbs.db
 .DS_Store
 ~$*
+
+# Markdown files
+*.md
+!README.md
+!readme.md
