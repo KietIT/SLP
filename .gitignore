@@ -48,3 +48,10 @@ Thumbs.db
 *.md
 !README.md
 !readme.md
+!docs/PHAT_LORA_GUIDE.md
+
+# This branch publishes the completed Phat experiment artifacts.
+!outputs/
+outputs/*
+!outputs/phat/
+!outputs/phat/**

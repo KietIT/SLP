@@ -302,6 +302,18 @@ Interpretation:
 
 ## Fine-tuning configuration
 
+### Phat: five-lambda LoRA ablation pipeline
+
+The complete ordinary/tone-aware PhoWhisper-base LoRA workflow is documented in
+[`docs/PHAT_LORA_GUIDE.md`](docs/PHAT_LORA_GUIDE.md). It adds five separate
+lambda configs, deterministic training, checkpoint/resume state, exact shared
+prediction schema export, full benchmark aggregation, guarded best-lambda
+selection, and small unit tests that do not load a large model.
+
+Use the existing `slp` conda environment and its exact interpreter for this
+workspace. Limited smoke outputs must stay under `outputs/phat/smoke/` and must
+not be reported as full ablation results.
+
 The main training config is:
 
 ```text

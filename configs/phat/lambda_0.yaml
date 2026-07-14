@@ -1,0 +1,12 @@
+base_config: base.yaml
+experiment:
+  id: phowhisper_base_lora_lambda_0
+  train_type: ordinary_lora
+training:
+  lambda_tone: 0.0
+  output_dir: outputs/phat/checkpoints/ckpt_lora_ordinary_lambda0
+logging:
+  file: outputs/phat/logs/train_lora_ordinary_lambda0.log
+  metrics_csv: outputs/phat/logs/train_lora_ordinary_lambda0.csv
+evaluation:
+  prediction_path: outputs/phat/predictions/pred_lora_ordinary_lambda0.csv

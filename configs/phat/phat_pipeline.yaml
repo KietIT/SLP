@@ -1,0 +1,8 @@
+experiment_configs:
+  - configs/phat/lambda_0.yaml
+  - configs/phat/lambda_005.yaml
+  - configs/phat/lambda_01.yaml
+  - configs/phat/lambda_03.yaml
+  - configs/phat/lambda_05.yaml
+results_path: outputs/phat/reports/lambda_ablation_results.csv
+best_lambda_report: outputs/phat/reports/best_lambda_report.md
