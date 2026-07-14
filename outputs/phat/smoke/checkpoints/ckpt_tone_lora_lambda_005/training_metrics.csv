@@ -1,0 +1,2 @@
+epoch,global_step,learning_rate,asr_loss,tone_loss,total_loss
+0,1,0.0,2.4867148399353027,1.17724609375,2.545577049255371

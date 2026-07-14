@@ -1,0 +1,246 @@
+2026-07-14 00:31:28,672 | INFO | Python seed settings: {'seed': 42, 'deterministic': True, 'python_hash_seed': '42'}
+2026-07-14 00:31:28,672 | INFO | Device: cuda
+2026-07-14 00:31:28,673 | INFO | PyTorch: 2.11.0+cu128 | CUDA build: 12.8
+2026-07-14 00:31:28,673 | INFO | Resolved config: D:\FPT_UNIVERSITY\Ky 7\SLP301\Midterm\SLP\configs\phat\lambda_0.yaml
+2026-07-14 00:31:34,593 | INFO | Parameters | total=72888832 trainable=294912 ratio=0.404605%
+2026-07-14 00:31:37,532 | INFO | epoch=0 step=1 asr_loss=1.033962 tone_loss=0.000000 total_loss=1.033962 lr=0.00000092
+2026-07-14 00:31:54,533 | INFO | epoch=0 step=10 asr_loss=0.887972 tone_loss=0.000000 total_loss=0.887972 lr=0.00000917
+2026-07-14 00:32:13,305 | INFO | epoch=0 step=20 asr_loss=0.907552 tone_loss=0.000000 total_loss=0.907552 lr=0.00001835
+2026-07-14 00:32:31,973 | INFO | epoch=0 step=30 asr_loss=0.867790 tone_loss=0.000000 total_loss=0.867790 lr=0.00002752
+2026-07-14 00:32:50,483 | INFO | epoch=0 step=40 asr_loss=0.874715 tone_loss=0.000000 total_loss=0.874715 lr=0.00003670
+2026-07-14 00:33:09,023 | INFO | epoch=0 step=50 asr_loss=0.827707 tone_loss=0.000000 total_loss=0.827707 lr=0.00004587
+2026-07-14 00:33:27,710 | INFO | epoch=0 step=60 asr_loss=0.706921 tone_loss=0.000000 total_loss=0.706921 lr=0.00005505
+2026-07-14 00:33:46,084 | INFO | epoch=0 step=70 asr_loss=0.578184 tone_loss=0.000000 total_loss=0.578184 lr=0.00006422
+2026-07-14 00:34:04,518 | INFO | epoch=0 step=80 asr_loss=0.346525 tone_loss=0.000000 total_loss=0.346525 lr=0.00007339
+2026-07-14 00:34:22,827 | INFO | epoch=0 step=90 asr_loss=0.143633 tone_loss=0.000000 total_loss=0.143633 lr=0.00008257
+2026-07-14 00:34:41,143 | INFO | epoch=0 step=100 asr_loss=0.122826 tone_loss=0.000000 total_loss=0.122826 lr=0.00009174
+2026-07-14 00:34:41,865 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000100
+2026-07-14 00:35:00,056 | INFO | epoch=0 step=110 asr_loss=0.110966 tone_loss=0.000000 total_loss=0.110966 lr=0.00009995
+2026-07-14 00:35:18,612 | INFO | epoch=0 step=120 asr_loss=0.129641 tone_loss=0.000000 total_loss=0.129641 lr=0.00009947
+2026-07-14 00:35:36,765 | INFO | epoch=0 step=130 asr_loss=0.121047 tone_loss=0.000000 total_loss=0.121047 lr=0.00009899
+2026-07-14 00:35:55,244 | INFO | epoch=0 step=140 asr_loss=0.118192 tone_loss=0.000000 total_loss=0.118192 lr=0.00009851
+2026-07-14 00:36:13,580 | INFO | epoch=0 step=150 asr_loss=0.108436 tone_loss=0.000000 total_loss=0.108436 lr=0.00009803
+2026-07-14 00:36:32,077 | INFO | epoch=0 step=160 asr_loss=0.092679 tone_loss=0.000000 total_loss=0.092679 lr=0.00009755
+2026-07-14 00:36:50,445 | INFO | epoch=0 step=170 asr_loss=0.113161 tone_loss=0.000000 total_loss=0.113161 lr=0.00009706
+2026-07-14 00:37:08,618 | INFO | epoch=0 step=180 asr_loss=0.096889 tone_loss=0.000000 total_loss=0.096889 lr=0.00009658
+2026-07-14 00:37:26,999 | INFO | epoch=0 step=190 asr_loss=0.104771 tone_loss=0.000000 total_loss=0.104771 lr=0.00009610
+2026-07-14 00:37:45,258 | INFO | epoch=0 step=200 asr_loss=0.107119 tone_loss=0.000000 total_loss=0.107119 lr=0.00009562
+2026-07-14 00:37:46,001 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000200
+2026-07-14 00:38:04,254 | INFO | epoch=0 step=210 asr_loss=0.099635 tone_loss=0.000000 total_loss=0.099635 lr=0.00009514
+2026-07-14 00:38:22,500 | INFO | epoch=0 step=220 asr_loss=0.067471 tone_loss=0.000000 total_loss=0.067471 lr=0.00009466
+2026-07-14 00:38:41,014 | INFO | epoch=0 step=230 asr_loss=0.105226 tone_loss=0.000000 total_loss=0.105226 lr=0.00009418
+2026-07-14 00:38:59,301 | INFO | epoch=0 step=240 asr_loss=0.075198 tone_loss=0.000000 total_loss=0.075198 lr=0.00009370
+2026-07-14 00:39:17,436 | INFO | epoch=0 step=250 asr_loss=0.099575 tone_loss=0.000000 total_loss=0.099575 lr=0.00009321
+2026-07-14 00:39:35,714 | INFO | epoch=0 step=260 asr_loss=0.091331 tone_loss=0.000000 total_loss=0.091331 lr=0.00009273
+2026-07-14 00:39:53,997 | INFO | epoch=0 step=270 asr_loss=0.110062 tone_loss=0.000000 total_loss=0.110062 lr=0.00009225
+2026-07-14 00:40:12,182 | INFO | epoch=0 step=280 asr_loss=0.091798 tone_loss=0.000000 total_loss=0.091798 lr=0.00009177
+2026-07-14 00:40:30,817 | INFO | epoch=0 step=290 asr_loss=0.085274 tone_loss=0.000000 total_loss=0.085274 lr=0.00009129
+2026-07-14 00:40:49,245 | INFO | epoch=0 step=300 asr_loss=0.096399 tone_loss=0.000000 total_loss=0.096399 lr=0.00009081
+2026-07-14 00:40:50,773 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000300
+2026-07-14 00:41:08,910 | INFO | epoch=0 step=310 asr_loss=0.091807 tone_loss=0.000000 total_loss=0.091807 lr=0.00009033
+2026-07-14 00:41:27,372 | INFO | epoch=0 step=320 asr_loss=0.104155 tone_loss=0.000000 total_loss=0.104155 lr=0.00008985
+2026-07-14 00:41:45,699 | INFO | epoch=0 step=330 asr_loss=0.078424 tone_loss=0.000000 total_loss=0.078424 lr=0.00008936
+2026-07-14 00:42:03,836 | INFO | epoch=0 step=340 asr_loss=0.126408 tone_loss=0.000000 total_loss=0.126408 lr=0.00008888
+2026-07-14 00:42:22,078 | INFO | epoch=0 step=350 asr_loss=0.096528 tone_loss=0.000000 total_loss=0.096528 lr=0.00008840
+2026-07-14 00:42:40,323 | INFO | epoch=0 step=360 asr_loss=0.134771 tone_loss=0.000000 total_loss=0.134771 lr=0.00008792
+2026-07-14 00:42:58,440 | INFO | epoch=0 step=370 asr_loss=0.086942 tone_loss=0.000000 total_loss=0.086942 lr=0.00008744
+2026-07-14 00:43:16,546 | INFO | epoch=0 step=380 asr_loss=0.070049 tone_loss=0.000000 total_loss=0.070049 lr=0.00008696
+2026-07-14 00:43:34,722 | INFO | epoch=0 step=390 asr_loss=0.101359 tone_loss=0.000000 total_loss=0.101359 lr=0.00008648
+2026-07-14 00:43:52,946 | INFO | epoch=0 step=400 asr_loss=0.081632 tone_loss=0.000000 total_loss=0.081632 lr=0.00008600
+2026-07-14 00:43:53,654 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000400
+2026-07-14 00:44:11,775 | INFO | epoch=0 step=410 asr_loss=0.078753 tone_loss=0.000000 total_loss=0.078753 lr=0.00008551
+2026-07-14 00:44:30,204 | INFO | epoch=0 step=420 asr_loss=0.087001 tone_loss=0.000000 total_loss=0.087001 lr=0.00008503
+2026-07-14 00:44:48,489 | INFO | epoch=0 step=430 asr_loss=0.082993 tone_loss=0.000000 total_loss=0.082993 lr=0.00008455
+2026-07-14 00:45:06,704 | INFO | epoch=0 step=440 asr_loss=0.100228 tone_loss=0.000000 total_loss=0.100228 lr=0.00008407
+2026-07-14 00:45:25,120 | INFO | epoch=0 step=450 asr_loss=0.088009 tone_loss=0.000000 total_loss=0.088009 lr=0.00008359
+2026-07-14 00:45:43,408 | INFO | epoch=0 step=460 asr_loss=0.070799 tone_loss=0.000000 total_loss=0.070799 lr=0.00008311
+2026-07-14 00:46:01,602 | INFO | epoch=0 step=470 asr_loss=0.101770 tone_loss=0.000000 total_loss=0.101770 lr=0.00008263
+2026-07-14 00:46:19,814 | INFO | epoch=0 step=480 asr_loss=0.076766 tone_loss=0.000000 total_loss=0.076766 lr=0.00008215
+2026-07-14 00:46:38,038 | INFO | epoch=0 step=490 asr_loss=0.084088 tone_loss=0.000000 total_loss=0.084088 lr=0.00008167
+2026-07-14 00:46:56,220 | INFO | epoch=0 step=500 asr_loss=0.065272 tone_loss=0.000000 total_loss=0.065272 lr=0.00008118
+2026-07-14 00:46:56,931 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000500
+2026-07-14 00:47:15,214 | INFO | epoch=0 step=510 asr_loss=0.074389 tone_loss=0.000000 total_loss=0.074389 lr=0.00008070
+2026-07-14 00:47:33,479 | INFO | epoch=0 step=520 asr_loss=0.094221 tone_loss=0.000000 total_loss=0.094221 lr=0.00008022
+2026-07-14 00:47:51,704 | INFO | epoch=0 step=530 asr_loss=0.075329 tone_loss=0.000000 total_loss=0.075329 lr=0.00007974
+2026-07-14 00:48:10,002 | INFO | epoch=0 step=540 asr_loss=0.098262 tone_loss=0.000000 total_loss=0.098262 lr=0.00007926
+2026-07-14 00:48:28,452 | INFO | epoch=0 step=550 asr_loss=0.095343 tone_loss=0.000000 total_loss=0.095343 lr=0.00007878
+2026-07-14 00:48:46,676 | INFO | epoch=0 step=560 asr_loss=0.097858 tone_loss=0.000000 total_loss=0.097858 lr=0.00007830
+2026-07-14 00:49:04,939 | INFO | epoch=0 step=570 asr_loss=0.080174 tone_loss=0.000000 total_loss=0.080174 lr=0.00007782
+2026-07-14 00:49:23,099 | INFO | epoch=0 step=580 asr_loss=0.073185 tone_loss=0.000000 total_loss=0.073185 lr=0.00007733
+2026-07-14 00:49:41,359 | INFO | epoch=0 step=590 asr_loss=0.099530 tone_loss=0.000000 total_loss=0.099530 lr=0.00007685
+2026-07-14 00:49:59,515 | INFO | epoch=0 step=600 asr_loss=0.108844 tone_loss=0.000000 total_loss=0.108844 lr=0.00007637
+2026-07-14 00:50:00,202 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000600
+2026-07-14 00:50:18,604 | INFO | epoch=0 step=610 asr_loss=0.069668 tone_loss=0.000000 total_loss=0.069668 lr=0.00007589
+2026-07-14 00:50:36,741 | INFO | epoch=0 step=620 asr_loss=0.092130 tone_loss=0.000000 total_loss=0.092130 lr=0.00007541
+2026-07-14 00:50:54,961 | INFO | epoch=0 step=630 asr_loss=0.083913 tone_loss=0.000000 total_loss=0.083913 lr=0.00007493
+2026-07-14 00:51:13,082 | INFO | epoch=0 step=640 asr_loss=0.084148 tone_loss=0.000000 total_loss=0.084148 lr=0.00007445
+2026-07-14 00:51:31,430 | INFO | epoch=0 step=650 asr_loss=0.105063 tone_loss=0.000000 total_loss=0.105063 lr=0.00007397
+2026-07-14 00:51:49,658 | INFO | epoch=0 step=660 asr_loss=0.079472 tone_loss=0.000000 total_loss=0.079472 lr=0.00007348
+2026-07-14 00:52:07,774 | INFO | epoch=0 step=670 asr_loss=0.089549 tone_loss=0.000000 total_loss=0.089549 lr=0.00007300
+2026-07-14 00:52:25,897 | INFO | epoch=0 step=680 asr_loss=0.068972 tone_loss=0.000000 total_loss=0.068972 lr=0.00007252
+2026-07-14 00:52:44,143 | INFO | epoch=0 step=690 asr_loss=0.055606 tone_loss=0.000000 total_loss=0.055606 lr=0.00007204
+2026-07-14 00:53:02,318 | INFO | epoch=0 step=700 asr_loss=0.085359 tone_loss=0.000000 total_loss=0.085359 lr=0.00007156
+2026-07-14 00:53:03,052 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000700
+2026-07-14 00:53:21,214 | INFO | epoch=0 step=710 asr_loss=0.090462 tone_loss=0.000000 total_loss=0.090462 lr=0.00007108
+2026-07-14 00:53:39,400 | INFO | epoch=0 step=720 asr_loss=0.069060 tone_loss=0.000000 total_loss=0.069060 lr=0.00007060
+2026-07-14 00:53:56,987 | INFO | epoch=1 step=730 asr_loss=0.071687 tone_loss=0.000000 total_loss=0.071687 lr=0.00007012
+2026-07-14 00:54:13,702 | INFO | epoch=1 step=740 asr_loss=0.076744 tone_loss=0.000000 total_loss=0.076744 lr=0.00006963
+2026-07-14 00:54:30,699 | INFO | epoch=1 step=750 asr_loss=0.063473 tone_loss=0.000000 total_loss=0.063473 lr=0.00006915
+2026-07-14 00:54:47,302 | INFO | epoch=1 step=760 asr_loss=0.081356 tone_loss=0.000000 total_loss=0.081356 lr=0.00006867
+2026-07-14 00:55:03,930 | INFO | epoch=1 step=770 asr_loss=0.081998 tone_loss=0.000000 total_loss=0.081998 lr=0.00006819
+2026-07-14 00:55:20,525 | INFO | epoch=1 step=780 asr_loss=0.088436 tone_loss=0.000000 total_loss=0.088436 lr=0.00006771
+2026-07-14 00:55:37,227 | INFO | epoch=1 step=790 asr_loss=0.070941 tone_loss=0.000000 total_loss=0.070941 lr=0.00006723
+2026-07-14 00:55:53,810 | INFO | epoch=1 step=800 asr_loss=0.082751 tone_loss=0.000000 total_loss=0.082751 lr=0.00006675
+2026-07-14 00:55:54,536 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000800
+2026-07-14 00:56:11,131 | INFO | epoch=1 step=810 asr_loss=0.069280 tone_loss=0.000000 total_loss=0.069280 lr=0.00006627
+2026-07-14 00:56:27,937 | INFO | epoch=1 step=820 asr_loss=0.075771 tone_loss=0.000000 total_loss=0.075771 lr=0.00006578
+2026-07-14 00:56:45,027 | INFO | epoch=1 step=830 asr_loss=0.084340 tone_loss=0.000000 total_loss=0.084340 lr=0.00006530
+2026-07-14 00:57:02,817 | INFO | epoch=1 step=840 asr_loss=0.073709 tone_loss=0.000000 total_loss=0.073709 lr=0.00006482
+2026-07-14 00:57:20,042 | INFO | epoch=1 step=850 asr_loss=0.080807 tone_loss=0.000000 total_loss=0.080807 lr=0.00006434
+2026-07-14 00:57:37,611 | INFO | epoch=1 step=860 asr_loss=0.111870 tone_loss=0.000000 total_loss=0.111870 lr=0.00006386
+2026-07-14 00:57:54,215 | INFO | epoch=1 step=870 asr_loss=0.076196 tone_loss=0.000000 total_loss=0.076196 lr=0.00006338
+2026-07-14 00:58:10,875 | INFO | epoch=1 step=880 asr_loss=0.084669 tone_loss=0.000000 total_loss=0.084669 lr=0.00006290
+2026-07-14 00:58:27,608 | INFO | epoch=1 step=890 asr_loss=0.083917 tone_loss=0.000000 total_loss=0.083917 lr=0.00006242
+2026-07-14 00:58:44,353 | INFO | epoch=1 step=900 asr_loss=0.091968 tone_loss=0.000000 total_loss=0.091968 lr=0.00006193
+2026-07-14 00:58:45,069 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_000900
+2026-07-14 00:59:01,691 | INFO | epoch=1 step=910 asr_loss=0.091034 tone_loss=0.000000 total_loss=0.091034 lr=0.00006145
+2026-07-14 00:59:18,541 | INFO | epoch=1 step=920 asr_loss=0.083206 tone_loss=0.000000 total_loss=0.083206 lr=0.00006097
+2026-07-14 00:59:35,265 | INFO | epoch=1 step=930 asr_loss=0.111459 tone_loss=0.000000 total_loss=0.111459 lr=0.00006049
+2026-07-14 00:59:51,957 | INFO | epoch=1 step=940 asr_loss=0.092155 tone_loss=0.000000 total_loss=0.092155 lr=0.00006001
+2026-07-14 01:00:08,597 | INFO | epoch=1 step=950 asr_loss=0.061991 tone_loss=0.000000 total_loss=0.061991 lr=0.00005953
+2026-07-14 01:00:25,243 | INFO | epoch=1 step=960 asr_loss=0.077844 tone_loss=0.000000 total_loss=0.077844 lr=0.00005905
+2026-07-14 01:00:41,871 | INFO | epoch=1 step=970 asr_loss=0.089848 tone_loss=0.000000 total_loss=0.089848 lr=0.00005857
+2026-07-14 01:00:58,618 | INFO | epoch=1 step=980 asr_loss=0.091383 tone_loss=0.000000 total_loss=0.091383 lr=0.00005808
+2026-07-14 01:01:15,204 | INFO | epoch=1 step=990 asr_loss=0.086032 tone_loss=0.000000 total_loss=0.086032 lr=0.00005760
+2026-07-14 01:01:31,895 | INFO | epoch=1 step=1000 asr_loss=0.084806 tone_loss=0.000000 total_loss=0.084806 lr=0.00005712
+2026-07-14 01:01:32,621 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001000
+2026-07-14 01:01:49,223 | INFO | epoch=1 step=1010 asr_loss=0.094972 tone_loss=0.000000 total_loss=0.094972 lr=0.00005664
+2026-07-14 01:02:06,191 | INFO | epoch=1 step=1020 asr_loss=0.097249 tone_loss=0.000000 total_loss=0.097249 lr=0.00005616
+2026-07-14 01:02:24,135 | INFO | epoch=1 step=1030 asr_loss=0.062796 tone_loss=0.000000 total_loss=0.062796 lr=0.00005568
+2026-07-14 01:02:42,956 | INFO | epoch=1 step=1040 asr_loss=0.092654 tone_loss=0.000000 total_loss=0.092654 lr=0.00005520
+2026-07-14 01:03:01,542 | INFO | epoch=1 step=1050 asr_loss=0.075033 tone_loss=0.000000 total_loss=0.075033 lr=0.00005472
+2026-07-14 01:03:20,067 | INFO | epoch=1 step=1060 asr_loss=0.090681 tone_loss=0.000000 total_loss=0.090681 lr=0.00005423
+2026-07-14 01:03:38,409 | INFO | epoch=1 step=1070 asr_loss=0.085444 tone_loss=0.000000 total_loss=0.085444 lr=0.00005375
+2026-07-14 01:03:56,921 | INFO | epoch=1 step=1080 asr_loss=0.081103 tone_loss=0.000000 total_loss=0.081103 lr=0.00005327
+2026-07-14 01:04:15,238 | INFO | epoch=1 step=1090 asr_loss=0.107724 tone_loss=0.000000 total_loss=0.107724 lr=0.00005279
+2026-07-14 01:04:33,493 | INFO | epoch=1 step=1100 asr_loss=0.073122 tone_loss=0.000000 total_loss=0.073122 lr=0.00005231
+2026-07-14 01:04:34,270 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001100
+2026-07-14 01:04:52,414 | INFO | epoch=1 step=1110 asr_loss=0.069413 tone_loss=0.000000 total_loss=0.069413 lr=0.00005183
+2026-07-14 01:05:10,749 | INFO | epoch=1 step=1120 asr_loss=0.078709 tone_loss=0.000000 total_loss=0.078709 lr=0.00005135
+2026-07-14 01:05:28,966 | INFO | epoch=1 step=1130 asr_loss=0.093756 tone_loss=0.000000 total_loss=0.093756 lr=0.00005087
+2026-07-14 01:05:47,046 | INFO | epoch=1 step=1140 asr_loss=0.076570 tone_loss=0.000000 total_loss=0.076570 lr=0.00005038
+2026-07-14 01:06:05,269 | INFO | epoch=1 step=1150 asr_loss=0.083890 tone_loss=0.000000 total_loss=0.083890 lr=0.00004990
+2026-07-14 01:06:23,454 | INFO | epoch=1 step=1160 asr_loss=0.107822 tone_loss=0.000000 total_loss=0.107822 lr=0.00004942
+2026-07-14 01:06:41,439 | INFO | epoch=1 step=1170 asr_loss=0.077221 tone_loss=0.000000 total_loss=0.077221 lr=0.00004894
+2026-07-14 01:06:59,532 | INFO | epoch=1 step=1180 asr_loss=0.087288 tone_loss=0.000000 total_loss=0.087288 lr=0.00004846
+2026-07-14 01:07:17,770 | INFO | epoch=1 step=1190 asr_loss=0.129111 tone_loss=0.000000 total_loss=0.129111 lr=0.00004798
+2026-07-14 01:07:35,910 | INFO | epoch=1 step=1200 asr_loss=0.103180 tone_loss=0.000000 total_loss=0.103180 lr=0.00004750
+2026-07-14 01:07:36,624 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001200
+2026-07-14 01:07:54,651 | INFO | epoch=1 step=1210 asr_loss=0.082528 tone_loss=0.000000 total_loss=0.082528 lr=0.00004702
+2026-07-14 01:08:12,834 | INFO | epoch=1 step=1220 asr_loss=0.092365 tone_loss=0.000000 total_loss=0.092365 lr=0.00004654
+2026-07-14 01:08:30,833 | INFO | epoch=1 step=1230 asr_loss=0.094378 tone_loss=0.000000 total_loss=0.094378 lr=0.00004605
+2026-07-14 01:08:48,830 | INFO | epoch=1 step=1240 asr_loss=0.079512 tone_loss=0.000000 total_loss=0.079512 lr=0.00004557
+2026-07-14 01:09:07,126 | INFO | epoch=1 step=1250 asr_loss=0.092566 tone_loss=0.000000 total_loss=0.092566 lr=0.00004509
+2026-07-14 01:09:25,136 | INFO | epoch=1 step=1260 asr_loss=0.068873 tone_loss=0.000000 total_loss=0.068873 lr=0.00004461
+2026-07-14 01:09:43,157 | INFO | epoch=1 step=1270 asr_loss=0.088287 tone_loss=0.000000 total_loss=0.088287 lr=0.00004413
+2026-07-14 01:10:01,409 | INFO | epoch=1 step=1280 asr_loss=0.063197 tone_loss=0.000000 total_loss=0.063197 lr=0.00004365
+2026-07-14 01:10:19,450 | INFO | epoch=1 step=1290 asr_loss=0.082958 tone_loss=0.000000 total_loss=0.082958 lr=0.00004317
+2026-07-14 01:10:37,440 | INFO | epoch=1 step=1300 asr_loss=0.119024 tone_loss=0.000000 total_loss=0.119024 lr=0.00004269
+2026-07-14 01:10:38,138 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001300
+2026-07-14 01:10:56,249 | INFO | epoch=1 step=1310 asr_loss=0.079969 tone_loss=0.000000 total_loss=0.079969 lr=0.00004220
+2026-07-14 01:11:14,294 | INFO | epoch=1 step=1320 asr_loss=0.073494 tone_loss=0.000000 total_loss=0.073494 lr=0.00004172
+2026-07-14 01:11:32,304 | INFO | epoch=1 step=1330 asr_loss=0.087528 tone_loss=0.000000 total_loss=0.087528 lr=0.00004124
+2026-07-14 01:11:50,168 | INFO | epoch=1 step=1340 asr_loss=0.087598 tone_loss=0.000000 total_loss=0.087598 lr=0.00004076
+2026-07-14 01:12:08,555 | INFO | epoch=1 step=1350 asr_loss=0.099172 tone_loss=0.000000 total_loss=0.099172 lr=0.00004028
+2026-07-14 01:12:26,654 | INFO | epoch=1 step=1360 asr_loss=0.080602 tone_loss=0.000000 total_loss=0.080602 lr=0.00003980
+2026-07-14 01:12:44,633 | INFO | epoch=1 step=1370 asr_loss=0.073334 tone_loss=0.000000 total_loss=0.073334 lr=0.00003932
+2026-07-14 01:13:02,697 | INFO | epoch=1 step=1380 asr_loss=0.079358 tone_loss=0.000000 total_loss=0.079358 lr=0.00003884
+2026-07-14 01:13:20,776 | INFO | epoch=1 step=1390 asr_loss=0.089683 tone_loss=0.000000 total_loss=0.089683 lr=0.00003835
+2026-07-14 01:13:38,738 | INFO | epoch=1 step=1400 asr_loss=0.089814 tone_loss=0.000000 total_loss=0.089814 lr=0.00003787
+2026-07-14 01:13:39,432 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001400
+2026-07-14 01:13:57,302 | INFO | epoch=1 step=1410 asr_loss=0.074987 tone_loss=0.000000 total_loss=0.074987 lr=0.00003739
+2026-07-14 01:14:15,484 | INFO | epoch=1 step=1420 asr_loss=0.103396 tone_loss=0.000000 total_loss=0.103396 lr=0.00003691
+2026-07-14 01:14:33,472 | INFO | epoch=1 step=1430 asr_loss=0.070062 tone_loss=0.000000 total_loss=0.070062 lr=0.00003643
+2026-07-14 01:14:51,468 | INFO | epoch=1 step=1440 asr_loss=0.072383 tone_loss=0.000000 total_loss=0.072383 lr=0.00003595
+2026-07-14 01:15:09,569 | INFO | epoch=1 step=1450 asr_loss=0.064767 tone_loss=0.000000 total_loss=0.064767 lr=0.00003547
+2026-07-14 01:15:27,015 | INFO | epoch=2 step=1460 asr_loss=0.060082 tone_loss=0.000000 total_loss=0.060082 lr=0.00003499
+2026-07-14 01:15:44,174 | INFO | epoch=2 step=1470 asr_loss=0.073240 tone_loss=0.000000 total_loss=0.073240 lr=0.00003450
+2026-07-14 01:16:01,421 | INFO | epoch=2 step=1480 asr_loss=0.105715 tone_loss=0.000000 total_loss=0.105715 lr=0.00003402
+2026-07-14 01:16:18,626 | INFO | epoch=2 step=1490 asr_loss=0.100040 tone_loss=0.000000 total_loss=0.100040 lr=0.00003354
+2026-07-14 01:16:35,569 | INFO | epoch=2 step=1500 asr_loss=0.070823 tone_loss=0.000000 total_loss=0.070823 lr=0.00003306
+2026-07-14 01:16:36,289 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001500
+2026-07-14 01:16:53,460 | INFO | epoch=2 step=1510 asr_loss=0.070821 tone_loss=0.000000 total_loss=0.070821 lr=0.00003258
+2026-07-14 01:17:11,063 | INFO | epoch=2 step=1520 asr_loss=0.099844 tone_loss=0.000000 total_loss=0.099844 lr=0.00003210
+2026-07-14 01:17:28,488 | INFO | epoch=2 step=1530 asr_loss=0.078302 tone_loss=0.000000 total_loss=0.078302 lr=0.00003162
+2026-07-14 01:17:45,778 | INFO | epoch=2 step=1540 asr_loss=0.065342 tone_loss=0.000000 total_loss=0.065342 lr=0.00003114
+2026-07-14 01:18:03,017 | INFO | epoch=2 step=1550 asr_loss=0.069206 tone_loss=0.000000 total_loss=0.069206 lr=0.00003065
+2026-07-14 01:18:20,383 | INFO | epoch=2 step=1560 asr_loss=0.079948 tone_loss=0.000000 total_loss=0.079948 lr=0.00003017
+2026-07-14 01:18:37,629 | INFO | epoch=2 step=1570 asr_loss=0.071454 tone_loss=0.000000 total_loss=0.071454 lr=0.00002969
+2026-07-14 01:18:54,813 | INFO | epoch=2 step=1580 asr_loss=0.087995 tone_loss=0.000000 total_loss=0.087995 lr=0.00002921
+2026-07-14 01:19:12,071 | INFO | epoch=2 step=1590 asr_loss=0.081734 tone_loss=0.000000 total_loss=0.081734 lr=0.00002873
+2026-07-14 01:19:29,653 | INFO | epoch=2 step=1600 asr_loss=0.074012 tone_loss=0.000000 total_loss=0.074012 lr=0.00002825
+2026-07-14 01:19:30,362 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001600
+2026-07-14 01:19:47,555 | INFO | epoch=2 step=1610 asr_loss=0.088419 tone_loss=0.000000 total_loss=0.088419 lr=0.00002777
+2026-07-14 01:20:04,901 | INFO | epoch=2 step=1620 asr_loss=0.070518 tone_loss=0.000000 total_loss=0.070518 lr=0.00002729
+2026-07-14 01:20:22,116 | INFO | epoch=2 step=1630 asr_loss=0.072367 tone_loss=0.000000 total_loss=0.072367 lr=0.00002680
+2026-07-14 01:20:39,330 | INFO | epoch=2 step=1640 asr_loss=0.082927 tone_loss=0.000000 total_loss=0.082927 lr=0.00002632
+2026-07-14 01:20:56,474 | INFO | epoch=2 step=1650 asr_loss=0.093082 tone_loss=0.000000 total_loss=0.093082 lr=0.00002584
+2026-07-14 01:21:13,885 | INFO | epoch=2 step=1660 asr_loss=0.076092 tone_loss=0.000000 total_loss=0.076092 lr=0.00002536
+2026-07-14 01:21:30,959 | INFO | epoch=2 step=1670 asr_loss=0.093152 tone_loss=0.000000 total_loss=0.093152 lr=0.00002488
+2026-07-14 01:21:48,167 | INFO | epoch=2 step=1680 asr_loss=0.072717 tone_loss=0.000000 total_loss=0.072717 lr=0.00002440
+2026-07-14 01:22:05,584 | INFO | epoch=2 step=1690 asr_loss=0.069019 tone_loss=0.000000 total_loss=0.069019 lr=0.00002392
+2026-07-14 01:22:22,870 | INFO | epoch=2 step=1700 asr_loss=0.094938 tone_loss=0.000000 total_loss=0.094938 lr=0.00002344
+2026-07-14 01:22:23,574 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001700
+2026-07-14 01:22:40,711 | INFO | epoch=2 step=1710 asr_loss=0.072344 tone_loss=0.000000 total_loss=0.072344 lr=0.00002295
+2026-07-14 01:22:57,856 | INFO | epoch=2 step=1720 asr_loss=0.067690 tone_loss=0.000000 total_loss=0.067690 lr=0.00002247
+2026-07-14 01:23:15,138 | INFO | epoch=2 step=1730 asr_loss=0.090503 tone_loss=0.000000 total_loss=0.090503 lr=0.00002199
+2026-07-14 01:23:32,229 | INFO | epoch=2 step=1740 asr_loss=0.086837 tone_loss=0.000000 total_loss=0.086837 lr=0.00002151
+2026-07-14 01:23:49,467 | INFO | epoch=2 step=1750 asr_loss=0.075562 tone_loss=0.000000 total_loss=0.075562 lr=0.00002103
+2026-07-14 01:24:06,796 | INFO | epoch=2 step=1760 asr_loss=0.086631 tone_loss=0.000000 total_loss=0.086631 lr=0.00002055
+2026-07-14 01:24:24,022 | INFO | epoch=2 step=1770 asr_loss=0.073654 tone_loss=0.000000 total_loss=0.073654 lr=0.00002007
+2026-07-14 01:24:41,297 | INFO | epoch=2 step=1780 asr_loss=0.071782 tone_loss=0.000000 total_loss=0.071782 lr=0.00001959
+2026-07-14 01:24:58,573 | INFO | epoch=2 step=1790 asr_loss=0.098769 tone_loss=0.000000 total_loss=0.098769 lr=0.00001910
+2026-07-14 01:25:15,962 | INFO | epoch=2 step=1800 asr_loss=0.072279 tone_loss=0.000000 total_loss=0.072279 lr=0.00001862
+2026-07-14 01:25:16,682 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001800
+2026-07-14 01:25:33,738 | INFO | epoch=2 step=1810 asr_loss=0.077122 tone_loss=0.000000 total_loss=0.077122 lr=0.00001814
+2026-07-14 01:25:51,217 | INFO | epoch=2 step=1820 asr_loss=0.082604 tone_loss=0.000000 total_loss=0.082604 lr=0.00001766
+2026-07-14 01:26:08,478 | INFO | epoch=2 step=1830 asr_loss=0.111111 tone_loss=0.000000 total_loss=0.111111 lr=0.00001718
+2026-07-14 01:26:25,617 | INFO | epoch=2 step=1840 asr_loss=0.091961 tone_loss=0.000000 total_loss=0.091961 lr=0.00001670
+2026-07-14 01:26:42,895 | INFO | epoch=2 step=1850 asr_loss=0.096213 tone_loss=0.000000 total_loss=0.096213 lr=0.00001622
+2026-07-14 01:27:00,085 | INFO | epoch=2 step=1860 asr_loss=0.096165 tone_loss=0.000000 total_loss=0.096165 lr=0.00001574
+2026-07-14 01:27:17,153 | INFO | epoch=2 step=1870 asr_loss=0.085942 tone_loss=0.000000 total_loss=0.085942 lr=0.00001526
+2026-07-14 01:27:34,309 | INFO | epoch=2 step=1880 asr_loss=0.057124 tone_loss=0.000000 total_loss=0.057124 lr=0.00001477
+2026-07-14 01:27:51,723 | INFO | epoch=2 step=1890 asr_loss=0.049448 tone_loss=0.000000 total_loss=0.049448 lr=0.00001429
+2026-07-14 01:28:08,973 | INFO | epoch=2 step=1900 asr_loss=0.078005 tone_loss=0.000000 total_loss=0.078005 lr=0.00001381
+2026-07-14 01:28:09,688 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_001900
+2026-07-14 01:28:26,985 | INFO | epoch=2 step=1910 asr_loss=0.093169 tone_loss=0.000000 total_loss=0.093169 lr=0.00001333
+2026-07-14 01:28:44,315 | INFO | epoch=2 step=1920 asr_loss=0.095824 tone_loss=0.000000 total_loss=0.095824 lr=0.00001285
+2026-07-14 01:29:01,492 | INFO | epoch=2 step=1930 asr_loss=0.072772 tone_loss=0.000000 total_loss=0.072772 lr=0.00001237
+2026-07-14 01:29:18,597 | INFO | epoch=2 step=1940 asr_loss=0.083017 tone_loss=0.000000 total_loss=0.083017 lr=0.00001189
+2026-07-14 01:29:35,747 | INFO | epoch=2 step=1950 asr_loss=0.119913 tone_loss=0.000000 total_loss=0.119913 lr=0.00001141
+2026-07-14 01:29:53,071 | INFO | epoch=2 step=1960 asr_loss=0.087466 tone_loss=0.000000 total_loss=0.087466 lr=0.00001092
+2026-07-14 01:30:10,329 | INFO | epoch=2 step=1970 asr_loss=0.077149 tone_loss=0.000000 total_loss=0.077149 lr=0.00001044
+2026-07-14 01:30:27,473 | INFO | epoch=2 step=1980 asr_loss=0.076625 tone_loss=0.000000 total_loss=0.076625 lr=0.00000996
+2026-07-14 01:30:44,734 | INFO | epoch=2 step=1990 asr_loss=0.078615 tone_loss=0.000000 total_loss=0.078615 lr=0.00000948
+2026-07-14 01:31:02,054 | INFO | epoch=2 step=2000 asr_loss=0.089387 tone_loss=0.000000 total_loss=0.089387 lr=0.00000900
+2026-07-14 01:31:02,769 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_002000
+2026-07-14 01:31:20,009 | INFO | epoch=2 step=2010 asr_loss=0.085159 tone_loss=0.000000 total_loss=0.085159 lr=0.00000852
+2026-07-14 01:31:37,189 | INFO | epoch=2 step=2020 asr_loss=0.081075 tone_loss=0.000000 total_loss=0.081075 lr=0.00000804
+2026-07-14 01:31:54,583 | INFO | epoch=2 step=2030 asr_loss=0.087331 tone_loss=0.000000 total_loss=0.087331 lr=0.00000756
+2026-07-14 01:32:11,660 | INFO | epoch=2 step=2040 asr_loss=0.063734 tone_loss=0.000000 total_loss=0.063734 lr=0.00000707
+2026-07-14 01:32:28,709 | INFO | epoch=2 step=2050 asr_loss=0.068206 tone_loss=0.000000 total_loss=0.068206 lr=0.00000659
+2026-07-14 01:32:45,954 | INFO | epoch=2 step=2060 asr_loss=0.068213 tone_loss=0.000000 total_loss=0.068213 lr=0.00000611
+2026-07-14 01:33:03,145 | INFO | epoch=2 step=2070 asr_loss=0.084653 tone_loss=0.000000 total_loss=0.084653 lr=0.00000563
+2026-07-14 01:33:20,395 | INFO | epoch=2 step=2080 asr_loss=0.078122 tone_loss=0.000000 total_loss=0.078122 lr=0.00000515
+2026-07-14 01:33:37,525 | INFO | epoch=2 step=2090 asr_loss=0.089648 tone_loss=0.000000 total_loss=0.089648 lr=0.00000467
+2026-07-14 01:33:54,816 | INFO | epoch=2 step=2100 asr_loss=0.083978 tone_loss=0.000000 total_loss=0.083978 lr=0.00000419
+2026-07-14 01:33:55,511 | INFO | Saved checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\checkpoint_step_002100
+2026-07-14 01:34:12,637 | INFO | epoch=2 step=2110 asr_loss=0.069194 tone_loss=0.000000 total_loss=0.069194 lr=0.00000371
+2026-07-14 01:34:30,134 | INFO | epoch=2 step=2120 asr_loss=0.072991 tone_loss=0.000000 total_loss=0.072991 lr=0.00000322
+2026-07-14 01:34:47,503 | INFO | epoch=2 step=2130 asr_loss=0.069451 tone_loss=0.000000 total_loss=0.069451 lr=0.00000274
+2026-07-14 01:35:04,723 | INFO | epoch=2 step=2140 asr_loss=0.092338 tone_loss=0.000000 total_loss=0.092338 lr=0.00000226
+2026-07-14 01:35:21,840 | INFO | epoch=2 step=2150 asr_loss=0.089806 tone_loss=0.000000 total_loss=0.089806 lr=0.00000178
+2026-07-14 01:35:39,204 | INFO | epoch=2 step=2160 asr_loss=0.107640 tone_loss=0.000000 total_loss=0.107640 lr=0.00000130
+2026-07-14 01:35:56,431 | INFO | epoch=2 step=2170 asr_loss=0.071318 tone_loss=0.000000 total_loss=0.071318 lr=0.00000082
+2026-07-14 01:36:13,604 | INFO | epoch=2 step=2180 asr_loss=0.068728 tone_loss=0.000000 total_loss=0.068728 lr=0.00000034
+2026-07-14 01:36:25,987 | INFO | Training completed with real final checkpoint: outputs\phat\checkpoints\ckpt_lora_ordinary_lambda0\final

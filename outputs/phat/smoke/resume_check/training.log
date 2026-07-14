@@ -1,0 +1,16 @@
+2026-07-14 00:23:41,592 | INFO | Python seed settings: {'seed': 42, 'deterministic': True, 'python_hash_seed': '42'}
+2026-07-14 00:23:41,592 | INFO | Device: cuda
+2026-07-14 00:23:41,592 | INFO | PyTorch: 2.11.0+cu128 | CUDA build: 12.8
+2026-07-14 00:23:41,592 | INFO | Resolved config: D:\FPT_UNIVERSITY\Ky 7\SLP301\Midterm\SLP\configs\phat\lambda_0.yaml
+2026-07-14 00:23:47,487 | INFO | Parameters | total=72888832 trainable=294912 ratio=0.404605%
+2026-07-14 00:23:48,888 | INFO | epoch=0 step=1 asr_loss=1.665585 tone_loss=0.000000 total_loss=1.665585 lr=0.00000000
+2026-07-14 00:23:49,519 | INFO | Saved checkpoint: outputs\phat\smoke\resume_check\checkpoint_step_000001
+2026-07-14 00:23:50,127 | INFO | Training completed with real final checkpoint: outputs\phat\smoke\resume_check\final
+2026-07-14 00:23:56,125 | INFO | Python seed settings: {'seed': 42, 'deterministic': True, 'python_hash_seed': '42'}
+2026-07-14 00:23:56,125 | INFO | Device: cuda
+2026-07-14 00:23:56,125 | INFO | PyTorch: 2.11.0+cu128 | CUDA build: 12.8
+2026-07-14 00:23:56,125 | INFO | Resolved config: D:\FPT_UNIVERSITY\Ky 7\SLP301\Midterm\SLP\configs\phat\lambda_0.yaml
+2026-07-14 00:24:02,124 | INFO | Parameters | total=72888832 trainable=294912 ratio=0.404605%
+2026-07-14 00:24:02,483 | INFO | Resumed from outputs\phat\smoke\resume_check\checkpoint_step_000001 at global_step=1
+2026-07-14 00:24:03,968 | INFO | Saved checkpoint: outputs\phat\smoke\resume_check\checkpoint_step_000002
+2026-07-14 00:24:04,612 | INFO | Training completed with real final checkpoint: outputs\phat\smoke\resume_check\final

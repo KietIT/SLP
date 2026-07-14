@@ -1,0 +1,70 @@
+seed: 42
+model:
+  name_or_path: vinai/PhoWhisper-base
+  language: vi
+  task: transcribe
+  lora:
+    r: 8
+    lora_alpha: 16
+    lora_dropout: 0.05
+    target_modules:
+    - q_proj
+    - v_proj
+training:
+  num_train_epochs: 3
+  per_device_train_batch_size: 16
+  gradient_accumulation_steps: 1
+  learning_rate: 0.0001
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  max_audio_seconds: 15.0
+  max_label_length: 192
+  mixed_precision: fp16
+  gradient_checkpointing: true
+  deterministic: true
+  num_workers: 0
+  save_steps: 100
+  log_steps: 10
+  tone_label_policy: last_subtoken
+  lambda_tone: 0.3
+  output_dir: outputs/phat/checkpoints/ckpt_tone_lora_lambda_03
+data:
+  train_manifest: data/manifests/vivos/train.jsonl
+  valid_manifest: data/manifests/vivos/dev.jsonl
+  sample_rate: 16000
+noise:
+  enable_train_noise: true
+  noise_manifest: data/manifests/noise/musan_noise.jsonl
+  snr_choices:
+  - 20
+  - 10
+  - 5
+  - 0
+  prob: 0.7
+evaluation:
+  manifest: outputs/benchmark/benchmark_manifest.csv
+  expected_total_rows: 1500
+  max_new_tokens: 128
+  sample_rate: 16000
+  max_audio_seconds: 15.0
+  prediction_path: outputs/phat/predictions/pred_tone_lora_lambda_03.csv
+selection:
+  low_snr:
+  - 0
+  - 5
+  ter_weight: 0.5
+  der_weight: 0.5
+  max_wer_absolute_increase: 0.05
+  max_cer_absolute_increase: 0.03
+  guard_split: all
+  guard_snr: all
+  allow_lambda_zero: true
+  expected_total_samples: 1500
+  expected_samples_per_condition: 300
+experiment:
+  id: phowhisper_base_tone_lora_lambda_03
+  train_type: tone_aware_lora
+logging:
+  file: outputs/phat/logs/train_tone_lora_lambda_03.log
+  metrics_csv: outputs/phat/logs/train_tone_lora_lambda_03.csv

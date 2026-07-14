@@ -1,0 +1,7 @@
+2026-07-14 00:30:35,133 | INFO | Python seed settings: {'seed': 42, 'deterministic': True, 'python_hash_seed': '42'}
+2026-07-14 00:30:35,133 | INFO | Device: cuda
+2026-07-14 00:30:35,133 | INFO | PyTorch: 2.11.0+cu128 | CUDA build: 12.8
+2026-07-14 00:30:35,133 | INFO | Resolved config: D:\FPT_UNIVERSITY\Ky 7\SLP301\Midterm\SLP\configs\phat\lambda_01.yaml
+2026-07-14 00:30:40,950 | INFO | Parameters | total=72892934 trainable=299014 ratio=0.410210%
+2026-07-14 00:30:43,767 | INFO | epoch=0 step=1 asr_loss=1.085364 tone_loss=1.842378 total_loss=1.269602 lr=0.00000000
+2026-07-14 00:30:44,621 | INFO | Training completed with real final checkpoint: outputs\phat\smoke\tone_batch16_check\final

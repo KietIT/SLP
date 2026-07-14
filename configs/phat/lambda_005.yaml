@@ -1,0 +1,12 @@
+base_config: base.yaml
+experiment:
+  id: phowhisper_base_tone_lora_lambda_005
+  train_type: tone_aware_lora
+training:
+  lambda_tone: 0.05
+  output_dir: outputs/phat/checkpoints/ckpt_tone_lora_lambda_005
+logging:
+  file: outputs/phat/logs/train_tone_lora_lambda_005.log
+  metrics_csv: outputs/phat/logs/train_tone_lora_lambda_005.csv
+evaluation:
+  prediction_path: outputs/phat/predictions/pred_tone_lora_lambda_005.csv

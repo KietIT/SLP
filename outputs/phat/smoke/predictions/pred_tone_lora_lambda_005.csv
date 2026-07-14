@@ -1,0 +1,6 @@
+utt_id,dataset,model,model_size,train_type,lambda,seed,snr,noise_type,ref,hyp
+VIVOSDEV16_266_clean,vivos,phowhisper,base,tone_aware_lora,0.05,42,clean,clean,PHÍA DƯỚI VÀ XUNG QUANH KỆ LÀ NƯỚC BẨN LÊNH LÁNG CHẢY QUA,phía dưới và xung quanh kệ là nước bẩn lên láng chảy hoa.
+VIVOSDEV16_266_snr20,vivos,phowhisper,base,tone_aware_lora,0.05,42,20,speech,PHÍA DƯỚI VÀ XUNG QUANH KỆ LÀ NƯỚC BẨN LÊNH LÁNG CHẢY QUA,phía dưới và xung quanh kệ là nước bẩn lên lán chảy qua.
+VIVOSDEV16_266_snr10,vivos,phowhisper,base,tone_aware_lora,0.05,42,10,noise,PHÍA DƯỚI VÀ XUNG QUANH KỆ LÀ NƯỚC BẨN LÊNH LÁNG CHẢY QUA,phía dưới và xung quanh kệ là nước bẩn lên láng chảy qua.
+VIVOSDEV16_266_snr5,vivos,phowhisper,base,tone_aware_lora,0.05,42,5,noise,PHÍA DƯỚI VÀ XUNG QUANH KỆ LÀ NƯỚC BẨN LÊNH LÁNG CHẢY QUA,tí dưới và xung quanh kệ là nước bẩn lên lấy chảy hoang.
+VIVOSDEV16_266_snr0,vivos,phowhisper,base,tone_aware_lora,0.05,42,0,music,PHÍA DƯỚI VÀ XUNG QUANH KỆ LÀ NƯỚC BẨN LÊNH LÁNG CHẢY QUA,phía dưới và xung quanh kệ là nước bẩn lên lái chảy hoang.
