@@ -64,6 +64,8 @@ data/manifests/vivos/train.jsonl
 data/manifests/vivos/dev.jsonl
 data/manifests/vivos/test.jsonl
 data/manifests/vivos/test_noisy.jsonl
+data/manifests/fleurs/test.jsonl
+data/manifests/fleurs/audio/test/*.wav
 ```
 
 ## Environment setup
@@ -381,6 +383,57 @@ python scripts/score_predictions.py \
   --out outputs/metrics_phowhisper_lora_noisy_by_snr.csv \
   --group_by snr
 ```
+
+## FLEURS Vietnamese external evaluation
+
+The external evaluation uses all 857 utterances in the FLEURS Vietnamese test
+split and the same `aligned_v1` metric implementation as the internal
+benchmark. It compares ordinary LoRA, tone-aware LoRA with lambda 0.05, and
+tone-aware LoRA with lambda 0.1 on exactly the same utterance IDs and
+references. Audio longer than 30 seconds is split into balanced, non-overlapping
+chunks to avoid sub-second tails, and each chunk has a 440-token decode limit
+within Whisper's 448-position target window. If the fast tokenizer encounters
+an invalid byte-BPE sequence, the runner validates the slow tokenizer has the
+same vocabulary and decodes only that sequence with invalid bytes ignored.
+
+Published-run provenance: FLEURS manifest SHA-256
+`4BEF10B833B7AE8B39D0202F2849564ED4299562B8C546C8828DB7900DC1EA22`,
+PhoWhisper-base revision `7ebdb9e88f5cc5271fb88f4d642c82ff9388650e`, and adapter
+SHA-256 values `821B91821DBE30029C044DD106692CA85B92307B9589799A2115D708A22A79F6`
+(ordinary), `A62F81FFB31BF2C72F01B405ED322CDEBE30C5D2ECD54F426FE43131D641DDB3`
+(lambda 0.05), and
+`28BFBE3D3C1BEDF63A4CF92DAA5446BD6F536F220EA02293BD5071D420606C3B`
+(lambda 0.1).
+
+```bash
+python scripts/download_fleurs.py
+python scripts/run_external_fleurs.py --device cuda
+python scripts/error_analysis.py --pred-glob "outputs/external/fleurs/predictions/pred_*.csv" --out-dir outputs/external/fleurs/error_analysis
+python scripts/build_error_breakdowns.py --events outputs/external/fleurs/error_analysis/error_events.csv --out-dir outputs/external/fleurs/error_analysis
+python scripts/bootstrap_ci.py --ordinary outputs/external/fleurs/predictions/pred_lora_ordinary_lambda0.csv --lambda-005 outputs/external/fleurs/predictions/pred_tone_lora_lambda_005.csv --lambda-01 outputs/external/fleurs/predictions/pred_tone_lora_lambda_01.csv --output outputs/external/fleurs/bootstrap_ci_results.csv
+```
+
+Use `scripts/build_error_artifacts.py` with `--overall-only` and one
+`--focus-run` for each of `ordinary_lora:0`, `tone_aware_lora:0.05`, and
+`tone_aware_lora:0.1` to build the tone, final-coda, and short-word artifacts.
+`orthographic_breakdown.csv` additionally reports the requested missing-mark,
+wrong-tone-mark, and wrong-vowel-mark diagnostics. These three feature labels
+are explicitly nonexclusive; the primary TER and DER tables remain additive.
+
+Current full-test results (lower is better):
+
+| Configuration | N | WER | CER | TER | DER | FCER | SWDR |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Ordinary LoRA | 857 | 16.6384% | 9.8534% | 1.1220% | 0.5373% | 8.3826% | 0.4915% |
+| Tone-aware LoRA, lambda 0.05 | 857 | 16.9235% | 10.0067% | 1.1661% | 0.5295% | 8.5887% | 0.6554% |
+| Tone-aware LoRA, lambda 0.1 | 857 | 17.1123% | 10.0137% | 1.0684% | 0.5593% | 8.5189% | 0.4915% |
+
+Paired percentile bootstrap uses 1,000 shared utterance-level resamples, seed
+42, and reports delta as configuration B minus configuration A. The 95% CI
+excludes zero only for WER and CER in ordinary LoRA versus lambda 0.05, and for
+WER in ordinary LoRA versus lambda 0.1. All three significant deltas are
+positive, so they favor ordinary LoRA on this FLEURS test set. The complete 12
+intervals are in `outputs/external/fleurs/bootstrap_ci_results.csv`.
 
 ## Completed experiment order
 

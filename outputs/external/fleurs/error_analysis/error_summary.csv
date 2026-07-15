@@ -1,0 +1,4 @@
+dataset,model,model_size,train_type,lambda,seed,n_utterances,n_ref_tokens,n_hyp_tokens,n_events,matches,substitutions,deletions,insertions,word_errors,word_error_rate,tone_eligible,tone_errors,tone_error_rate,diacritic_eligible,diacritic_errors,diacritic_error_rate,final_consonant_eligible,final_consonant_errors,final_consonant_error_rate
+fleurs,phowhisper,base,ordinary_lora,0,42,857,25958,27162,27296,22977,2847,134,1338,4319,0.166384159026,23263,261,0.011219533164,23266,125,0.005372646781,13206,1107,0.083825533848
+fleurs,phowhisper,base,tone_aware_lora,0.05,42,857,25958,27192,27336,22943,2871,144,1378,4393,0.169234917944,23239,271,0.011661431215,23229,123,0.005295105256,13215,1135,0.085887249338
+fleurs,phowhisper,base,tone_aware_lora,0.1,42,857,25958,27275,27380,22938,2915,105,1422,4442,0.171122582633,23213,248,0.010683668634,23244,130,0.005592841163,13206,1125,0.085188550659

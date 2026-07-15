@@ -221,6 +221,50 @@ def canonical_low_snrs(values: Sequence[object]) -> tuple[str, ...]:
     return canonical
 
 
+def canonical_focus_runs(values: Sequence[object]) -> tuple[tuple[str, str], ...]:
+    selectors: list[tuple[str, str]] = []
+    for value in values:
+        text = str(value).strip()
+        if ":" not in text:
+            raise ErrorArtifactError(
+                "focus run must use TRAIN_TYPE:LAMBDA, for example ordinary_lora:0"
+            )
+        train_type, lambda_value = (part.strip() for part in text.split(":", 1))
+        if not train_type or not lambda_value:
+            raise ErrorArtifactError(
+                "focus run must include non-empty TRAIN_TYPE and LAMBDA"
+            )
+        selectors.append(
+            (
+                train_type,
+                _canonical_decimal(lambda_value, field="focus run lambda"),
+            )
+        )
+    if not selectors:
+        raise ErrorArtifactError("at least one --focus-run value is required")
+    if len(set(selectors)) != len(selectors):
+        raise ErrorArtifactError("focus run selectors must be unique")
+    return tuple(selectors)
+
+
+def _canonical_scopes(
+    low_snrs: Sequence[object],
+    *,
+    overall_only: bool,
+) -> tuple[str, ...]:
+    if overall_only:
+        if low_snrs:
+            raise ErrorArtifactError(
+                "--overall-only cannot be combined with low-SNR values"
+            )
+        return ()
+    return canonical_low_snrs(low_snrs)
+
+
+def _scope_order(low_snrs: Sequence[str]) -> tuple[str, ...]:
+    return SCOPE_ORDER if low_snrs else ("overall",)
+
+
 def _event_snr(value: object, *, path: Path, row_number: int) -> str:
     text = str(value).strip()
     if text.casefold() == "clean":
@@ -256,12 +300,13 @@ def load_tone_aggregation(
     event_path: str | Path,
     *,
     low_snrs: Sequence[str],
+    overall_only: bool = False,
 ) -> ToneAggregation:
     path = Path(event_path)
     if not path.is_file():
         raise ErrorArtifactError(f"event CSV does not exist: {path}")
 
-    low_snr_values = canonical_low_snrs(low_snrs)
+    low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
     low_snr_set = frozenset(low_snr_values)
     counts: defaultdict[MatrixKey, Counter[tuple[str, str]]] = defaultdict(Counter)
     eligible_deletions: Counter[MatrixKey] = Counter()
@@ -413,12 +458,13 @@ def load_coda_aggregation(
     event_path: str | Path,
     *,
     low_snrs: Sequence[str],
+    overall_only: bool = False,
 ) -> CodaAggregation:
     path = Path(event_path)
     if not path.is_file():
         raise ErrorArtifactError(f"event CSV does not exist: {path}")
 
-    low_snr_values = canonical_low_snrs(low_snrs)
+    low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
     low_snr_set = frozenset(low_snr_values)
     valid_codas = frozenset(FINAL_CODAS)
     if valid_codas != frozenset(CODA_ORDER[1:]):
@@ -628,6 +674,7 @@ def load_short_word_aggregation(
     *,
     low_snrs: Sequence[str],
     context_window: int,
+    overall_only: bool = False,
 ) -> ShortWordAggregation:
     path = Path(event_path)
     if not path.is_file():
@@ -641,7 +688,7 @@ def load_short_word_aggregation(
             "Gate F short-word display order disagrees with the analysis contract"
         )
 
-    low_snr_values = canonical_low_snrs(low_snrs)
+    low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
     low_snr_set = frozenset(low_snr_values)
     deletion_counts: Counter[MatrixKey] = Counter()
     reference_units: Counter[MatrixKey] = Counter()
@@ -822,7 +869,7 @@ def build_tone_matrix_rows(
     rows: list[dict[str, object]] = []
     for run_key in aggregation.run_keys:
         metadata = dict(zip(RUN_COLUMNS, run_key))
-        for scope in SCOPE_ORDER:
+        for scope in _scope_order(aggregation.low_snrs):
             matrix = aggregation.counts.get((run_key, scope), Counter())
             for ref_tone in TONE_ORDER:
                 ref_total = sum(matrix[(ref_tone, hyp_tone)] for hyp_tone in TONE_ORDER)
@@ -851,7 +898,7 @@ def build_coda_matrix_rows(
     rows: list[dict[str, object]] = []
     for run_key in aggregation.run_keys:
         metadata = dict(zip(RUN_COLUMNS, run_key))
-        for scope in SCOPE_ORDER:
+        for scope in _scope_order(aggregation.low_snrs):
             matrix = aggregation.counts.get((run_key, scope), Counter())
             for ref_coda in CODA_ORDER:
                 ref_total = sum(matrix[(ref_coda, hyp_coda)] for hyp_coda in CODA_ORDER)
@@ -918,6 +965,72 @@ def _resolve_candidate_run_keys(
     return tuple(selected)
 
 
+def _resolve_focus_run_keys(
+    run_keys: Sequence[RunKey],
+    focus_runs: Sequence[tuple[str, str]],
+) -> tuple[tuple[str, RunKey], ...]:
+    selected: list[tuple[str, RunKey]] = []
+    for train_type, lambda_value in focus_runs:
+        matches: list[RunKey] = []
+        for run_key in run_keys:
+            metadata = dict(zip(RUN_COLUMNS, run_key))
+            if metadata["train_type"] != train_type or not metadata["lambda"]:
+                continue
+            try:
+                observed = _canonical_decimal(
+                    metadata["lambda"], field="event lambda"
+                )
+            except ErrorArtifactError as exc:
+                raise ErrorArtifactError(
+                    f"invalid lambda in run metadata {run_key}: {exc}"
+                ) from exc
+            if observed == lambda_value:
+                matches.append(run_key)
+        label = f"{train_type}:{lambda_value}"
+        if len(matches) != 1:
+            raise ErrorArtifactError(
+                f"focus run {label} must match exactly one run; found {len(matches)}"
+            )
+        selected.append((label, matches[0]))
+    return tuple(selected)
+
+
+def _resolve_report_runs(
+    run_keys: Sequence[RunKey],
+    *,
+    candidate_lambdas: Sequence[object] | None,
+    focus_runs: Sequence[object] | None,
+) -> tuple[tuple[str, RunKey], ...]:
+    if focus_runs:
+        if candidate_lambdas:
+            raise ErrorArtifactError(
+                "use either --focus-run or --candidate-lambda, not both"
+            )
+        return _resolve_focus_run_keys(
+            run_keys,
+            canonical_focus_runs(focus_runs),
+        )
+    if not candidate_lambdas:
+        raise ErrorArtifactError(
+            "two --candidate-lambda values or explicit --focus-run values are required"
+        )
+    candidates = canonical_candidate_lambdas(candidate_lambdas)
+    return _resolve_candidate_run_keys(run_keys, candidates)
+
+
+def _focus_display(label: str) -> str:
+    if ":" in label:
+        train_type, lambda_value = label.split(":", 1)
+        return f"{train_type} — λ={lambda_value}"
+    return f"λ={label}"
+
+
+def _focus_console(label: str) -> str:
+    if ":" in label:
+        return f"focus={label}"
+    return f"candidate lambda={label}"
+
+
 def _matrix_values(
     aggregation: ToneAggregation,
     run_key: RunKey,
@@ -948,16 +1061,17 @@ def render_tone_confusion_png(
     candidate_runs: Sequence[tuple[str, RunKey]],
 ) -> None:
     labels = [TONE_DISPLAY[label] for label in TONE_ORDER]
+    scopes = _scope_order(aggregation.low_snrs)
     figure, axes = plt.subplots(
-        nrows=len(SCOPE_ORDER),
+        nrows=len(scopes),
         ncols=len(candidate_runs),
         squeeze=False,
-        figsize=(14, 10),
+        figsize=(max(7 * len(candidate_runs), 7), max(5 * len(scopes) + 1, 6)),
     )
     image = None
     low_label = "/".join(aggregation.low_snrs)
 
-    for row_index, scope in enumerate(SCOPE_ORDER):
+    for row_index, scope in enumerate(scopes):
         for column_index, (candidate, run_key) in enumerate(candidate_runs):
             axis = axes[row_index][column_index]
             raw, rates, matrix_total, off_diagonal, deletions = _matrix_values(
@@ -972,7 +1086,7 @@ def render_tone_confusion_png(
             if scope == "low_snr":
                 scope_label = f"{scope_label} ({low_label} dB)"
             axis.set_title(
-                f"λ={candidate} — {scope_label}\n"
+                f"{_focus_display(candidate)} — {scope_label}\n"
                 f"N={matrix_total:,}; nhầm={off_diagonal:,}; xóa loại trừ={deletions:,}",
                 fontsize=11,
             )
@@ -1003,7 +1117,7 @@ def render_tone_confusion_png(
         left=0.08,
         right=0.84,
         bottom=0.08,
-        top=0.90,
+        top=0.84,
         wspace=0.28,
         hspace=0.38,
     )
@@ -1052,16 +1166,20 @@ def render_coda_confusion_png(
     candidate_runs: Sequence[tuple[str, RunKey]],
 ) -> None:
     labels = [CODA_DISPLAY[label] for label in CODA_ORDER]
+    scopes = _scope_order(aggregation.low_snrs)
     figure, axes = plt.subplots(
-        nrows=len(SCOPE_ORDER),
+        nrows=len(scopes),
         ncols=len(candidate_runs),
         squeeze=False,
-        figsize=(15, 11),
+        figsize=(
+            max(7.5 * len(candidate_runs), 7.5),
+            max(5.5 * len(scopes) + 1, 6.5),
+        ),
     )
     image = None
     low_label = "/".join(aggregation.low_snrs)
 
-    for row_index, scope in enumerate(SCOPE_ORDER):
+    for row_index, scope in enumerate(scopes):
         for column_index, (candidate, run_key) in enumerate(candidate_runs):
             axis = axes[row_index][column_index]
             raw, rates, matrix_total, off_diagonal, word_deletions = (
@@ -1076,7 +1194,7 @@ def render_coda_confusion_png(
             if scope == "low_snr":
                 scope_label = f"{scope_label} ({low_label} dB)"
             axis.set_title(
-                f"λ={candidate} — {scope_label}\n"
+                f"{_focus_display(candidate)} — {scope_label}\n"
                 f"N={matrix_total:,}; nhầm={off_diagonal:,}; "
                 f"xóa từ có âm cuối={word_deletions:,}",
                 fontsize=11,
@@ -1108,7 +1226,7 @@ def render_coda_confusion_png(
         left=0.07,
         right=0.84,
         bottom=0.08,
-        top=0.90,
+        top=0.84,
         wspace=0.24,
         hspace=0.34,
     )
@@ -1465,16 +1583,25 @@ def run_build(
     event_path: str | Path,
     output_dir: str | Path,
     *,
-    candidate_lambdas: Sequence[object],
+    candidate_lambdas: Sequence[object] | None = None,
+    focus_runs: Sequence[object] | None = None,
     low_snrs: Sequence[object],
+    overall_only: bool = False,
     overwrite: bool = False,
 ) -> BuildResult:
-    candidates = canonical_candidate_lambdas(candidate_lambdas)
-    low_snr_values = canonical_low_snrs(low_snrs)
+    low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
     with _output_lock(output_dir):
         ensure_outputs_available(event_path, output_dir, overwrite=overwrite)
-        aggregation = load_tone_aggregation(event_path, low_snrs=low_snr_values)
-        candidate_runs = resolve_candidate_runs(aggregation, candidates)
+        aggregation = load_tone_aggregation(
+            event_path,
+            low_snrs=low_snr_values,
+            overall_only=overall_only,
+        )
+        candidate_runs = _resolve_report_runs(
+            aggregation.run_keys,
+            candidate_lambdas=candidate_lambdas,
+            focus_runs=focus_runs,
+        )
         rows = build_tone_matrix_rows(aggregation)
         csv_path, png_path = write_tone_outputs(
             output_dir,
@@ -1496,16 +1623,25 @@ def run_coda_build(
     event_path: str | Path,
     output_dir: str | Path,
     *,
-    candidate_lambdas: Sequence[object],
+    candidate_lambdas: Sequence[object] | None = None,
+    focus_runs: Sequence[object] | None = None,
     low_snrs: Sequence[object],
+    overall_only: bool = False,
     overwrite: bool = False,
 ) -> CodaBuildResult:
-    candidates = canonical_candidate_lambdas(candidate_lambdas)
-    low_snr_values = canonical_low_snrs(low_snrs)
+    low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
     with _output_lock(output_dir, lock_name=CODA_OUTPUT_LOCK_NAME):
         ensure_coda_outputs_available(event_path, output_dir, overwrite=overwrite)
-        aggregation = load_coda_aggregation(event_path, low_snrs=low_snr_values)
-        candidate_runs = resolve_coda_candidate_runs(aggregation, candidates)
+        aggregation = load_coda_aggregation(
+            event_path,
+            low_snrs=low_snr_values,
+            overall_only=overall_only,
+        )
+        candidate_runs = _resolve_report_runs(
+            aggregation.run_keys,
+            candidate_lambdas=candidate_lambdas,
+            focus_runs=focus_runs,
+        )
         rows = build_coda_matrix_rows(aggregation)
         csv_path, png_path = write_coda_outputs(
             output_dir,
@@ -1527,13 +1663,14 @@ def run_short_word_build(
     event_path: str | Path,
     output_dir: str | Path,
     *,
-    candidate_lambdas: Sequence[object],
+    candidate_lambdas: Sequence[object] | None = None,
+    focus_runs: Sequence[object] | None = None,
     low_snrs: Sequence[object],
     context_window: int,
+    overall_only: bool = False,
     overwrite: bool = False,
 ) -> ShortWordBuildResult:
-    candidates = canonical_candidate_lambdas(candidate_lambdas)
-    low_snr_values = canonical_low_snrs(low_snrs)
+    low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
     with _output_lock(output_dir, lock_name=SHORT_WORD_OUTPUT_LOCK_NAME):
         ensure_short_word_output_available(
             event_path,
@@ -1544,10 +1681,12 @@ def run_short_word_build(
             event_path,
             low_snrs=low_snr_values,
             context_window=context_window,
+            overall_only=overall_only,
         )
-        candidate_runs = _resolve_candidate_run_keys(
+        candidate_runs = _resolve_report_runs(
             aggregation.run_keys,
-            candidates,
+            candidate_lambdas=candidate_lambdas,
+            focus_runs=focus_runs,
         )
         csv_path = write_short_word_output(
             output_dir,
@@ -1578,14 +1717,31 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--candidate-lambda",
         action="append",
-        required=True,
-        help="Tone-aware candidate lambda for focused reporting; repeat exactly twice.",
+        default=None,
+        help=(
+            "Legacy tone-aware candidate lambda for focused reporting; repeat exactly "
+            "twice. Mutually exclusive with --focus-run."
+        ),
+    )
+    parser.add_argument(
+        "--focus-run",
+        action="append",
+        default=None,
+        help=(
+            "Explicit focused run as TRAIN_TYPE:LAMBDA; repeatable. Example: "
+            "ordinary_lora:0. Mutually exclusive with --candidate-lambda."
+        ),
     )
     parser.add_argument(
         "--low-snr",
         action="append",
         default=None,
         help="SNR included in the low_snr scope; repeatable. Default: 0 and 5.",
+    )
+    parser.add_argument(
+        "--overall-only",
+        action="store_true",
+        help="Build only the overall scope (for clean-only external datasets such as FLEURS).",
     )
     parser.add_argument(
         "--context-window",
@@ -1601,15 +1757,20 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
-    low_snrs = args.low_snr or ["0", "5"]
+    if args.overall_only:
+        low_snrs = args.low_snr or []
+    else:
+        low_snrs = args.low_snr or ["0", "5"]
     try:
         if args.artifact == "short-word":
             result = run_short_word_build(
                 args.events,
                 args.out_dir,
                 candidate_lambdas=args.candidate_lambda,
+                focus_runs=args.focus_run,
                 low_snrs=low_snrs,
                 context_window=args.context_window,
+                overall_only=args.overall_only,
                 overwrite=args.overwrite,
             )
         elif args.artifact == "coda":
@@ -1617,7 +1778,9 @@ def main() -> None:
                 args.events,
                 args.out_dir,
                 candidate_lambdas=args.candidate_lambda,
+                focus_runs=args.focus_run,
                 low_snrs=low_snrs,
+                overall_only=args.overall_only,
                 overwrite=args.overwrite,
             )
         else:
@@ -1625,7 +1788,9 @@ def main() -> None:
                 args.events,
                 args.out_dir,
                 candidate_lambdas=args.candidate_lambda,
+                focus_runs=args.focus_run,
                 low_snrs=low_snrs,
+                overall_only=args.overall_only,
                 overwrite=args.overwrite,
             )
     except (ErrorArtifactError, OSError, csv.Error) as exc:
@@ -1633,29 +1798,33 @@ def main() -> None:
 
     print(f"PASS event rows: {result.aggregation.event_rows}")
     print(f"PASS runs: {len(result.aggregation.run_keys)}")
-    print(f"PASS low SNR: {','.join(result.aggregation.low_snrs)}")
+    if result.aggregation.low_snrs:
+        print(f"PASS low SNR: {','.join(result.aggregation.low_snrs)}")
+    else:
+        print("PASS scope: overall-only")
+    scopes = _scope_order(result.aggregation.low_snrs)
     if args.artifact == "short-word":
         for candidate, run_key in result.candidate_runs:
-            for scope in SCOPE_ORDER:
+            for scope in scopes:
                 key = (run_key, scope)
                 examples = int(result.aggregation.deletion_counts.get(key, 0))
                 reference_units = int(result.aggregation.reference_units.get(key, 0))
                 swdr = examples / reference_units if reference_units else 0.0
                 print(
-                    f"candidate lambda={candidate} scope={scope} examples={examples} "
+                    f"{_focus_console(candidate)} scope={scope} examples={examples} "
                     f"reference_units={reference_units} swdr={swdr:.12f}"
                 )
         print(f"wrote {result.csv_path} ({result.example_rows} rows)")
         return
 
     for candidate, run_key in result.candidate_runs:
-        for scope in SCOPE_ORDER:
+        for scope in scopes:
             if args.artifact == "coda":
                 _, _, matrix_total, off_diagonal, word_deletions = (
                     _coda_matrix_values(result.aggregation, run_key, scope)
                 )
                 print(
-                    f"candidate lambda={candidate} scope={scope} matrix={matrix_total} "
+                    f"{_focus_console(candidate)} scope={scope} matrix={matrix_total} "
                     f"off_diagonal={off_diagonal} word_deletions={word_deletions}"
                 )
             else:
@@ -1663,7 +1832,7 @@ def main() -> None:
                     result.aggregation, run_key, scope
                 )
                 print(
-                    f"candidate lambda={candidate} scope={scope} matrix={matrix_total} "
+                    f"{_focus_console(candidate)} scope={scope} matrix={matrix_total} "
                     f"off_diagonal={off_diagonal} excluded_deletions={deletions}"
                 )
     print(f"wrote {result.csv_path} ({result.matrix_rows} rows)")

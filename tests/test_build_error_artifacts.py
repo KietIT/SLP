@@ -30,6 +30,7 @@ from scripts.build_error_artifacts import (
     build_coda_matrix_rows,
     build_tone_matrix_rows,
     canonical_candidate_lambdas,
+    canonical_focus_runs,
     canonical_low_snrs,
     load_coda_aggregation,
     load_short_word_aggregation,
@@ -1132,7 +1133,7 @@ class BuildErrorArtifactsTest(unittest.TestCase):
             png_before = png_path.read_bytes()
             with Image.open(png_path) as image:
                 self.assertEqual(image.format, "PNG")
-                self.assertEqual(image.size, (4500, 3300))
+                self.assertEqual(image.size, (4500, 3600))
                 dpi = image.info.get("dpi", (0, 0))
                 self.assertGreaterEqual(dpi[0], 299)
                 self.assertGreaterEqual(dpi[1], 299)
@@ -1540,6 +1541,143 @@ class BuildErrorArtifactsTest(unittest.TestCase):
             self.assertFalse((output_dir / f".{SHORT_WORD_CSV_NAME}.tmp").exists())
             self.assertFalse((output_dir / f".{SHORT_WORD_CSV_NAME}.bak").exists())
             self.assertFalse((output_dir / SHORT_WORD_OUTPUT_LOCK_NAME).exists())
+
+    def test_overall_only_supports_explicit_ordinary_and_two_lambda_focus_runs(self) -> None:
+        focus_runs = (
+            "ordinary_lora:0",
+            "tone_aware_lora:0.05",
+            "tone_aware_lora:0.1",
+        )
+        self.assertEqual(
+            canonical_focus_runs(focus_runs),
+            (
+                ("ordinary_lora", "0"),
+                ("tone_aware_lora", "0.05"),
+                ("tone_aware_lora", "0.1"),
+            ),
+        )
+        tone_rows = [row for row in fixture_rows() if row["snr"] == "clean"]
+        coda_rows = [row for row in coda_fixture_rows() if row["snr"] == "clean"]
+        short_rows = []
+        for train_type, lambda_value in canonical_focus_runs(focus_runs):
+            short_rows.append(
+                short_word_event_row(
+                    utt_id=f"{train_type}-{lambda_value}-clean-deletion",
+                    train_type=train_type,
+                    **{"lambda": lambda_value},
+                    operation="deletion",
+                    ref_token="đã",
+                    hyp_token="",
+                    ref_index="0",
+                    hyp_index="",
+                    ref="đã",
+                    hyp="",
+                    short_word_deletion="true",
+                )
+            )
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            tone_events = root / "tone_events.csv"
+            coda_events = root / "coda_events.csv"
+            short_events = root / "short_events.csv"
+            write_events(tone_events, tone_rows)
+            write_events(coda_events, coda_rows)
+            write_events(short_events, short_rows)
+
+            tone_result = run_build(
+                tone_events,
+                root / "tone",
+                focus_runs=focus_runs,
+                low_snrs=(),
+                overall_only=True,
+            )
+            coda_result = run_coda_build(
+                coda_events,
+                root / "coda",
+                focus_runs=focus_runs,
+                low_snrs=(),
+                overall_only=True,
+            )
+            short_result = run_short_word_build(
+                short_events,
+                root / "short",
+                focus_runs=focus_runs,
+                low_snrs=(),
+                context_window=1,
+                overall_only=True,
+            )
+
+            self.assertEqual(tone_result.aggregation.low_snrs, ())
+            self.assertEqual(coda_result.aggregation.low_snrs, ())
+            self.assertEqual(short_result.aggregation.low_snrs, ())
+            self.assertEqual(len(tone_result.candidate_runs), 3)
+            self.assertEqual(len(coda_result.candidate_runs), 3)
+            self.assertEqual(len(short_result.candidate_runs), 3)
+            self.assertEqual(tone_result.matrix_rows, 3 * len(TONE_ORDER) ** 2)
+            self.assertEqual(coda_result.matrix_rows, 3 * len(CODA_ORDER) ** 2)
+            self.assertEqual(short_result.example_rows, 3)
+            _, tone_csv = read_csv(tone_result.csv_path)
+            _, coda_csv = read_csv(coda_result.csv_path)
+            _, short_csv = read_csv(short_result.csv_path)
+            self.assertEqual({row["group_value"] for row in tone_csv}, {"overall"})
+            self.assertEqual({row["group_value"] for row in coda_csv}, {"overall"})
+            self.assertTrue(all(row["low_snr_scope"] == "false" for row in short_csv))
+            self.assertTrue(tone_result.png_path.is_file())
+            self.assertTrue(coda_result.png_path.is_file())
+
+    def test_overall_only_cli_focus_is_explicit_and_conflicts_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            event_path = root / "events.csv"
+            output_dir = root / "output"
+            write_events(event_path, [row for row in fixture_rows() if row["snr"] == "clean"])
+            command = [
+                sys.executable,
+                "-X",
+                "utf8",
+                str(SCRIPT),
+                "--events",
+                str(event_path),
+                "--overall-only",
+                "--focus-run",
+                "ordinary_lora:0",
+                "--focus-run",
+                "tone_aware_lora:0.05",
+                "--focus-run",
+                "tone_aware_lora:0.1",
+                "--out-dir",
+                str(output_dir),
+            ]
+            completed = subprocess.run(command, capture_output=True, text=True, check=False)
+            self.assertEqual(completed.returncode, 0, completed.stderr)
+            self.assertIn("PASS scope: overall-only", completed.stdout)
+            self.assertIn("focus=ordinary_lora:0 scope=overall", completed.stdout)
+            _, rows = read_csv(output_dir / "tone_confusion_matrix.csv")
+            self.assertEqual({row["group_value"] for row in rows}, {"overall"})
+
+            conflicting_scope = subprocess.run(
+                [*command[:-2], "--low-snr", "0", *command[-2:]],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(conflicting_scope.returncode, 2)
+            self.assertIn("cannot be combined", conflicting_scope.stderr)
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            event_path = root / "events.csv"
+            write_events(event_path, [row for row in fixture_rows() if row["snr"] == "clean"])
+            with self.assertRaisesRegex(ErrorArtifactError, "either --focus-run"):
+                run_build(
+                    event_path,
+                    root / "output",
+                    candidate_lambdas=("0.05", "0.1"),
+                    focus_runs=("ordinary_lora:0",),
+                    low_snrs=(),
+                    overall_only=True,
+                )
 
 
 if __name__ == "__main__":

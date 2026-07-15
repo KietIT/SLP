@@ -62,3 +62,6 @@ outputs/*
 !outputs/analysis/**
 !outputs/error_analysis/
 !outputs/error_analysis/**
+!outputs/external/
+!outputs/external/**
+outputs/external/fleurs/smoke_duration/
