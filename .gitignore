@@ -55,3 +55,6 @@ Thumbs.db
 outputs/*
 !outputs/phat/
 !outputs/phat/**
+!docs/prediction_schema.md
+!outputs/predictions/
+!outputs/predictions/**
