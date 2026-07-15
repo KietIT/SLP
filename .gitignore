@@ -58,3 +58,7 @@ outputs/*
 !docs/prediction_schema.md
 !outputs/predictions/
 !outputs/predictions/**
+!outputs/analysis/
+!outputs/analysis/**
+!outputs/error_analysis/
+!outputs/error_analysis/**
