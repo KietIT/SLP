@@ -11,7 +11,7 @@ from torch.utils.data import Dataset
 
 from .noise import choose_and_mix, read_audio
 from .text_norm import normalize_vi_text
-from .tone import build_token_tone_labels, IGNORE_INDEX
+from .tone import IGNORE_INDEX, ToneAlignmentError, build_token_tone_alignment
 
 
 def read_jsonl(path: str) -> List[dict]:
@@ -32,23 +32,59 @@ def _find_subsequence(values: Sequence[int], needle: Sequence[int]) -> Optional[
 def align_tone_labels_to_token_ids(
     full_token_ids: Sequence[int],
     text_token_ids: Sequence[int],
+    tone_piece_token_ids: Sequence[int],
     tone_piece_labels: Sequence[int],
     special_token_ids: Sequence[int],
 ) -> List[int]:
-    """Align syllable-derived tone labels to tokenizer output with special tokens ignored.
+    """Align verified text-piece labels to a sequence containing Whisper special tokens.
 
     Whisper labels may include decoder/language/task/eos special tokens. Tone labels are
     produced from text-only BPE pieces, so we fill only text-token positions and keep all
-    special tokens at IGNORE_INDEX.
+    special tokens at IGNORE_INDEX. Every sequence equality is checked before assignment;
+    positional truncation or fallback ``zip`` would silently corrupt the auxiliary task.
     """
+    text_ids = list(text_token_ids)
+    piece_ids = list(tone_piece_token_ids)
+    piece_labels = list(tone_piece_labels)
+    if len(piece_ids) != len(piece_labels):
+        raise ToneAlignmentError(
+            f"Tone piece ID/label length mismatch: ids={len(piece_ids)}, labels={len(piece_labels)}"
+        )
+    if text_ids != piece_ids:
+        mismatch_index = next(
+            (
+                index
+                for index, (text_id, piece_id) in enumerate(zip(text_ids, piece_ids))
+                if text_id != piece_id
+            ),
+            min(len(text_ids), len(piece_ids)),
+        )
+        raise ToneAlignmentError(
+            "Tone piece IDs differ from full-text tokenizer IDs: "
+            f"index={mismatch_index}, text_length={len(text_ids)}, piece_length={len(piece_ids)}"
+        )
+
+    specials = set(special_token_ids)
+    non_special = [token_id for token_id in full_token_ids if token_id not in specials]
+    if non_special != text_ids:
+        raise ToneAlignmentError(
+            "Non-special label IDs differ from text-only tokenizer IDs: "
+            f"text_length={len(text_ids)}, non_special_length={len(non_special)}"
+        )
+
     aligned = [IGNORE_INDEX] * len(full_token_ids)
-    start = _find_subsequence(full_token_ids, text_token_ids)
-    if start is not None:
-        positions = list(range(start, min(start + len(text_token_ids), len(full_token_ids))))
-    else:
-        specials = set(special_token_ids)
-        positions = [i for i, token_id in enumerate(full_token_ids) if token_id not in specials]
-    for pos, tone_id in zip(positions, tone_piece_labels):
+    start = _find_subsequence(full_token_ids, text_ids)
+    if start is None:
+        raise ToneAlignmentError(
+            "Text token IDs are not an exact subsequence of labels with special tokens: "
+            f"text_length={len(text_ids)}, non_special_length={len(non_special)}"
+        )
+    positions = list(range(start, start + len(text_ids)))
+    if len(positions) != len(piece_labels):
+        raise ToneAlignmentError(
+            f"Aligned position/label length mismatch: positions={len(positions)}, labels={len(piece_labels)}"
+        )
+    for pos, tone_id in zip(positions, piece_labels):
         aligned[pos] = tone_id
     return aligned
 
@@ -77,16 +113,23 @@ class ASRManifestDataset(Dataset):
             wav = wav[:self.max_len]
         if self.noise_paths and random.random() < self.noise_prob:
             wav, noise_meta = choose_and_mix(wav, self.noise_paths, snr_choices=self.snr_choices, sr=self.sample_rate, seed=random.randint(0, 10**9))
-        text = normalize_vi_text(item["text"])
+        source_text = str(item["text"])
+        text = normalize_vi_text(source_text)
         features = self.processor.feature_extractor(wav, sampling_rate=self.sample_rate).input_features[0]
         tokenizer = self.processor.tokenizer
         labels = tokenizer(text, add_special_tokens=True).input_ids
         text_token_ids = tokenizer(text, add_special_tokens=False).input_ids
-        tone_piece_labels = build_token_tone_labels(text, tokenizer, policy=self.tone_label_policy)
+        tone_alignment = build_token_tone_alignment(
+            text,
+            tokenizer,
+            policy=self.tone_label_policy,
+            source_text=source_text,
+        )
         tone_labels = align_tone_labels_to_token_ids(
             labels,
             text_token_ids,
-            tone_piece_labels,
+            tone_alignment.token_ids,
+            tone_alignment.tone_labels,
             getattr(tokenizer, "all_special_ids", []),
         )
         if self.max_label_length is not None:
@@ -112,12 +155,22 @@ class DataCollatorSpeechSeq2SeqWithTone:
         tone_max = labels.size(1)
         tone = torch.full_like(labels, fill_value=-100)
         for i, f in enumerate(features):
+            if len(f["labels"]) != len(f["tone_labels"]):
+                raise ToneAlignmentError(
+                    "Collator received mismatched decoder/tone label lengths: "
+                    f"item={i}, labels={len(f['labels'])}, "
+                    f"tone_labels={len(f['tone_labels'])}"
+                )
             ids = torch.tensor(f["tone_labels"], dtype=torch.long)
             if remove_decoder_start and ids.numel() > 0:
                 ids = ids[1:]
-            n = min(tone_max, ids.numel())
-            if n > 0:
-                tone[i, :n] = ids[:n]
+            if ids.numel() > tone_max:
+                raise ToneAlignmentError(
+                    "Tone labels exceed the padded decoder sequence: "
+                    f"item={i}, tone_labels={ids.numel()}, padded_labels={tone_max}"
+                )
+            if ids.numel() > 0:
+                tone[i, : ids.numel()] = ids
         batch["labels"] = labels
         batch["tone_labels"] = tone
         return batch

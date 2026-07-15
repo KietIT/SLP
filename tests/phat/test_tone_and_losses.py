@@ -14,12 +14,20 @@ class _TokenResult:
 
 
 class _FakeTokenizer:
+    def __init__(self) -> None:
+        self.calls: list[str] = []
+
     def __call__(self, text: str, *, add_special_tokens: bool) -> _TokenResult:
         del add_special_tokens
-        normalized = text.strip()
-        if normalized == "nghiêng":
-            return _TokenResult([11, 12])
-        return _TokenResult([len(normalized) + 20])
+        self.calls.append(text)
+        mapping = {
+            "nghiêng": [11, 12],
+            " má": [13],
+            "nghiêng má": [11, 12, 13],
+        }
+        if text not in mapping:
+            raise AssertionError(f"Unexpected fake-tokenizer input: {text!r}")
+        return _TokenResult(mapping[text])
 
 
 class ToneAndLossTests(unittest.TestCase):
@@ -46,8 +54,10 @@ class ToneAndLossTests(unittest.TestCase):
                 self.assertEqual(tone_id, IGNORE_INDEX)
 
     def test_token_tone_labels_respect_last_subtoken_policy(self) -> None:
-        labels = build_token_tone_labels("nghiêng má", _FakeTokenizer(), policy="last_subtoken")
+        tokenizer = _FakeTokenizer()
+        labels = build_token_tone_labels("nghiêng má", tokenizer, policy="last_subtoken")
         self.assertEqual(labels, [IGNORE_INDEX, TONE_TO_ID["ngang"], TONE_TO_ID["sac"]])
+        self.assertEqual(tokenizer.calls[:2], ["nghiêng", " má"])
 
     def test_all_ignored_tone_loss_is_finite_zero(self) -> None:
         logits = torch.randn(2, 4, 6, requires_grad=True)
