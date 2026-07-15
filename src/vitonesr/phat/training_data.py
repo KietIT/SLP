@@ -10,7 +10,7 @@ from torch.utils.data import Dataset
 from src.vitonesr.data import align_tone_labels_to_token_ids, read_jsonl
 from src.vitonesr.noise import choose_and_mix, read_audio
 from src.vitonesr.text_norm import normalize_vi_text
-from src.vitonesr.tone import build_token_tone_labels
+from src.vitonesr.tone import build_token_tone_alignment
 
 
 def _stable_item_seed(seed: int, epoch: int, index: int) -> int:
@@ -91,7 +91,8 @@ class DeterministicASRTrainingDataset(Dataset):
                 sr=self.sample_rate,
                 seed=item_seed,
             )
-        text = normalize_vi_text(str(item["text"]))
+        source_text = str(item["text"])
+        text = normalize_vi_text(source_text)
         features = self.processor.feature_extractor(
             waveform,
             sampling_rate=self.sample_rate,
@@ -99,11 +100,17 @@ class DeterministicASRTrainingDataset(Dataset):
         tokenizer = self.processor.tokenizer
         labels = tokenizer(text, add_special_tokens=True).input_ids
         text_token_ids = tokenizer(text, add_special_tokens=False).input_ids
-        tone_piece_labels = build_token_tone_labels(text, tokenizer, policy=self.tone_label_policy)
+        tone_alignment = build_token_tone_alignment(
+            text,
+            tokenizer,
+            policy=self.tone_label_policy,
+            source_text=source_text,
+        )
         tone_labels = align_tone_labels_to_token_ids(
             labels,
             text_token_ids,
-            tone_piece_labels,
+            tone_alignment.token_ids,
+            tone_alignment.tone_labels,
             getattr(tokenizer, "all_special_ids", []),
         )
         if self.max_label_length is not None:

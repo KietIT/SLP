@@ -65,3 +65,7 @@ outputs/*
 !outputs/external/
 !outputs/external/**
 outputs/external/fleurs/smoke_duration/
+!outputs/paper_v2/
+outputs/paper_v2/*
+!outputs/paper_v2/audits/
+!outputs/paper_v2/audits/**
