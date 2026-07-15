@@ -264,7 +264,7 @@ All metrics are error rates, so lower is better.
 | TER simple | Simple Vietnamese tone error rate |
 | DER simple | Simple Vietnamese diacritic error rate |
 | FCER simple | Final consonant error rate for Vietnamese final consonants |
-| SWDR simple | Short word deletion rate for words with length `<= 2` |
+| SWDR simple | Short word deletion rate over reference occurrences in the fixed lexicon: `đã`, `có`, `là`, `một`, `và` |
 
 `TER`, `DER`, `FCER`, and `SWDR` are diagnostic metrics for this midterm
 project. They should be reported as simple/prototype Vietnamese ASR error

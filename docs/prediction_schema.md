@@ -34,11 +34,11 @@ Các giá trị `train_type` hiện dùng:
 
 - `zero_shot`
 - `ordinary_lora`
-- `tone_lora`
+- `tone_aware_lora`
 - `clean_only_lora`
 - `noisy_only_lora`
 - `clean_noisy_lora`
-- `tone_lora_clean_noisy`
+- `tone_aware_lora_clean_noisy`
 
 Quy tắc `lambda`:
 
@@ -111,7 +111,7 @@ python scripts/normalize_predictions.py --input_glob "outputs/zero_shot/pred_*.c
 Ví dụ một file tone-aware LoRA:
 
 ```powershell
-python scripts/normalize_predictions.py --input outputs/lora/pred_tone_lora_lambda_0.1.csv --model phowhisper --model_size base --train_type tone_lora --lambda 0.1 --seed 42 --output_dir outputs/predictions/tone_lora
+python scripts/normalize_predictions.py --input outputs/lora/pred_tone_lora_lambda_0.1.csv --model phowhisper --model_size base --train_type tone_aware_lora --lambda 0.1 --seed 42 --output_dir outputs/predictions/tone_aware_lora
 ```
 
 Script sẽ:
