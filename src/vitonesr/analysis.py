@@ -570,9 +570,28 @@ def _rate(numerator: int, denominator: int) -> float:
     return numerator / max(denominator, 1)
 
 
+def _coverage(eligible_units: int, reference_words: int) -> float:
+    """Return the auditable share of reference-word positions in a metric.
+
+    TER, DER, and FCER in ``aligned_v1`` are conditional diagnostics: their
+    eligible denominators depend on the hypothesis produced at an aligned
+    reference-word position.  Keeping this helper separate from ``_rate``
+    makes that conditioning explicit without changing the versioned scalar
+    definitions.
+    """
+
+    return eligible_units / max(reference_words, 1)
+
+
 @dataclass(frozen=True, slots=True)
 class CorpusMetricResult:
-    """Aligned-v1 metric values plus auditable corpus numerators/denominators."""
+    """Aligned-v1 metric values plus auditable corpus numerators/denominators.
+
+    WER and CER use reference-only denominators.  TER, DER, and FCER are
+    conditional diagnostics whose eligible denominator can change with the
+    hypothesis.  Their ``*_coverage`` properties expose the eligible share of
+    reference-word positions and must accompany between-system claims.
+    """
 
     n_utterances: int
     word_errors: int
@@ -614,6 +633,21 @@ class CorpusMetricResult:
     def swdr(self) -> float:
         return _rate(self.short_word_deletions, self.short_word_reference_units)
 
+    @property
+    def ter_coverage(self) -> float:
+        return _coverage(self.tone_reference_units, self.word_reference_units)
+
+    @property
+    def der_coverage(self) -> float:
+        return _coverage(self.diacritic_reference_units, self.word_reference_units)
+
+    @property
+    def fcer_coverage(self) -> float:
+        return _coverage(
+            self.final_consonant_reference_units,
+            self.word_reference_units,
+        )
+
     def to_dict(self, *, include_counts: bool = False) -> dict[str, object]:
         values: dict[str, object] = {
             "metric_version": METRIC_VERSION,
@@ -634,10 +668,13 @@ class CorpusMetricResult:
                     "cer_denominator": self.character_reference_units,
                     "ter_numerator": self.tone_errors,
                     "ter_denominator": self.tone_reference_units,
+                    "ter_coverage": self.ter_coverage,
                     "der_numerator": self.diacritic_errors,
                     "der_denominator": self.diacritic_reference_units,
+                    "der_coverage": self.der_coverage,
                     "fcer_numerator": self.final_consonant_errors,
                     "fcer_denominator": self.final_consonant_reference_units,
+                    "fcer_coverage": self.fcer_coverage,
                     "swdr_numerator": self.short_word_deletions,
                     "swdr_denominator": self.short_word_reference_units,
                 }
@@ -673,6 +710,11 @@ def compute_aligned_metric_result(
     for utterance_index, (ref, hyp) in enumerate(zip(refs, hyps)):
         normalized_ref = normalize_vi_text(ref)
         normalized_hyp = normalize_vi_text(hyp)
+        if not normalized_ref:
+            raise ValueError(
+                "reference at utterance index "
+                f"{utterance_index} is empty after text normalization"
+            )
         events = analyze_error_events(
             ref, hyp, utterance_index=utterance_index
         )

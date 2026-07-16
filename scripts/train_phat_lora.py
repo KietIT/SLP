@@ -29,8 +29,21 @@ def main() -> None:
         parser.error("--resume requires --checkpoint")
     if args.checkpoint and not args.resume:
         parser.error("--checkpoint is only valid together with --resume")
+    if (
+        (args.max_train_samples is not None or args.max_train_steps is not None)
+        and args.output_dir is None
+    ):
+        parser.error(
+            "limited smoke training requires a separate --output-dir"
+        )
 
     config = load_experiment_config(args.config)
+    if (
+        args.seed is not None
+        and int(args.seed) != int(config["seed"])
+        and args.output_dir is None
+    ):
+        parser.error("Changing --seed requires a separate --output-dir")
     if (
         args.lambda_value is not None
         and float(args.lambda_value) != float(config["training"]["lambda_tone"])
@@ -46,13 +59,13 @@ def main() -> None:
         max_train_samples=args.max_train_samples,
         max_train_steps=args.max_train_steps,
     )
-    final_checkpoint = train_experiment(
+    best_checkpoint = train_experiment(
         config,
         device_arg=args.device,
         resume_checkpoint=args.checkpoint if args.resume else None,
         overwrite=args.overwrite,
     )
-    print(final_checkpoint)
+    print(best_checkpoint)
 
 
 if __name__ == "__main__":

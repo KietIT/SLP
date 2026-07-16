@@ -1,0 +1,7 @@
+protocol_version,check_id,status,observed,expected,details
+paper_v2_noisy_dev_v1,expected_row_count,PASS,14125,14125,one row per source and condition
+paper_v2_noisy_dev_v1,unique_utterance_ids,PASS,14125,14125,derived utterance IDs must be unique
+paper_v2_noisy_dev_v1,noise_partition_is_dev,PASS,11300,11300,no train/test noise may enter noisy-dev
+paper_v2_noisy_dev_v1,measured_snr_tolerance,PASS,0.0,1e-06,measured component-power SNR error
+paper_v2_noisy_dev_v1,stored_audio_has_no_clipping,PASS,0,0,post-write samples at full scale
+paper_v2_noisy_dev_v1,derived_audio_paths_contained,PASS,11300,11300,every noisy artifact must live under output_audio_dir

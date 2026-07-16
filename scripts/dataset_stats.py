@@ -58,7 +58,11 @@ def main() -> None:
         out = Path(args.out)
         out.parent.mkdir(parents=True, exist_ok=True)
         with out.open("w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=["manifest", "snr", "utterances", "hours", "avg_seconds"])
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["manifest", "snr", "utterances", "hours", "avg_seconds"],
+                lineterminator="\n",
+            )
             writer.writeheader()
             writer.writerows(rows)
         print(f"wrote {out}")

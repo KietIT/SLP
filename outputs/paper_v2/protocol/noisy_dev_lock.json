@@ -1,0 +1,86 @@
+{
+  "audit": {
+    "checks": 6,
+    "failed_checks": 0,
+    "path": "outputs/paper_v2/protocol/noisy_dev_audit.csv",
+    "sha256": "727ac7250299a55a4f719688000bb99fc80e182bd2cb0c70d511ac4e781345fa"
+  },
+  "builder": {
+    "params": {
+      "algorithm": "sha256_noise_assignment_power_mix_v1",
+      "audio_container": "WAV",
+      "audio_subtype": "PCM_16",
+      "channel_policy": "mean_to_mono",
+      "clipping_measurement": "pre_scale_over_1_and_stored_full_scale",
+      "include_clean": true,
+      "input_sample_rate_policy": "require_exact",
+      "peak_limit": 0.999,
+      "sample_rate": 16000,
+      "seed": 42,
+      "snr_measurement": "component_power_after_anti_clip_before_pcm16",
+      "snrs_db": [
+        20.0,
+        10.0,
+        5.0,
+        0.0
+      ]
+    },
+    "params_sha256": "49af2adb31bb31ff2f5e4f632e27d57667327e855add8d2c00c89cf427d5f4d0"
+  },
+  "final_test_eligible": false,
+  "noise": {
+    "dev_manifest": "data/manifests/noise/paper_v2/musan_dev.jsonl",
+    "dev_manifest_sha256": "471c0f94a8f29eefa462bc92caee0270a911ab889dc26662a0a7fe6e74aeac00",
+    "partition": "dev",
+    "registry_manifest_sha256": "c62de50e5c523c4c8c5b5e4d669793f4e369ec2a2a241e3cc9c2833b36976e28",
+    "split_lock": "outputs/paper_v2/protocol/noise_split_lock.json",
+    "split_lock_sha256": "5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9"
+  },
+  "output": {
+    "audio_dir": "data/derived/paper_v2/noisy_dev",
+    "audio_inventory_sha256": "11b339aedb7d55cac3b775cde385631f5f61d1f3d6638b7a981409ac2084ad5f",
+    "clean_row_count": 2825,
+    "manifest": "data/manifests/paper_v2/vivos_dev_noisy.jsonl",
+    "manifest_sha256": "e9bb6cdb4934d90f10b0782b7960a609b33476ffbfcd946a08568a46de8c853b",
+    "noisy_row_count": 11300,
+    "row_count": 14125
+  },
+  "protocol_version": "paper_v2_noisy_dev_v1",
+  "schema": [
+    "utt_id",
+    "source_utt_id",
+    "speaker_id",
+    "dataset",
+    "split",
+    "condition",
+    "audio_path",
+    "audio_sha256",
+    "clean_path",
+    "clean_audio_sha256",
+    "transcript",
+    "text_sha256",
+    "snr",
+    "target_snr_db",
+    "measured_snr_db",
+    "noise_id",
+    "noise_type",
+    "noise_path",
+    "noise_audio_sha256",
+    "noise_split",
+    "seed",
+    "sample_rate",
+    "duration_seconds",
+    "pre_scale_peak",
+    "anti_clip_gain",
+    "pre_scale_clipped_samples",
+    "stored_peak",
+    "clipped_sample_count"
+  ],
+  "selection_eligible": true,
+  "source_dev": {
+    "manifest": "data/manifests/paper_v2/vivos_dev.jsonl",
+    "manifest_sha256": "3dc1afaaf4aedcaf5e5f472d93bb718df5776630e2e04db59e32f8fd8ef1af79",
+    "utterance_count": 2825
+  },
+  "status": "LOCKED"
+}

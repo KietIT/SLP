@@ -77,8 +77,15 @@ class PhoWhisperLoRA(nn.Module):
         return self.asr_model.generate(*args, **kwargs)
 
 
-def _new_base_model(model_name_or_path: str) -> WhisperForConditionalGeneration:
-    model = WhisperForConditionalGeneration.from_pretrained(model_name_or_path)
+def _new_base_model(
+    model_name_or_path: str,
+    *,
+    revision: str,
+) -> WhisperForConditionalGeneration:
+    model = WhisperForConditionalGeneration.from_pretrained(
+        model_name_or_path,
+        revision=revision,
+    )
     model.config.use_cache = False
     return model
 
@@ -86,6 +93,7 @@ def _new_base_model(model_name_or_path: str) -> WhisperForConditionalGeneration:
 def build_trainable_model(
     *,
     model_name_or_path: str,
+    revision: str,
     lambda_tone: float,
     lora_r: int,
     lora_alpha: int,
@@ -93,7 +101,7 @@ def build_trainable_model(
     target_modules: Sequence[str],
     adapter_checkpoint: str | Path | None = None,
 ) -> PhoWhisperLoRA:
-    base = _new_base_model(model_name_or_path)
+    base = _new_base_model(model_name_or_path, revision=revision)
     if adapter_checkpoint is None:
         lora_config = LoraConfig(
             r=int(lora_r),

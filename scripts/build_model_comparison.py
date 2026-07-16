@@ -91,7 +91,7 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = ["model", "condition", "n", *METRIC_FIELDS]
     with out_path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(all_rows)
     print(f"wrote {out_path}")

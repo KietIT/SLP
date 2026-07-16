@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import io
 import os
 import sys
 import unicodedata
+import uuid
 from collections import Counter, defaultdict
 from collections.abc import Iterator, Mapping, Sequence
 from contextlib import contextmanager
@@ -28,6 +30,15 @@ from src.vitonesr.analysis import (  # noqa: E402
     RUN_METADATA_COLUMNS,
     SHORT_WORDS,
     TONE_LABELS,
+)
+from src.vitonesr.artifact_bundle import (  # noqa: E402
+    bind_input_files,
+    commit_artifact_bundle,
+    verify_input_bindings,
+)
+from src.vitonesr.prediction_evidence import (  # noqa: E402
+    PredictionEvidenceError,
+    verify_formal_error_events,
 )
 from src.vitonesr.text_norm import normalize_vi_text  # noqa: E402
 
@@ -100,6 +111,7 @@ SHORT_WORD_COLUMNS = [
 ]
 SHORT_WORD_CSV_NAME = "short_word_deletion_examples.csv"
 SHORT_WORD_OUTPUT_LOCK_NAME = ".short_word_deletion_examples.lock"
+ERROR_ARTIFACT_BUNDLE_VERSION = "error_artifacts_aligned_v1_bundle_v1"
 
 RunKey = tuple[str, ...]
 MatrixKey = tuple[RunKey, str]
@@ -1308,6 +1320,111 @@ def _write_coda_png_temp(
     return temporary
 
 
+def _render_csv_bytes(
+    path: Path,
+    rows: Sequence[dict[str, object]],
+    *,
+    columns: Sequence[str],
+    resume: bool,
+) -> bytes:
+    if resume:
+        handle = io.StringIO(newline="")
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(columns),
+            extrasaction="raise",
+            lineterminator="\n",
+        )
+        writer.writeheader()
+        writer.writerows(rows)
+        return handle.getvalue().encode("utf-8")
+    temporary = _write_csv_temp(path, rows, columns=columns)
+    try:
+        return temporary.read_bytes()
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+def _render_tone_png_bytes(
+    path: Path,
+    aggregation: ToneAggregation,
+    candidate_runs: Sequence[tuple[str, RunKey]],
+    *,
+    resume: bool,
+) -> bytes:
+    if not resume:
+        temporary = _write_png_temp(path, aggregation, candidate_runs)
+    else:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_name(
+            f".{path.name}.resume-render.{uuid.uuid4().hex}.png"
+        )
+        try:
+            render_tone_confusion_png(temporary, aggregation, candidate_runs)
+            with temporary.open("r+b") as handle:
+                os.fsync(handle.fileno())
+        except Exception:
+            if temporary.exists():
+                temporary.unlink()
+            raise
+    try:
+        return temporary.read_bytes()
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+def _render_coda_png_bytes(
+    path: Path,
+    aggregation: CodaAggregation,
+    candidate_runs: Sequence[tuple[str, RunKey]],
+    *,
+    resume: bool,
+) -> bytes:
+    if not resume:
+        temporary = _write_coda_png_temp(path, aggregation, candidate_runs)
+    else:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_name(
+            f".{path.name}.resume-render.{uuid.uuid4().hex}.png"
+        )
+        try:
+            render_coda_confusion_png(temporary, aggregation, candidate_runs)
+            with temporary.open("r+b") as handle:
+                os.fsync(handle.fileno())
+        except Exception:
+            if temporary.exists():
+                temporary.unlink()
+            raise
+    try:
+        return temporary.read_bytes()
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+def _artifact_parameters(
+    *,
+    artifact: str,
+    event_rows: int,
+    low_snrs: Sequence[str],
+    candidate_runs: Sequence[tuple[str, RunKey]],
+    extra: Mapping[str, object] | None = None,
+) -> dict[str, object]:
+    return {
+        "artifact": artifact,
+        "metric_version": METRIC_VERSION,
+        "event_rows": event_rows,
+        "low_snrs": list(low_snrs),
+        "focus_runs": [
+            {"label": label, "run_key": list(run_key)}
+            for label, run_key in candidate_runs
+        ],
+        **dict(extra or {}),
+    }
+
+
 def _destinations(output_dir: str | Path) -> tuple[Path, Path]:
     directory = Path(output_dir)
     return directory / TONE_CSV_NAME, directory / TONE_PNG_NAME
@@ -1330,15 +1447,47 @@ def _backup_path(destination: Path) -> Path:
     return destination.with_name(f".{destination.name}.bak")
 
 
+def _pid_is_alive(pid: int) -> bool:
+    if pid <= 0:
+        return False
+    if pid == os.getpid():
+        return True
+    try:
+        os.kill(pid, 0)
+    except (OSError, OverflowError):
+        return False
+    return True
+
+
+def _lock_pid(path: Path) -> int | None:
+    try:
+        text = path.read_text(encoding="ascii").strip()
+        return int(text.removeprefix("pid=")) if text.startswith("pid=") else None
+    except (OSError, UnicodeDecodeError, ValueError):
+        return None
+
+
 @contextmanager
 def _output_lock(
     output_dir: str | Path,
     *,
     lock_name: str = OUTPUT_LOCK_NAME,
+    bundle_name: str = "tone_confusion_matrix",
+    resume: bool = False,
 ) -> Iterator[None]:
     directory = Path(output_dir)
     directory.mkdir(parents=True, exist_ok=True)
     lock_path = directory / lock_name
+    journal_path = directory / f".{bundle_name}.bundle.transaction.json"
+    marker_path = directory / f"{bundle_name}.bundle.commit.json"
+    if (
+        lock_path.exists()
+        and resume
+        and (journal_path.is_file() or marker_path.is_file())
+    ):
+        owner = _lock_pid(lock_path)
+        if owner is not None and not _pid_is_alive(owner):
+            lock_path.unlink()
     try:
         descriptor = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     except FileExistsError as exc:
@@ -1364,9 +1513,12 @@ def ensure_outputs_available(
     output_dir: str | Path,
     *,
     overwrite: bool,
+    resume: bool = False,
 ) -> tuple[Path, Path]:
     destinations = _destinations(output_dir)
-    _ensure_output_pair_available(event_path, destinations, overwrite=overwrite)
+    _ensure_output_pair_available(
+        event_path, destinations, overwrite=overwrite, resume=resume
+    )
     return destinations
 
 
@@ -1375,9 +1527,12 @@ def ensure_coda_outputs_available(
     output_dir: str | Path,
     *,
     overwrite: bool,
+    resume: bool = False,
 ) -> tuple[Path, Path]:
     destinations = _coda_destinations(output_dir)
-    _ensure_output_pair_available(event_path, destinations, overwrite=overwrite)
+    _ensure_output_pair_available(
+        event_path, destinations, overwrite=overwrite, resume=resume
+    )
     return destinations
 
 
@@ -1386,9 +1541,12 @@ def ensure_short_word_output_available(
     output_dir: str | Path,
     *,
     overwrite: bool,
+    resume: bool = False,
 ) -> Path:
     destination = _short_word_destination(output_dir)
-    _ensure_output_pair_available(event_path, (destination,), overwrite=overwrite)
+    _ensure_output_pair_available(
+        event_path, (destination,), overwrite=overwrite, resume=resume
+    )
     return destination
 
 
@@ -1397,10 +1555,13 @@ def _ensure_output_pair_available(
     destinations: Sequence[Path],
     *,
     overwrite: bool,
+    resume: bool = False,
 ) -> None:
     resolved_input = Path(event_path).resolve()
     if any(path.resolve() == resolved_input for path in destinations):
         raise ErrorArtifactError("refusing to overwrite the input event CSV")
+    if resume:
+        return
     existing = [path for path in destinations if path.exists()]
     if existing and not overwrite:
         raise ErrorArtifactError(
@@ -1512,22 +1673,34 @@ def write_tone_outputs(
     candidate_runs: Sequence[tuple[str, RunKey]],
     *,
     overwrite: bool,
+    resume: bool = False,
+    input_bindings: Sequence[Mapping[str, object]] = (),
 ) -> tuple[Path, Path]:
     csv_path, png_path = _destinations(output_dir)
-    temporary_paths: list[Path] = []
-    try:
-        temporary_paths.append(_write_csv_temp(csv_path, rows))
-        temporary_paths.append(_write_png_temp(png_path, aggregation, candidate_runs))
-        _commit_output_pair(
-            temporary_paths,
-            (csv_path, png_path),
-            overwrite=overwrite,
-        )
-    except Exception:
-        for temporary in temporary_paths:
-            if temporary.exists():
-                temporary.unlink()
-        raise
+    csv_content = _render_csv_bytes(
+        csv_path, rows, columns=TONE_MATRIX_COLUMNS, resume=resume
+    )
+    png_content = _render_tone_png_bytes(
+        png_path, aggregation, candidate_runs, resume=resume
+    )
+    commit_artifact_bundle(
+        bundle_name="tone_confusion_matrix",
+        bundle_version=ERROR_ARTIFACT_BUNDLE_VERSION,
+        data_destinations={"csv": csv_path, "png": png_path},
+        data_contents={"csv": csv_content, "png": png_content},
+        provenance_path=Path(output_dir) / "tone_confusion_matrix.provenance.json",
+        input_bindings=input_bindings,
+        parameters=_artifact_parameters(
+            artifact="tone_confusion_matrix",
+            event_rows=aggregation.event_rows,
+            low_snrs=aggregation.low_snrs,
+            candidate_runs=candidate_runs,
+            extra={"matrix_rows": len(rows)},
+        ),
+        overwrite=overwrite,
+        resume=resume,
+        error_type=ErrorArtifactError,
+    )
     return csv_path, png_path
 
 
@@ -1538,26 +1711,35 @@ def write_coda_outputs(
     candidate_runs: Sequence[tuple[str, RunKey]],
     *,
     overwrite: bool,
+    resume: bool = False,
+    input_bindings: Sequence[Mapping[str, object]] = (),
 ) -> tuple[Path, Path]:
     csv_path, png_path = _coda_destinations(output_dir)
-    temporary_paths: list[Path] = []
-    try:
-        temporary_paths.append(
-            _write_csv_temp(csv_path, rows, columns=CODA_MATRIX_COLUMNS)
-        )
-        temporary_paths.append(
-            _write_coda_png_temp(png_path, aggregation, candidate_runs)
-        )
-        _commit_output_pair(
-            temporary_paths,
-            (csv_path, png_path),
-            overwrite=overwrite,
-        )
-    except Exception:
-        for temporary in temporary_paths:
-            if temporary.exists():
-                temporary.unlink()
-        raise
+    csv_content = _render_csv_bytes(
+        csv_path, rows, columns=CODA_MATRIX_COLUMNS, resume=resume
+    )
+    png_content = _render_coda_png_bytes(
+        png_path, aggregation, candidate_runs, resume=resume
+    )
+    commit_artifact_bundle(
+        bundle_name="final_coda_confusion_matrix",
+        bundle_version=ERROR_ARTIFACT_BUNDLE_VERSION,
+        data_destinations={"csv": csv_path, "png": png_path},
+        data_contents={"csv": csv_content, "png": png_content},
+        provenance_path=Path(output_dir)
+        / "final_coda_confusion_matrix.provenance.json",
+        input_bindings=input_bindings,
+        parameters=_artifact_parameters(
+            artifact="final_coda_confusion_matrix",
+            event_rows=aggregation.event_rows,
+            low_snrs=aggregation.low_snrs,
+            candidate_runs=candidate_runs,
+            extra={"matrix_rows": len(rows)},
+        ),
+        overwrite=overwrite,
+        resume=resume,
+        error_type=ErrorArtifactError,
+    )
     return csv_path, png_path
 
 
@@ -1566,16 +1748,27 @@ def write_short_word_output(
     rows: Sequence[dict[str, object]],
     *,
     overwrite: bool,
+    resume: bool = False,
+    input_bindings: Sequence[Mapping[str, object]] = (),
+    parameters: Mapping[str, object] | None = None,
 ) -> Path:
     csv_path = _short_word_destination(output_dir)
-    temporary: Path | None = None
-    try:
-        temporary = _write_csv_temp(csv_path, rows, columns=SHORT_WORD_COLUMNS)
-        _commit_output_pair((temporary,), (csv_path,), overwrite=overwrite)
-    except Exception:
-        if temporary is not None and temporary.exists():
-            temporary.unlink()
-        raise
+    csv_content = _render_csv_bytes(
+        csv_path, rows, columns=SHORT_WORD_COLUMNS, resume=resume
+    )
+    commit_artifact_bundle(
+        bundle_name="short_word_deletion_examples",
+        bundle_version=ERROR_ARTIFACT_BUNDLE_VERSION,
+        data_destinations={"csv": csv_path},
+        data_contents={"csv": csv_content},
+        provenance_path=Path(output_dir)
+        / "short_word_deletion_examples.provenance.json",
+        input_bindings=input_bindings,
+        parameters=dict(parameters or {}),
+        overwrite=overwrite,
+        resume=resume,
+        error_type=ErrorArtifactError,
+    )
     return csv_path
 
 
@@ -1588,15 +1781,24 @@ def run_build(
     low_snrs: Sequence[object],
     overall_only: bool = False,
     overwrite: bool = False,
+    resume: bool = False,
 ) -> BuildResult:
     low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
-    with _output_lock(output_dir):
-        ensure_outputs_available(event_path, output_dir, overwrite=overwrite)
+    bindings = bind_input_files((event_path,), root=ROOT)
+    with _output_lock(
+        output_dir,
+        bundle_name="tone_confusion_matrix",
+        resume=resume,
+    ):
+        ensure_outputs_available(
+            event_path, output_dir, overwrite=overwrite, resume=resume
+        )
         aggregation = load_tone_aggregation(
             event_path,
             low_snrs=low_snr_values,
             overall_only=overall_only,
         )
+        verify_input_bindings(bindings, (event_path,), root=ROOT)
         candidate_runs = _resolve_report_runs(
             aggregation.run_keys,
             candidate_lambdas=candidate_lambdas,
@@ -1609,6 +1811,8 @@ def run_build(
             aggregation,
             candidate_runs,
             overwrite=overwrite,
+            resume=resume,
+            input_bindings=bindings,
         )
         return BuildResult(
             csv_path=csv_path,
@@ -1628,15 +1832,25 @@ def run_coda_build(
     low_snrs: Sequence[object],
     overall_only: bool = False,
     overwrite: bool = False,
+    resume: bool = False,
 ) -> CodaBuildResult:
     low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
-    with _output_lock(output_dir, lock_name=CODA_OUTPUT_LOCK_NAME):
-        ensure_coda_outputs_available(event_path, output_dir, overwrite=overwrite)
+    bindings = bind_input_files((event_path,), root=ROOT)
+    with _output_lock(
+        output_dir,
+        lock_name=CODA_OUTPUT_LOCK_NAME,
+        bundle_name="final_coda_confusion_matrix",
+        resume=resume,
+    ):
+        ensure_coda_outputs_available(
+            event_path, output_dir, overwrite=overwrite, resume=resume
+        )
         aggregation = load_coda_aggregation(
             event_path,
             low_snrs=low_snr_values,
             overall_only=overall_only,
         )
+        verify_input_bindings(bindings, (event_path,), root=ROOT)
         candidate_runs = _resolve_report_runs(
             aggregation.run_keys,
             candidate_lambdas=candidate_lambdas,
@@ -1649,6 +1863,8 @@ def run_coda_build(
             aggregation,
             candidate_runs,
             overwrite=overwrite,
+            resume=resume,
+            input_bindings=bindings,
         )
         return CodaBuildResult(
             csv_path=csv_path,
@@ -1669,13 +1885,21 @@ def run_short_word_build(
     context_window: int,
     overall_only: bool = False,
     overwrite: bool = False,
+    resume: bool = False,
 ) -> ShortWordBuildResult:
     low_snr_values = _canonical_scopes(low_snrs, overall_only=overall_only)
-    with _output_lock(output_dir, lock_name=SHORT_WORD_OUTPUT_LOCK_NAME):
+    bindings = bind_input_files((event_path,), root=ROOT)
+    with _output_lock(
+        output_dir,
+        lock_name=SHORT_WORD_OUTPUT_LOCK_NAME,
+        bundle_name="short_word_deletion_examples",
+        resume=resume,
+    ):
         ensure_short_word_output_available(
             event_path,
             output_dir,
             overwrite=overwrite,
+            resume=resume,
         )
         aggregation = load_short_word_aggregation(
             event_path,
@@ -1683,6 +1907,7 @@ def run_short_word_build(
             context_window=context_window,
             overall_only=overall_only,
         )
+        verify_input_bindings(bindings, (event_path,), root=ROOT)
         candidate_runs = _resolve_report_runs(
             aggregation.run_keys,
             candidate_lambdas=candidate_lambdas,
@@ -1692,6 +1917,18 @@ def run_short_word_build(
             output_dir,
             aggregation.examples,
             overwrite=overwrite,
+            resume=resume,
+            input_bindings=bindings,
+            parameters=_artifact_parameters(
+                artifact="short_word_deletion_examples",
+                event_rows=aggregation.event_rows,
+                low_snrs=aggregation.low_snrs,
+                candidate_runs=candidate_runs,
+                extra={
+                    "example_rows": len(aggregation.examples),
+                    "context_window": context_window,
+                },
+            ),
         )
         return ShortWordBuildResult(
             csv_path=csv_path,
@@ -1750,7 +1987,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="Tokens on each side of a short-word deletion context. Default: 3.",
     )
     parser.add_argument("--out-dir", required=True)
-    parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--formal-paper-v2",
+        action="store_true",
+        help="Re-verify the error bundle and every source prediction before use.",
+    )
+    parser.add_argument("--benchmark-manifest")
+    parser.add_argument("--split-lock")
+    parser.add_argument("--decision-lock")
+    parser.add_argument("--final-benchmark-lock")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--overwrite", action="store_true")
+    mode.add_argument(
+        "--resume",
+        action="store_true",
+        help="Recover only a hash-verified interrupted artifact bundle.",
+    )
     return parser
 
 
@@ -1762,6 +2014,28 @@ def main() -> None:
     else:
         low_snrs = args.low_snr or ["0", "5"]
     try:
+        if args.formal_paper_v2:
+            missing = [
+                name
+                for name, value in (
+                    ("benchmark_manifest", args.benchmark_manifest),
+                    ("split_lock", args.split_lock),
+                    ("decision_lock", args.decision_lock),
+                )
+                if value is None
+            ]
+            if missing:
+                raise ErrorArtifactError(
+                    "formal paper-v2 artifacts require " + ", ".join(missing)
+                )
+            verify_formal_error_events(
+                args.events,
+                benchmark_path=args.benchmark_manifest,
+                split_lock_path=args.split_lock,
+                decision_path=args.decision_lock,
+                final_benchmark_lock_path=args.final_benchmark_lock,
+                root=ROOT,
+            )
         if args.artifact == "short-word":
             result = run_short_word_build(
                 args.events,
@@ -1772,6 +2046,7 @@ def main() -> None:
                 context_window=args.context_window,
                 overall_only=args.overall_only,
                 overwrite=args.overwrite,
+                resume=args.resume,
             )
         elif args.artifact == "coda":
             result = run_coda_build(
@@ -1782,6 +2057,7 @@ def main() -> None:
                 low_snrs=low_snrs,
                 overall_only=args.overall_only,
                 overwrite=args.overwrite,
+                resume=args.resume,
             )
         else:
             result = run_build(
@@ -1792,8 +2068,9 @@ def main() -> None:
                 low_snrs=low_snrs,
                 overall_only=args.overall_only,
                 overwrite=args.overwrite,
+                resume=args.resume,
             )
-    except (ErrorArtifactError, OSError, csv.Error) as exc:
+    except (ErrorArtifactError, PredictionEvidenceError, OSError, csv.Error) as exc:
         parser.exit(2, f"error: {exc}\n")
 
     print(f"PASS event rows: {result.aggregation.event_rows}")

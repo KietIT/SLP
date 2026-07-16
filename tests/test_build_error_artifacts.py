@@ -824,6 +824,18 @@ class BuildErrorArtifactsTest(unittest.TestCase):
             self.assertEqual(len(rows), 3 * 2 * 6 * 6)
             csv_before = csv_path.read_bytes()
             png_before = png_path.read_bytes()
+            self.assertTrue(
+                (output_dir / "tone_confusion_matrix.provenance.json").is_file()
+            )
+            self.assertTrue(
+                (output_dir / "tone_confusion_matrix.bundle.commit.json").is_file()
+            )
+            resumed = subprocess.run(
+                [*command, "--resume"], capture_output=True, text=True, check=False
+            )
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertEqual(csv_path.read_bytes(), csv_before)
+            self.assertEqual(png_path.read_bytes(), png_before)
             with Image.open(png_path) as image:
                 self.assertEqual(image.format, "PNG")
                 self.assertGreaterEqual(image.width, 4000)

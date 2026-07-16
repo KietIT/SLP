@@ -1,0 +1,75 @@
+protocol:
+  formal: true
+  # Missing/tampered decision and final-benchmark locks still fail closed.
+  final_test_unlocked: true
+  split_lock: outputs/paper_v2/protocol/split_lock.json
+  expected_split_lock_sha256: a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2
+  decision_lock: outputs/paper_v2/protocol/best_lambda_decision.json
+  expected_decision_lock_sha256: REQUIRED_SHA256_AFTER_GATE4_DECISION
+
+benchmark:
+  lock_protocol_version: paper_v2_final_benchmark_v1
+  lock: outputs/paper_v2/protocol/final_benchmark_lock.json
+  expected_lock_sha256: REQUIRED_SHA256_AFTER_GATE5_BENCHMARK
+  manifest: outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl
+  expected_manifest_sha256: REQUIRED_SHA256_AFTER_GATE5_BENCHMARK
+  expected_rows: 2300
+  dataset: vivos
+  verify_audio_sha256: true
+
+output_dir: outputs/paper_v2/predictions/zero_shot
+seed: 42
+
+decoding:
+  language: vi
+  task: transcribe
+  sample_rate: 16000
+  max_audio_seconds: 15.0
+  max_new_tokens: 128
+  do_sample: false
+  num_beams: 1
+
+runtime:
+  batch_size: 1
+  device: auto
+  precision: fp16
+  # Set true only after all six immutable snapshots have been materialized locally.
+  local_files_only: false
+
+models:
+  whisper_tiny:
+    repo_id: openai/whisper-tiny
+    revision: REQUIRED_IMMUTABLE_REVISION
+    model: whisper
+    model_size: tiny
+    filename: pred_whisper_tiny.csv
+  whisper_base:
+    repo_id: openai/whisper-base
+    revision: REQUIRED_IMMUTABLE_REVISION
+    model: whisper
+    model_size: base
+    filename: pred_whisper_base.csv
+  whisper_small:
+    repo_id: openai/whisper-small
+    revision: REQUIRED_IMMUTABLE_REVISION
+    model: whisper
+    model_size: small
+    filename: pred_whisper_small.csv
+  phowhisper_tiny:
+    repo_id: vinai/PhoWhisper-tiny
+    revision: REQUIRED_IMMUTABLE_REVISION
+    model: phowhisper
+    model_size: tiny
+    filename: pred_phowhisper_tiny.csv
+  phowhisper_base:
+    repo_id: vinai/PhoWhisper-base
+    revision: 7ebdb9e88f5cc5271fb88f4d642c82ff9388650e
+    model: phowhisper
+    model_size: base
+    filename: pred_phowhisper_base.csv
+  phowhisper_small:
+    repo_id: vinai/PhoWhisper-small
+    revision: REQUIRED_IMMUTABLE_REVISION
+    model: phowhisper
+    model_size: small
+    filename: pred_phowhisper_small.csv
