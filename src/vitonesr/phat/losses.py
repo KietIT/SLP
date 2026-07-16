@@ -17,9 +17,18 @@ def safe_tone_cross_entropy(
         raise ValueError("tone_logits must have shape [batch, sequence, classes]")
     if tone_labels.ndim != 2:
         raise ValueError("tone_labels must have shape [batch, sequence]")
-    sequence_length = min(tone_logits.size(1), tone_labels.size(1))
-    logits = tone_logits[:, :sequence_length, :]
-    labels = tone_labels[:, :sequence_length]
+    if tone_logits.size(0) != tone_labels.size(0):
+        raise ValueError(
+            "tone logits/labels batch mismatch: "
+            f"logits={tone_logits.size(0)}, labels={tone_labels.size(0)}"
+        )
+    if tone_logits.size(1) != tone_labels.size(1):
+        raise ValueError(
+            "tone logits/labels sequence mismatch: "
+            f"logits={tone_logits.size(1)}, labels={tone_labels.size(1)}"
+        )
+    logits = tone_logits
+    labels = tone_labels
     valid_mask = labels.ne(ignore_index)
     if not torch.any(valid_mask):
         return logits.sum() * 0.0
