@@ -314,6 +314,13 @@ class ErrorBreakdownTest(unittest.TestCase):
             self.assertEqual(first.returncode, 0, first.stderr)
             outputs = [output_dir / name for name in breakdowns.OUTPUT_NAMES]
             first_bytes = [path.read_bytes() for path in outputs]
+            self.assertTrue((output_dir / "error_breakdowns.provenance.json").is_file())
+            self.assertTrue((output_dir / "error_breakdowns.bundle.commit.json").is_file())
+            resumed = subprocess.run(
+                [*command, "--resume"], capture_output=True, text=True, check=False
+            )
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertEqual([path.read_bytes() for path in outputs], first_bytes)
             self.assertEqual(event_path.read_bytes(), source_before)
             expected_columns = (
                 breakdowns.WER_COLUMNS,

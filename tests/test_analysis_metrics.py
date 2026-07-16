@@ -215,12 +215,36 @@ class CorpusMetricTests(unittest.TestCase):
         )
         self.assertEqual(counts["wer_numerator"], 0)
         self.assertEqual(counts["wer_denominator"], 2)
+        self.assertEqual(counts["ter_coverage"], 1.0)
+        self.assertEqual(counts["der_coverage"], 1.0)
+        self.assertEqual(counts["fcer_coverage"], 0.5)
+
+    def test_conditional_metric_coverage_exposes_hypothesis_dependence(self) -> None:
+        exact = compute_aligned_metric_result(["má ba"], ["má ba"])
+        lexical = compute_aligned_metric_result(["má ba"], ["xe ban"])
+
+        self.assertEqual(exact.word_reference_units, 2)
+        self.assertEqual(exact.ter_coverage, 1.0)
+        self.assertEqual(exact.der_coverage, 1.0)
+        self.assertEqual(exact.fcer_coverage, 0.0)
+        self.assertEqual(lexical.ter_coverage, 0.0)
+        self.assertEqual(lexical.der_coverage, 0.0)
+        # aligned_v1 FCER uses coda presence on either side of an aligned
+        # reference position, so its denominator is also hypothesis-dependent.
+        self.assertEqual(lexical.fcer_coverage, 0.5)
+
+        counts = lexical.to_dict(include_counts=True)
+        self.assertEqual(counts["ter_denominator"], 0)
+        self.assertEqual(counts["der_denominator"], 0)
+        self.assertEqual(counts["fcer_denominator"], 1)
 
     def test_length_mismatch_and_empty_corpus_are_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "equal length"):
             compute_aligned_metrics(["a"], [])
         with self.assertRaisesRegex(ValueError, "empty corpus"):
             compute_aligned_metrics([], [])
+        with self.assertRaisesRegex(ValueError, "empty after text normalization"):
+            compute_aligned_metrics(["!!!"], [""])
 
 
 if __name__ == "__main__":

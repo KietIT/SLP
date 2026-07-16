@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import io
 import os
 import sys
 import unicodedata
@@ -17,6 +18,15 @@ sys.path.insert(0, str(ROOT))
 
 from scripts.error_analysis import EVENT_COLUMNS  # noqa: E402
 from src.vitonesr.analysis import METRIC_VERSION, RUN_METADATA_COLUMNS  # noqa: E402
+from src.vitonesr.artifact_bundle import (  # noqa: E402
+    bind_input_files,
+    commit_artifact_bundle,
+    verify_input_bindings,
+)
+from src.vitonesr.prediction_evidence import (  # noqa: E402
+    PredictionEvidenceError,
+    verify_formal_error_events,
+)
 
 
 RUN_COLUMNS = list(RUN_METADATA_COLUMNS)
@@ -134,6 +144,7 @@ OUTPUT_NAMES = (
     "diacritic_error_events.csv",
 )
 OUTPUT_LOCK_NAME = ".error_breakdowns.lock"
+BREAKDOWN_BUNDLE_VERSION = "error_breakdowns_aligned_v1_bundle_v1"
 
 RunKey = tuple[str, ...]
 
@@ -667,10 +678,40 @@ def _backup_path(path: Path) -> Path:
     return path.with_name(f".{path.name}.bak")
 
 
+def _pid_is_alive(pid: int) -> bool:
+    if pid <= 0:
+        return False
+    if pid == os.getpid():
+        return True
+    try:
+        os.kill(pid, 0)
+    except (OSError, OverflowError):
+        return False
+    return True
+
+
+def _lock_pid(path: Path) -> int | None:
+    try:
+        text = path.read_text(encoding="ascii").strip()
+        return int(text.removeprefix("pid=")) if text.startswith("pid=") else None
+    except (OSError, UnicodeDecodeError, ValueError):
+        return None
+
+
 @contextmanager
-def _output_lock(output_dir: Path) -> Iterator[None]:
+def _output_lock(output_dir: Path, *, resume: bool = False) -> Iterator[None]:
     output_dir.mkdir(parents=True, exist_ok=True)
     lock_path = output_dir / OUTPUT_LOCK_NAME
+    journal_path = output_dir / ".error_breakdowns.bundle.transaction.json"
+    marker_path = output_dir / "error_breakdowns.bundle.commit.json"
+    if (
+        lock_path.exists()
+        and resume
+        and (journal_path.is_file() or marker_path.is_file())
+    ):
+        owner = _lock_pid(lock_path)
+        if owner is not None and not _pid_is_alive(owner):
+            lock_path.unlink()
     try:
         descriptor = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     except FileExistsError as exc:
@@ -712,6 +753,21 @@ def _write_csv_temp(
             temporary.unlink()
         raise
     return temporary
+
+
+def _render_csv_bytes(
+    rows: Sequence[Mapping[str, object]], columns: Sequence[str]
+) -> bytes:
+    handle = io.StringIO(newline="")
+    writer = csv.DictWriter(
+        handle,
+        fieldnames=list(columns),
+        extrasaction="raise",
+        lineterminator="\n",
+    )
+    writer.writeheader()
+    writer.writerows(rows)
+    return handle.getvalue().encode("utf-8")
 
 
 def _commit_outputs(
@@ -772,30 +828,15 @@ def write_breakdown_outputs(
     result: BreakdownResult,
     *,
     overwrite: bool = False,
+    resume: bool = False,
+    input_bindings: Sequence[Mapping[str, object]] | None = None,
 ) -> tuple[Path, ...]:
     directory = Path(output_dir)
     destinations = tuple(directory / name for name in OUTPUT_NAMES)
     source = Path(event_path).resolve()
     if any(path.resolve() == source for path in destinations):
         raise ErrorBreakdownError("refusing to overwrite the input event CSV")
-    with _output_lock(directory):
-        existing = [path for path in destinations if path.exists()]
-        if existing and not overwrite:
-            raise ErrorBreakdownError(
-                "output already exists; use a new --out-dir or --overwrite: "
-                + ", ".join(str(path) for path in existing)
-            )
-        auxiliaries = [
-            auxiliary
-            for path in destinations
-            for auxiliary in (_temporary_path(path), _backup_path(path))
-        ]
-        stale = [path for path in auxiliaries if path.exists()]
-        if stale:
-            raise ErrorBreakdownError(
-                "temporary or backup output already exists: "
-                + ", ".join(str(path) for path in stale)
-            )
+    with _output_lock(directory, resume=resume):
         specifications = (
             (result.wer_rows, WER_COLUMNS),
             (result.ter_rows, TER_COLUMNS),
@@ -804,15 +845,50 @@ def write_breakdown_outputs(
             (result.event_rows, DIACRITIC_EVENT_COLUMNS),
         )
         temporary_paths: list[Path] = []
-        try:
-            for destination, (rows, columns) in zip(destinations, specifications):
-                temporary_paths.append(_write_csv_temp(destination, rows, columns))
-            _commit_outputs(temporary_paths, destinations, overwrite=overwrite)
-        except Exception:
+        if resume:
+            contents = {
+                f"output_{index:02d}": _render_csv_bytes(rows, columns)
+                for index, (rows, columns) in enumerate(specifications)
+            }
+        else:
+            try:
+                for destination, (rows, columns) in zip(destinations, specifications):
+                    temporary_paths.append(_write_csv_temp(destination, rows, columns))
+                contents = {
+                    f"output_{index:02d}": temporary.read_bytes()
+                    for index, temporary in enumerate(temporary_paths)
+                }
+            except Exception:
+                for temporary in temporary_paths:
+                    if temporary.exists():
+                        temporary.unlink()
+                raise
             for temporary in temporary_paths:
                 if temporary.exists():
                     temporary.unlink()
-            raise
+        bindings = tuple(
+            input_bindings or bind_input_files((event_path,), root=ROOT)
+        )
+        commit_artifact_bundle(
+            bundle_name="error_breakdowns",
+            bundle_version=BREAKDOWN_BUNDLE_VERSION,
+            data_destinations={
+                f"output_{index:02d}": destination
+                for index, destination in enumerate(destinations)
+            },
+            data_contents=contents,
+            provenance_path=directory / "error_breakdowns.provenance.json",
+            input_bindings=bindings,
+            parameters={
+                "metric_version": METRIC_VERSION,
+                "input_event_rows": result.input_event_rows,
+                "run_count": len(result.run_keys),
+                "diacritic_event_rows": len(result.event_rows),
+            },
+            overwrite=overwrite,
+            resume=resume,
+            error_type=ErrorBreakdownError,
+        )
     return destinations
 
 
@@ -825,7 +901,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--events", required=True, help="aligned-v1 error_events.csv")
     parser.add_argument("--out-dir", required=True)
-    parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--formal-paper-v2",
+        action="store_true",
+        help="Re-verify the error bundle and every source prediction before use.",
+    )
+    parser.add_argument("--benchmark-manifest")
+    parser.add_argument("--split-lock")
+    parser.add_argument("--decision-lock")
+    parser.add_argument("--final-benchmark-lock")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--overwrite", action="store_true")
+    mode.add_argument(
+        "--resume",
+        action="store_true",
+        help="Recover only a journal- and input-hash-verified breakdown bundle.",
+    )
     return parser
 
 
@@ -833,14 +924,40 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
     try:
+        if args.formal_paper_v2:
+            missing = [
+                name
+                for name, value in (
+                    ("benchmark_manifest", args.benchmark_manifest),
+                    ("split_lock", args.split_lock),
+                    ("decision_lock", args.decision_lock),
+                )
+                if value is None
+            ]
+            if missing:
+                raise ErrorBreakdownError(
+                    "formal paper-v2 breakdowns require " + ", ".join(missing)
+                )
+            verify_formal_error_events(
+                args.events,
+                benchmark_path=args.benchmark_manifest,
+                split_lock_path=args.split_lock,
+                decision_path=args.decision_lock,
+                final_benchmark_lock_path=args.final_benchmark_lock,
+                root=ROOT,
+            )
+        bindings = bind_input_files((args.events,), root=ROOT)
         result = build_breakdowns(args.events)
+        verify_input_bindings(bindings, (args.events,), root=ROOT)
         outputs = write_breakdown_outputs(
             args.events,
             args.out_dir,
             result,
             overwrite=args.overwrite,
+            resume=args.resume,
+            input_bindings=bindings,
         )
-    except (ErrorBreakdownError, OSError, csv.Error) as exc:
+    except (ErrorBreakdownError, PredictionEvidenceError, OSError, csv.Error) as exc:
         parser.exit(2, f"error: {exc}\n")
 
     print(f"PASS event rows: {result.input_event_rows}")

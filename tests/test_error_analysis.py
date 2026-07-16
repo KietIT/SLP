@@ -287,6 +287,15 @@ class ErrorAnalysisTest(unittest.TestCase):
             summary_path = output_dir / "error_summary.csv"
             event_before = event_path.read_bytes()
             summary_before = summary_path.read_bytes()
+            self.assertTrue((output_dir / "error_analysis.provenance.json").is_file())
+            self.assertTrue((output_dir / "error_analysis.bundle.commit.json").is_file())
+
+            resumed = subprocess.run(
+                [*command, "--resume"], capture_output=True, text=True, check=False
+            )
+            self.assertEqual(resumed.returncode, 0, resumed.stderr)
+            self.assertEqual(event_path.read_bytes(), event_before)
+            self.assertEqual(summary_path.read_bytes(), summary_before)
 
             event_header, event_rows = read_csv(event_path)
             summary_header, summary_rows = read_csv(summary_path)

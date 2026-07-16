@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import glob
+import io
 import os
 import sys
 from collections.abc import Mapping, Sequence
@@ -21,10 +22,21 @@ from src.vitonesr.analysis import (  # noqa: E402
     analyze_error_events,
     load_prediction_csv,
 )
+from src.vitonesr.artifact_bundle import (  # noqa: E402
+    bind_input_files,
+    commit_artifact_bundle,
+    verify_input_bindings,
+)
+from src.vitonesr.prediction_evidence import (  # noqa: E402
+    PredictionEvidenceError,
+    formal_protocol_parameters,
+    verify_formal_prediction_set,
+)
 
 
 DEFAULT_PREDICTION_GLOB = "outputs/predictions/*/pred_*.csv"
 DEFAULT_OUTPUT_DIR = Path("outputs/error_analysis")
+ERROR_ANALYSIS_BUNDLE_VERSION = "error_analysis_aligned_v1_bundle_v1"
 
 RUN_COLUMNS = list(RUN_METADATA_COLUMNS)
 CANONICAL_COLUMNS = list(CANONICAL_PREDICTION_COLUMNS)
@@ -342,13 +354,31 @@ def _write_csv_temp(path: Path, rows: Sequence[dict[str, object]], columns: Sequ
     return temporary
 
 
+def _csv_bytes(
+    rows: Sequence[dict[str, object]], columns: Sequence[str]
+) -> bytes:
+    handle = io.StringIO(newline="")
+    writer = csv.DictWriter(
+        handle,
+        fieldnames=list(columns),
+        extrasaction="raise",
+        lineterminator="\n",
+    )
+    writer.writeheader()
+    writer.writerows(rows)
+    return handle.getvalue().encode("utf-8")
+
+
 def write_outputs(
     output_dir: Path,
     event_rows: Sequence[dict[str, object]],
     summary_rows: Sequence[dict[str, object]],
     *,
     overwrite: bool = False,
+    resume: bool = False,
     protected_inputs: Sequence[Path] = (),
+    input_bindings: Sequence[Mapping[str, Any]] | None = None,
+    formal_protocol: Mapping[str, Any] | None = None,
 ) -> tuple[Path, Path]:
     event_path = output_dir / "error_events.csv"
     summary_path = output_dir / "error_summary.csv"
@@ -359,24 +389,32 @@ def write_outputs(
     for path in outputs:
         if path.resolve() in protected:
             raise ErrorAnalysisError(f"refusing to overwrite an input prediction: {path}")
-    existing = [path for path in outputs if path.exists()]
-    if existing and not overwrite:
-        raise ErrorAnalysisError(
-            "output already exists; use a new --out-dir or --overwrite: "
-            + ", ".join(str(path) for path in existing)
-        )
-
-    temporary_paths: list[Path] = []
-    try:
-        temporary_paths.append(_write_csv_temp(event_path, event_rows, EVENT_COLUMNS))
-        temporary_paths.append(_write_csv_temp(summary_path, summary_rows, SUMMARY_COLUMNS))
-        for temporary, destination in zip(temporary_paths, outputs):
-            temporary.replace(destination)
-    except Exception:
-        for temporary in temporary_paths:
-            if temporary.exists():
-                temporary.unlink()
-        raise
+    bindings = tuple(input_bindings or bind_input_files(protected_inputs, root=ROOT))
+    commit_artifact_bundle(
+        bundle_name="error_analysis",
+        bundle_version=ERROR_ANALYSIS_BUNDLE_VERSION,
+        data_destinations={"events": event_path, "summary": summary_path},
+        data_contents={
+            "events": _csv_bytes(event_rows, EVENT_COLUMNS),
+            "summary": _csv_bytes(summary_rows, SUMMARY_COLUMNS),
+        },
+        provenance_path=output_dir / "error_analysis.provenance.json",
+        input_bindings=bindings,
+        parameters={
+            "metric_version": METRIC_VERSION,
+            "prediction_file_count": len(bindings),
+            "event_rows": len(event_rows),
+            "summary_rows": len(summary_rows),
+            **(
+                {"formal_protocol": dict(formal_protocol)}
+                if formal_protocol is not None
+                else {}
+            ),
+        },
+        overwrite=overwrite,
+        resume=resume,
+        error_type=ErrorAnalysisError,
+    )
     return event_path, summary_path
 
 
@@ -394,7 +432,25 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument("--out-dir", default=str(DEFAULT_OUTPUT_DIR))
-    parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--formal-paper-v2",
+        action="store_true",
+        help="Require verified prediction sidecars and transitive paper-v2 locks.",
+    )
+    parser.add_argument("--benchmark-manifest")
+    parser.add_argument("--split-lock")
+    parser.add_argument("--decision-lock")
+    parser.add_argument(
+        "--final-benchmark-lock",
+        help="Required for final VIVOS predictions; omit for FLEURS replication.",
+    )
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--overwrite", action="store_true")
+    mode.add_argument(
+        "--resume",
+        action="store_true",
+        help="Recover only a hash-verified interrupted error-analysis bundle.",
+    )
     return parser
 
 
@@ -404,20 +460,49 @@ def main() -> None:
     try:
         inputs = discover_inputs(args.pred_glob)
         output_dir = Path(args.out_dir)
+        formal_protocol = None
+        if args.formal_paper_v2:
+            missing = [
+                name
+                for name, value in (
+                    ("benchmark_manifest", args.benchmark_manifest),
+                    ("split_lock", args.split_lock),
+                    ("decision_lock", args.decision_lock),
+                )
+                if value is None
+            ]
+            if missing:
+                raise ErrorAnalysisError(
+                    "formal paper-v2 analysis requires " + ", ".join(missing)
+                )
+            verified = verify_formal_prediction_set(
+                inputs,
+                benchmark_path=args.benchmark_manifest,
+                split_lock_path=args.split_lock,
+                decision_path=args.decision_lock,
+                final_benchmark_lock_path=args.final_benchmark_lock,
+                root=ROOT,
+            )
+            formal_protocol = formal_protocol_parameters(verified)
+        bindings = bind_input_files(inputs, root=ROOT)
         rows = load_prediction_rows(inputs)
         event_rows, summary_rows = build_error_analysis(rows)
+        verify_input_bindings(bindings, inputs, root=ROOT)
         event_path, summary_path = write_outputs(
             output_dir,
             event_rows,
             summary_rows,
             overwrite=args.overwrite,
+            resume=args.resume,
             protected_inputs=inputs,
+            input_bindings=bindings,
+            formal_protocol=formal_protocol,
         )
         print(f"PASS prediction files: {len(inputs)}")
         print(f"PASS prediction rows: {len(rows)}")
         print(f"wrote {event_path} ({len(event_rows)} events)")
         print(f"wrote {summary_path} ({len(summary_rows)} runs)")
-    except ErrorAnalysisError as exc:
+    except (ErrorAnalysisError, PredictionEvidenceError, OSError, csv.Error) as exc:
         parser.exit(2, f"error: {exc}\n")
 
 
