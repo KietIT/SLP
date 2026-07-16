@@ -1,0 +1,82 @@
+{
+  "audit": {
+    "checks": 15,
+    "failed_checks": 0,
+    "path": "outputs/paper_v2/protocol/noise_split_audit.csv",
+    "sha256": "586518ed06b07f2a3ef20c041304cde5c559467a17386d98448481d341d329c6"
+  },
+  "dataset": "musan",
+  "fractions": {
+    "dev": 0.1,
+    "test": 0.1,
+    "train": 0.8
+  },
+  "hash_algorithm": "sha256_raw_bytes",
+  "protocol_version": "musan_content_split_v1",
+  "registry": {
+    "file_count": 2016,
+    "manifest": "data/manifests/noise/paper_v2/musan_registry.jsonl",
+    "manifest_sha256": "c62de50e5c523c4c8c5b5e4d669793f4e369ec2a2a241e3cc9c2833b36976e28"
+  },
+  "schema": [
+    "noise_id",
+    "source_dataset",
+    "source_url",
+    "source_revision",
+    "license_id",
+    "license_url",
+    "source_relative_path",
+    "audio",
+    "audio_sha256",
+    "duration_seconds",
+    "sample_rate",
+    "channels",
+    "frames",
+    "noise_type",
+    "noise_subtype",
+    "split"
+  ],
+  "seed": 42,
+  "source": {
+    "dataset": "musan",
+    "inventory_sha256": "00b82316a0f8ff1a10f616c75136da7462adaee86fb1944670a4543b65a78cfd",
+    "license_id": "MIXED-CREATIVE-COMMONS-AND-US-PUBLIC-DOMAIN; SEE-ARCHIVE-LICENSE-FILES",
+    "license_url": "https://www.openslr.org/resources/17/musan.tar.gz",
+    "revision": "86d1061c7e15b5c9e906777685c519701df51bfde3001e1070dcc9ffac955ee1",
+    "url": "https://www.openslr.org/resources/17/musan.tar.gz"
+  },
+  "split_algorithm": "sha256_stratified_content_split_v1",
+  "splits": {
+    "dev": {
+      "file_count": 202,
+      "manifest": "data/manifests/noise/paper_v2/musan_dev.jsonl",
+      "manifest_sha256": "471c0f94a8f29eefa462bc92caee0270a911ab889dc26662a0a7fe6e74aeac00",
+      "type_counts": {
+        "music": 66,
+        "noise": 93,
+        "speech": 43
+      }
+    },
+    "test": {
+      "file_count": 202,
+      "manifest": "data/manifests/noise/paper_v2/musan_test.jsonl",
+      "manifest_sha256": "6345d11536a99f0584bc96d58d10ad236e4b6995f692748e8eebe12489be9719",
+      "type_counts": {
+        "music": 66,
+        "noise": 93,
+        "speech": 43
+      }
+    },
+    "train": {
+      "file_count": 1612,
+      "manifest": "data/manifests/noise/paper_v2/musan_train.jsonl",
+      "manifest_sha256": "9f0f840214c4960310c4f6ec20b2da2d5e0cf6cf3dcdf96e6d6d448351951848",
+      "type_counts": {
+        "music": 528,
+        "noise": 744,
+        "speech": 340
+      }
+    }
+  },
+  "status": "LOCKED"
+}

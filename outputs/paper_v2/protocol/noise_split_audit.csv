@@ -1,0 +1,16 @@
+protocol_version,check_id,entity,split_a,split_b,status,overlap_count,total_a,total_b,details
+musan_content_split_v1,no_noise_id_overlap_train_dev,noise_id,train,dev,PASS,0,1612,202,none
+musan_content_split_v1,no_noise_id_overlap_train_test,noise_id,train,test,PASS,0,1612,202,none
+musan_content_split_v1,no_noise_id_overlap_dev_test,noise_id,dev,test,PASS,0,202,202,none
+musan_content_split_v1,registry_partition_identity_noise_id,noise_id,registry,train_plus_dev_plus_test,PASS,0,2016,2016,none
+musan_content_split_v1,no_source_relative_path_overlap_train_dev,source_relative_path,train,dev,PASS,0,1612,202,none
+musan_content_split_v1,no_source_relative_path_overlap_train_test,source_relative_path,train,test,PASS,0,1612,202,none
+musan_content_split_v1,no_source_relative_path_overlap_dev_test,source_relative_path,dev,test,PASS,0,202,202,none
+musan_content_split_v1,registry_partition_identity_source_relative_path,source_relative_path,registry,train_plus_dev_plus_test,PASS,0,2016,2016,none
+musan_content_split_v1,no_audio_sha256_overlap_train_dev,audio_sha256,train,dev,PASS,0,1612,202,none
+musan_content_split_v1,no_audio_sha256_overlap_train_test,audio_sha256,train,test,PASS,0,1612,202,none
+musan_content_split_v1,no_audio_sha256_overlap_dev_test,audio_sha256,dev,test,PASS,0,202,202,none
+musan_content_split_v1,registry_partition_identity_audio_sha256,audio_sha256,registry,train_plus_dev_plus_test,PASS,0,2016,2016,none
+musan_content_split_v1,all_noise_types_present_train,noise_type,train,required,PASS,0,3,3,none
+musan_content_split_v1,all_noise_types_present_dev,noise_type,dev,required,PASS,0,3,3,none
+musan_content_split_v1,all_noise_types_present_test,noise_type,test,required,PASS,0,3,3,none
