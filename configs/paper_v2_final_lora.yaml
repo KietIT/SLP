@@ -1,0 +1,34 @@
+suite_version: paper_v2_final_lora_suite_v1
+
+# Fill every REQUIRED_AFTER_* digest after the corresponding immutable artifact
+# is created. The runner intentionally rejects placeholders.
+protocol:
+  formal: true
+  final_test_unlocked: true
+  split_lock: outputs/paper_v2/protocol/split_lock.json
+  expected_split_lock_sha256: REQUIRED_AFTER_SPLIT_LOCK
+  decision_lock: outputs/paper_v2/protocol/best_lambda_decision.json
+  expected_decision_lock_sha256: REQUIRED_AFTER_DECISION
+  method_lock: outputs/paper_v2/protocol/method_lock.json
+  expected_method_lock_sha256: REQUIRED_AFTER_METHOD_LOCK
+  method_config: configs/phat/lambda_0.yaml
+  noise_split_lock: outputs/paper_v2/protocol/noise_split_lock.json
+  expected_noise_split_lock_sha256: REQUIRED_AFTER_NOISE_LOCK
+  final_benchmark_lock: outputs/paper_v2/protocol/final_benchmark_lock.json
+  expected_final_benchmark_lock_sha256: REQUIRED_AFTER_FINAL_BENCHMARK
+
+benchmark:
+  manifest: outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl
+  expected_manifest_sha256: REQUIRED_AFTER_FINAL_BENCHMARK
+  expected_rows: 2300
+  verify_audio_sha256: true
+
+runtime:
+  device: auto
+  # Set true for the strongest preflight. False still verifies every protocol
+  # manifest/lock hash and all 2,300 final audio hashes before inference.
+  verify_method_audio_sha256: false
+
+output:
+  directory: outputs/paper_v2/final_predictions
+  aggregate_filename: final_lora_results.csv
