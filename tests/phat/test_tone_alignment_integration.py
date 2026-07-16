@@ -8,7 +8,12 @@ from typing import Any
 
 import torch
 
-from scripts.audit_tone_alignment import TranscriptRecord, audit_records
+from scripts.audit_tone_alignment import (
+    DEFAULT_TOKENIZER_REVISION,
+    TranscriptRecord,
+    audit_records,
+    build_parser,
+)
 from src.vitonesr.data import (
     DataCollatorSpeechSeq2SeqWithTone,
     align_tone_labels_to_token_ids,
@@ -293,6 +298,7 @@ class RealPhoWhisperTokenizerTests(unittest.TestCase):
 
             cls.tokenizer: Any | None = AutoTokenizer.from_pretrained(
                 "vinai/PhoWhisper-base",
+                revision=DEFAULT_TOKENIZER_REVISION,
                 local_files_only=True,
             )
             cls.load_error = ""
@@ -338,6 +344,13 @@ class RealPhoWhisperTokenizerTests(unittest.TestCase):
         second = build_token_tone_alignment(nfd, self.tokenizer)
         self.assertEqual(first.token_ids, second.token_ids)
         self.assertEqual(first.tone_labels, second.tone_labels)
+
+
+class ToneAuditCliTests(unittest.TestCase):
+    def test_default_tokenizer_revision_is_immutable(self) -> None:
+        args = build_parser().parse_args([])
+        self.assertEqual(args.tokenizer_revision, DEFAULT_TOKENIZER_REVISION)
+        self.assertEqual(len(args.tokenizer_revision), 40)
 
 
 if __name__ == "__main__":

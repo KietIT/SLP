@@ -82,6 +82,13 @@ class ToneAndLossTests(unittest.TestCase):
         incorrect = safe_tone_cross_entropy(logits, torch.tensor([[1, 0]]))
         self.assertLess(float(correct), float(incorrect))
 
+    def test_tone_loss_rejects_batch_or_sequence_mismatch(self) -> None:
+        logits = torch.zeros((2, 3, 6))
+        with self.assertRaisesRegex(ValueError, "batch mismatch"):
+            safe_tone_cross_entropy(logits, torch.zeros((1, 3), dtype=torch.long))
+        with self.assertRaisesRegex(ValueError, "sequence mismatch"):
+            safe_tone_cross_entropy(logits, torch.zeros((2, 2), dtype=torch.long))
+
     def test_lambda_zero_total_loss_equals_asr_loss(self) -> None:
         asr_loss = torch.tensor(2.5, requires_grad=True)
         tone_loss = torch.tensor(9.0, requires_grad=True)

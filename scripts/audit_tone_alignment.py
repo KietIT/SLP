@@ -5,6 +5,7 @@ import csv
 import hashlib
 import json
 import os
+import re
 import sys
 from collections import Counter
 from dataclasses import dataclass
@@ -27,10 +28,11 @@ from src.vitonesr.tone import (  # noqa: E402
 )
 
 
-AUDIT_VERSION = "tone_alignment_v1"
+AUDIT_VERSION = "tone_alignment_v2"
 DEFAULT_INPUT = "outputs/phat/predictions/pred_lora_ordinary_lambda0.csv"
 DEFAULT_OUTPUT_CSV = "outputs/paper_v2/audits/tone_alignment_audit.csv"
 DEFAULT_OUTPUT_SUMMARY = "outputs/paper_v2/audits/tone_alignment_summary.md"
+DEFAULT_TOKENIZER_REVISION = "7ebdb9e88f5cc5271fb88f4d642c82ff9388650e"
 TEXT_COLUMN_CANDIDATES = ("transcript", "ref", "text")
 ID_COLUMN_CANDIDATES = ("source_utt_id", "utt_id", "id")
 AUDIT_COLUMNS = [
@@ -435,6 +437,7 @@ def build_summary(
     *,
     input_paths: Sequence[str | Path],
     tokenizer_source: str,
+    tokenizer_revision: str,
     vocab_sha256: str,
     policy: str,
     deduplicate_text: bool,
@@ -463,6 +466,7 @@ def build_summary(
         f"- Audit version: `{AUDIT_VERSION}`",
         f"- Inputs: {', '.join(f'`{_display_path(Path(path))}`' for path in input_paths)}",
         f"- Tokenizer: `{tokenizer_source}`",
+        f"- Tokenizer immutable revision: `{tokenizer_revision}`",
         f"- Tokenizer vocabulary SHA-256: `{vocab_sha256}`",
         f"- Tone policy: `{policy}`",
         f"- Transcript deduplication: `{'normalized_text' if deduplicate_text else 'disabled'}`",
@@ -574,6 +578,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--id-column", help="Override utterance-ID column detection")
     parser.add_argument("--tokenizer-source", default="vinai/PhoWhisper-base")
     parser.add_argument(
+        "--tokenizer-revision",
+        default=DEFAULT_TOKENIZER_REVISION,
+        help="Immutable 40- or 64-hex model revision used to load the tokenizer",
+    )
+    parser.add_argument(
         "--allow-download",
         action="store_true",
         help="Allow Transformers to download a missing tokenizer; disabled by default",
@@ -612,6 +621,12 @@ def run(args: argparse.Namespace) -> AuditResult:
             + ", ".join(str(path) for path in existing)
         )
 
+    tokenizer_revision = str(args.tokenizer_revision).strip().casefold()
+    if re.fullmatch(r"(?:[0-9a-f]{40}|[0-9a-f]{64})", tokenizer_revision) is None:
+        raise ToneAuditError(
+            "--tokenizer-revision must be an immutable 40- or 64-character hex commit"
+        )
+
     records = load_records(
         input_paths,
         text_column=args.text_column,
@@ -623,6 +638,7 @@ def run(args: argparse.Namespace) -> AuditResult:
         raise ToneAuditError("transformers is required for the alignment audit") from exc
     tokenizer = AutoTokenizer.from_pretrained(
         args.tokenizer_source,
+        revision=tokenizer_revision,
         local_files_only=not args.allow_download,
     )
     result = audit_records(
@@ -636,6 +652,7 @@ def run(args: argparse.Namespace) -> AuditResult:
         result,
         input_paths=input_paths,
         tokenizer_source=args.tokenizer_source,
+        tokenizer_revision=tokenizer_revision,
         vocab_sha256=vocab_sha256,
         policy=args.policy,
         deduplicate_text=not args.keep_duplicates,

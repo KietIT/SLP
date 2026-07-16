@@ -5,9 +5,10 @@ from typing import Optional
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from transformers import WhisperForConditionalGeneration
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+
+from .phat.losses import safe_tone_cross_entropy
 
 
 class WhisperToneMTL(nn.Module):
@@ -40,13 +41,10 @@ class WhisperToneMTL(nn.Module):
         if tone_labels is not None:
             hidden = outputs.decoder_hidden_states[-1]
             tone_logits = self.tone_head(hidden)
-            # Align lengths defensively.
-            t = min(tone_logits.size(1), tone_labels.size(1))
-            tone_loss = F.cross_entropy(
-                tone_logits[:, :t, :].reshape(-1, tone_logits.size(-1)),
-                tone_labels[:, :t].reshape(-1),
-                ignore_index=-100,
-            )
+            # A length mismatch is a label-alignment validity error.  Silently
+            # truncating either side can train the tone head against shifted BPE
+            # positions while still producing a finite loss.
+            tone_loss = safe_tone_cross_entropy(tone_logits, tone_labels)
             loss = loss + self.lambda_tone * tone_loss
         return {
             "loss": loss,
