@@ -5,16 +5,20 @@ controlled VIVOS + MUSAN benchmark construction, Whisper/PhoWhisper inference,
 WER/CER scoring, Vietnamese diagnostic metrics, and a PhoWhisper LoRA +
 tone-aware multi-task learning training path.
 
-The current midterm run compares three systems on the same clean and noisy
-VIVOS manifests:
+The exact paper-v2 protocol, distributed runner assignments, hash handoff,
+resume commands, and stop conditions are documented in [Guide.md](Guide.md).
+
+The repository retains an archived midterm comparison of three systems on the
+same clean and noisy VIVOS manifests:
 
 1. `openai/whisper-base` zero-shot
 2. `vinai/PhoWhisper-base` zero-shot
 3. `vinai/PhoWhisper-base` tone-aware LoRA trained on VIVOS with MUSAN noise
    augmentation
 
-All reported results use six metrics: `WER`, `CER`, `TER`, `DER`, `FCER`, and
-`SWDR`.
+Those archived results use six metrics: `WER`, `CER`, `TER`, `DER`, `FCER`, and
+`SWDR`. They were derived from the official VIVOS test partition and must not
+be used as paper-v2 selection or final evidence.
 
 ## What is included
 
@@ -30,17 +34,20 @@ train.py                 LoRA + tone-aware MTL training entrypoint
 requirements.txt         Python dependencies
 ```
 
-Large generated files are intentionally excluded from Git by default:
+Large generated files are intentionally excluded from Git by default. The only
+exceptions are small, reviewed protocol manifests/audits under
+`data/manifests/paper_v2/` and `outputs/paper_v2/`:
 
 ```text
-data/                    Downloaded VIVOS/MUSAN and generated noisy audio
+data/                    Downloaded VIVOS/MUSAN and generated noisy audio (ignored)
 outputs/                 Generated CSV/report/slide artifacts
 experiments/             Fine-tuned checkpoints and training outputs
 ```
 
-For coursework submission, keep `data/` out of Git. If the team wants to share
-the generated result CSVs/checkpoints, add selected `outputs/` and
-`experiments/` files explicitly.
+Keep raw data and checkpoint weights out of normal Git commits. Reviewed result
+tables, prediction CSVs, protocol locks, and portable provenance may be staged
+selectively; transfer checkpoints with the hash-verified handoff procedure in
+`Guide.md` (or a separately approved Git-LFS workflow).
 
 ## Dataset links
 
@@ -59,13 +66,17 @@ Expected local dataset layout after download:
 ```text
 data/raw/vivos/
 data/raw/musan/musan/noise/
-data/manifests/noise/musan_noise.jsonl
-data/manifests/vivos/train.jsonl
-data/manifests/vivos/dev.jsonl
-data/manifests/vivos/test.jsonl
-data/manifests/vivos/test_noisy.jsonl
-data/manifests/fleurs/test.jsonl
-data/manifests/fleurs/audio/test/*.wav
+data/manifests/noise/musan_noise.jsonl  # legacy/unlocked, not formal Gate-2 input
+data/manifests/paper_v2/vivos_train.jsonl
+data/manifests/paper_v2/vivos_dev.jsonl
+data/manifests/paper_v2/vivos_test_legacy_exposed.jsonl
+data/manifests/paper_v2/vivos_test_locked.jsonl
+outputs/paper_v2/protocol/split_lock.json
+outputs/paper_v2/protocol/split_audit.csv
+outputs/paper_v2/protocol/legacy_test_exposure.csv
+data/manifests/fleurs/paper_v2/test.jsonl
+data/manifests/fleurs/paper_v2/audio/test/*.wav
+outputs/paper_v2/protocol/fleurs_test_lock.json
 ```
 
 ## Environment setup
@@ -88,35 +99,60 @@ python -m pip install -r requirements.txt
 
 If SSH is not configured in Colab, use the HTTPS clone URL instead.
 
-## Prepare VIVOS + MUSAN
+## Paper-v2 VIVOS split protocol
+
+The paper protocol splits the official VIVOS train partition by speaker. Of the
+760 official-test utterances, 300 already appeared in the historical benchmark
+used for lambda comparison and are therefore recorded as
+`vivos_test_legacy_exposed.jsonl`. Only their 460-utterance complement is sealed
+as the unseen `vivos_test_locked.jsonl`; neither partition is a valid input for
+checkpoint or lambda selection. Paper-v2 training verifies the
+split-lock, manifest SHA-256, and every locked VIVOS train/dev audio SHA-256 before model/output
+creation. Setting `protocol.final_test_unlocked: true` is necessary but never
+sufficient to open the final test: inference also requires the reviewed
+decision-v3 lock and the matching final-benchmark lock.
+The decision lock names each permitted configuration and binds its `method_id`,
+`train_type`, lambda, seed, immutable backbone revision, checkpoint
+fingerprint, resolved-config hash, and training-contract hash. Anonymous
+checkpoint allow-lists are not accepted.
 
 ```bash
 bash scripts/download_vivos.sh
-bash scripts/download_musan.sh
 
 python scripts/make_vivos_manifest.py \
-  --vivos_root data/raw/vivos \
-  --out_dir data/manifests/vivos
-
-python scripts/make_noise_manifest.py \
-  --noise_root data/raw/musan/musan/noise \
-  --out data/manifests/noise/musan_noise.jsonl
-
-python scripts/make_noisy_test.py \
-  --manifest data/manifests/vivos/test.jsonl \
-  --noise_manifest data/manifests/noise/musan_noise.jsonl \
-  --out_manifest data/manifests/vivos/test_noisy.jsonl \
-  --limit 50 \
-  --snrs 20 10 5 0 \
-  --seed 42
-
-python scripts/dataset_stats.py \
-  data/manifests/vivos/test.jsonl \
-  data/manifests/vivos/test_noisy.jsonl \
-  --out outputs/dataset_stats.csv
+  --vivos-root data/raw/vivos \
+  --out-dir data/manifests/paper_v2 \
+  --protocol-dir outputs/paper_v2/protocol \
+  --legacy-benchmark-manifest outputs/benchmark/benchmark_manifest.csv \
+  --expected-legacy-exposed 300 \
+  --seed 42 \
+  --dev-speaker-fraction 0.20
 ```
 
-Dataset statistics from the current midterm run:
+Running the command again verifies byte-identical outputs. A changed source,
+seed, or split configuration is refused unless `--overwrite` is explicit. The
+trainer requires `train` and `dev` manifests respectively, evaluates dev after
+each epoch, and saves the lowest-dev-ASR-loss checkpoint under `best/`.
+Checkpoint/lambda selection is dev-only; after the method, lambda, and exact
+checkpoint identities are locked, the evaluator may open only the 460 unseen
+final-test utterances through that reviewed authorization. The 300 exposed
+utterances remain historical/regression evidence and can never be relabeled as
+unseen final evidence.
+
+Gate 1.2 alone does not authorize definitive training. The formal pipeline is
+fail-closed while the Gate-2 locked noise registry and derived noisy-dev
+benchmark lock are absent, and definitive runs begin only after Gates 1-3 are
+complete. The clean dev manifest may be used only for diagnostics, with
+outputs isolated under a smoke/diagnostic path; it is not the low-SNR selection
+screen.
+
+## Historical midterm artifacts
+
+The statistics and full pipeline below describe the earlier coursework run.
+That run selected models on the official VIVOS test partition and therefore is
+not valid evidence for the paper-v2 protocol.
+
+Dataset statistics from the historical midterm run:
 
 | Manifest | SNR | Utterances | Hours | Avg seconds |
 | --- | ---: | ---: | ---: | ---: |
@@ -126,9 +162,13 @@ Dataset statistics from the current midterm run:
 | `data/manifests/vivos/test_noisy.jsonl` | 5 dB | 50 | 0.046 | 3.31 |
 | `data/manifests/vivos/test_noisy.jsonl` | 0 dB | 50 | 0.046 | 3.31 |
 
-## Full midterm pipeline
+### Full midterm pipeline (archival only)
 
-Run the complete experiment pipeline with the active Python environment:
+> **Do not run this command for paper-v2.** It rebuilds an
+> official-test-derived coursework pipeline and can only reproduce archival
+> artifacts after the final-test boundary has already been crossed.
+
+Archived invocation:
 
 ```powershell
 conda activate slp
@@ -159,13 +199,19 @@ outputs/model_comparison_6metrics.csv
 notebooks/midterm_results_analysis.ipynb
 ```
 
-## Robust benchmark and zero-shot baseline
+## Historical robust benchmark and zero-shot baseline (archival only)
 
-The larger benchmark pipeline keeps the midterm outputs untouched and writes new
-artifacts under `outputs/benchmark/`, `outputs/zero_shot/`, and
+> **Do not build, run, aggregate, or select from this benchmark for paper-v2.**
+> It is derived from `data/manifests/vivos/test.jsonl`, the official VIVOS test
+> partition. The commands below are retained only to reproduce coursework
+> artifacts after test access; they are not a substitute for the Gate-2
+> noise-disjoint dev screen or locked final benchmark.
+
+The archived larger benchmark pipeline keeps the midterm outputs untouched and
+writes artifacts under `outputs/benchmark/`, `outputs/zero_shot/`, and
 `data/noisy_eval/`.
 
-Build a typed MUSAN manifest:
+Archived typed-MUSAN invocation:
 
 ```bash
 python scripts/make_musan_noise_manifest_typed.py \
@@ -174,7 +220,7 @@ python scripts/make_musan_noise_manifest_typed.py \
   --seed 42
 ```
 
-Build the fixed benchmark:
+Archived official-test benchmark invocation:
 
 ```bash
 python scripts/build_robust_benchmark.py \
@@ -191,7 +237,7 @@ python scripts/build_robust_benchmark.py \
   --sample_rate 16000
 ```
 
-Run one zero-shot model:
+Archived one-model invocation:
 
 ```bash
 python scripts/infer_zero_shot.py \
@@ -205,7 +251,7 @@ python scripts/infer_zero_shot.py \
   --resume
 ```
 
-Run the full zero-shot pipeline:
+Archived full zero-shot invocation:
 
 ```bash
 python scripts/run_zero_shot_pipeline.py \
@@ -218,7 +264,7 @@ python scripts/run_zero_shot_pipeline.py \
   --device auto
 ```
 
-Smoke test with a small benchmark and one model:
+Archived smoke invocation (still official-test-derived):
 
 ```bash
 python scripts/run_zero_shot_pipeline.py \
@@ -234,7 +280,7 @@ python scripts/run_zero_shot_pipeline.py \
   --smoke_test
 ```
 
-Aggregate and validate after predictions are available:
+Archived aggregate/validation invocation:
 
 ```bash
 python scripts/aggregate_zero_shot.py \
@@ -272,9 +318,11 @@ All metrics are error rates, so lower is better.
 project. They should be reported as simple/prototype Vietnamese ASR error
 indicators, not as external benchmark-standard metrics.
 
-## Current midterm results
+## Historical midterm results (archival only)
 
-These results are from the current small midterm subset:
+These official-test-derived results are from the archived small midterm subset.
+They must not be interpreted as paper-v2 development, selection, or final-test
+results:
 
 | Model | Condition | N | WER | CER | TER | DER | FCER | SWDR |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -306,23 +354,45 @@ Interpretation:
 
 ### Phat: five-lambda LoRA ablation pipeline
 
-The complete ordinary/tone-aware PhoWhisper-base LoRA workflow is documented in
-[`docs/PHAT_LORA_GUIDE.md`](docs/PHAT_LORA_GUIDE.md). It adds five separate
-lambda configs, deterministic training, checkpoint/resume state, exact shared
-prediction schema export, full benchmark aggregation, guarded best-lambda
-selection, and small unit tests that do not load a large model.
+The paper-v2 ordinary/tone-aware PhoWhisper-base workflow uses the five configs
+under `configs/phat/`. It now requires speaker-disjoint train/dev manifests,
+evaluates dev after every epoch, saves `best/` by `dev_asr_loss`, and binds every
+lambda-ablation result to the full dev manifest, selected-row hash, checkpoint
+fingerprint, and `metric_version=aligned_v1`.
+`select_best_lambda.py` rejects missing, mixed, partial, legacy, or test
+provenance. It also requires candidate TER and DER denominator coverage to be
+at least `0.98` of ordinary LoRA at the configured low-SNR conditions.
+
+The locked training-noise registry and derived noisy-dev benchmark are now
+present, so the paper-v2 configs enable formal training. This flag alone grants
+no authority: training still fails closed unless the reviewed environment and
+method locks bind the exact source revision, split/noise locks, backbone
+revision, and training contract. The noisy-dev lock binds the source-dev hash,
+the disjoint noise split, and every derived audio file; merely replacing
+`evaluation.manifest` is not sufficient.
 
 Use the existing `slp` conda environment and its exact interpreter for this
-workspace. Limited smoke outputs must stay under `outputs/phat/smoke/` and must
-not be reported as full ablation results.
+workspace. Limited smoke outputs must stay separate and must not be reported as
+full ablation results.
 
-The main training config is:
+The active paper-v2 configs are:
 
 ```text
-configs/phowhisper_base_lora.yaml
+configs/phat/lambda_0.yaml
+configs/phat/lambda_005.yaml
+configs/phat/lambda_01.yaml
+configs/phat/lambda_03.yaml
+configs/phat/lambda_05.yaml
 ```
 
-Important fields:
+The older configuration example below is retained only for the historical
+midterm entry point; it is not the paper-v2 selection protocol.
+
+> **Legacy commands below are archival and prohibited for paper-v2.** They use
+> the old manifests/checkpoint layout, including official-test inputs. Do not
+> execute them before the reviewed decision-v3 lock opens final test.
+
+Legacy fields:
 
 ```yaml
 model:
@@ -359,13 +429,13 @@ noise:
   prob: 0.70
 ```
 
-Run fine-tuning on Colab/GPU:
+Archived legacy fine-tuning invocation:
 
 ```bash
 python train.py --config configs/phowhisper_base_lora.yaml
 ```
 
-Evaluate a trained checkpoint:
+Archived legacy official-test evaluation invocation:
 
 ```bash
 python evaluate.py \
@@ -375,7 +445,7 @@ python evaluate.py \
   --out outputs/phowhisper_lora_noisy.csv
 ```
 
-Score the predictions by SNR:
+Archived legacy scoring invocation:
 
 ```bash
 python scripts/score_predictions.py \
@@ -385,6 +455,12 @@ python scripts/score_predictions.py \
 ```
 
 ## FLEURS Vietnamese external evaluation
+
+> Historical pre-paper-v2 result: the three adapters below were trained before
+> the exact tone-label alignment fix and before the speaker-disjoint dev/test
+> protocol. The measurements remain useful for debugging the evaluation code,
+> but they are not valid evidence for the paper. Re-run FLEURS only after the
+> paper-v2 checkpoints have been retrained and the dev-only decision is locked.
 
 The external evaluation uses all 857 utterances in the FLEURS Vietnamese test
 split and the same `aligned_v1` metric implementation as the internal
@@ -396,7 +472,7 @@ within Whisper's 448-position target window. If the fast tokenizer encounters
 an invalid byte-BPE sequence, the runner validates the slow tokenizer has the
 same vocabulary and decodes only that sequence with invalid bytes ignored.
 
-Published-run provenance: FLEURS manifest SHA-256
+Archived-run provenance: FLEURS manifest SHA-256
 `4BEF10B833B7AE8B39D0202F2849564ED4299562B8C546C8828DB7900DC1EA22`,
 PhoWhisper-base revision `7ebdb9e88f5cc5271fb88f4d642c82ff9388650e`, and adapter
 SHA-256 values `821B91821DBE30029C044DD106692CA85B92307B9589799A2115D708A22A79F6`
@@ -404,6 +480,9 @@ SHA-256 values `821B91821DBE30029C044DD106692CA85B92307B9589799A2115D708A22A79F6
 (lambda 0.05), and
 `28BFBE3D3C1BEDF63A4CF92DAA5446BD6F536F220EA02293BD5071D420606C3B`
 (lambda 0.1).
+
+The following command block is archival only; do not run it against the old
+adapters or publish its outputs as paper-v2 evidence:
 
 ```bash
 python scripts/download_fleurs.py
@@ -420,7 +499,7 @@ Use `scripts/build_error_artifacts.py` with `--overall-only` and one
 wrong-tone-mark, and wrong-vowel-mark diagnostics. These three feature labels
 are explicitly nonexclusive; the primary TER and DER tables remain additive.
 
-Current full-test results (lower is better):
+Historical full-test results (lower is better):
 
 | Configuration | N | WER | CER | TER | DER | FCER | SWDR |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -435,7 +514,7 @@ WER in ordinary LoRA versus lambda 0.1. All three significant deltas are
 positive, so they favor ordinary LoRA on this FLEURS test set. The complete 12
 intervals are in `outputs/external/fleurs/bootstrap_ci_results.csv`.
 
-## Completed experiment order
+## Historical completed experiment order
 
 1. Reproduce the `openai/whisper-base` zero-shot baseline.
 2. Run `vinai/PhoWhisper-base` zero-shot on the same clean/noisy subset.
@@ -445,9 +524,9 @@ intervals are in `outputs/external/fleurs/bootstrap_ci_results.csv`.
 5. Compare WER, CER, TER, DER, FCER, and SWDR across clean/noisy/SNR splits.
 6. Build the final table at `outputs/model_comparison_6metrics.csv`.
 
-## Current project claim
+## Historical midterm claim
 
-At midterm, the correct claim is:
+For the archived midterm run only, the correct claim was:
 
 > The project has a reproducible Vietnamese noisy-ASR pipeline, real VIVOS +
 > MUSAN evaluation data, Whisper/PhoWhisper zero-shot baselines, a trained
