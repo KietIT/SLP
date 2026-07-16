@@ -1,7 +1,16 @@
 seed: 42
 
+protocol:
+  split_lock: outputs/paper_v2/protocol/split_lock.json
+  method_lock: outputs/paper_v2/protocol/method_lock.json
+  decision_lock: outputs/paper_v2/protocol/best_lambda_decision.json
+  verify_audio_sha256: true
+  formal_training_unlocked: true
+  final_test_unlocked: true
+
 model:
   name_or_path: vinai/PhoWhisper-base
+  revision: 7ebdb9e88f5cc5271fb88f4d642c82ff9388650e
   language: vi
   task: transcribe
   lora:
@@ -11,8 +20,10 @@ model:
     target_modules: [q_proj, v_proj]
 
 training:
+  run_scope: formal
   num_train_epochs: 3
   per_device_train_batch_size: 16
+  per_device_eval_batch_size: 16
   gradient_accumulation_steps: 1
   learning_rate: 1.0e-4
   warmup_ratio: 0.05
@@ -27,33 +38,51 @@ training:
   save_steps: 100
   log_steps: 10
   tone_label_policy: last_subtoken
+  checkpoint_metric: dev_asr_loss
+  checkpoint_mode: min
 
 data:
-  train_manifest: data/manifests/vivos/train.jsonl
-  valid_manifest: data/manifests/vivos/dev.jsonl
+  train_manifest: data/manifests/paper_v2/vivos_train.jsonl
+  valid_manifest: data/manifests/paper_v2/vivos_dev.jsonl
   sample_rate: 16000
 
 noise:
   enable_train_noise: true
-  noise_manifest: data/manifests/noise/musan_noise.jsonl
+  noise_manifest: data/manifests/noise/paper_v2/musan_train.jsonl
   snr_choices: [20, 10, 5, 0]
   prob: 0.70
 
 evaluation:
-  manifest: outputs/benchmark/benchmark_manifest.csv
-  expected_total_rows: 1500
+  manifest: data/manifests/paper_v2/vivos_dev_noisy.jsonl
+  data_split: dev
+  benchmark_protocol: noisy_dev
+  locked_vivos_split: dev
+  noisy_dev_lock: outputs/paper_v2/protocol/noisy_dev_lock.json
+  expected_noisy_dev_lock_sha256: db263c9dc565a498261a1f912d7389ad4c947015d1b03f12befb89618417cda7
+  expected_noise_split_lock_sha256: 5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9
+  expected_source_dev_sha256: 3dc1afaaf4aedcaf5e5f472d93bb718df5776630e2e04db59e32f8fd8ef1af79
+  expected_manifest_sha256: e9bb6cdb4934d90f10b0782b7960a609b33476ffbfcd946a08568a46de8c853b
+  expected_total_rows: 14125
   max_new_tokens: 128
+  batch_size: 1
+  inference_precision: fp16
   sample_rate: 16000
   max_audio_seconds: 15.0
 
 selection:
+  required_evaluation_split: dev
+  expected_manifest_sha256: e9bb6cdb4934d90f10b0782b7960a609b33476ffbfcd946a08568a46de8c853b
+  expected_evaluation_contract_sha256: 647101a414b86db0a8a9896821630904399b2fbb122035692f4d6e19c497a589
+  require_full_manifest: true
   low_snr: [0, 5]
   ter_weight: 0.5
   der_weight: 0.5
   max_wer_absolute_increase: 0.05
   max_cer_absolute_increase: 0.03
+  min_ter_coverage_ratio_vs_baseline: 0.98
+  min_der_coverage_ratio_vs_baseline: 0.98
+  min_fcer_coverage_ratio_vs_baseline: 0.98
   guard_split: all
   guard_snr: all
-  allow_lambda_zero: true
-  expected_total_samples: 1500
-  expected_samples_per_condition: 300
+  allow_lambda_zero: false
+  locked_control_strategy: best_eligible_non_selected_tone_aware

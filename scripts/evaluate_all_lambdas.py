@@ -31,11 +31,21 @@ def main() -> None:
     parser.add_argument("--output-dir", default=None, help="Prediction directory; required for limited smoke runs.")
     parser.add_argument("--results-path", default=None)
     parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help=(
+            "Verify/reuse completed lambda predictions and resume exact "
+            "hash-bound partial predictions."
+        ),
+    )
     parser.add_argument("--device", default="auto")
     parser.add_argument("--limit", type=int, default=None)
-    parser.add_argument("--batch-size", type=int, default=1)
+    parser.add_argument("--batch-size", type=int, default=None)
     parser.add_argument("--allow-partial", action="store_true")
     args = parser.parse_args()
+    if args.resume and args.overwrite:
+        parser.error("--resume and --overwrite are mutually exclusive")
     if args.limit is not None and args.output_dir is None:
         parser.error("--limit requires a separate --output-dir so partial smoke outputs cannot replace official outputs")
     if args.checkpoint and len(args.lambda_value or []) != 1:
@@ -52,9 +62,13 @@ def main() -> None:
         if args.checkpoint:
             checkpoint = Path(args.checkpoint)
         elif args.checkpoint_root:
-            checkpoint = Path(args.checkpoint_root) / Path(str(config["training"]["output_dir"])).name / "final"
+            checkpoint = (
+                Path(args.checkpoint_root)
+                / Path(str(config["training"]["output_dir"])).name
+                / "best"
+            )
         else:
-            checkpoint = Path(str(config["training"]["output_dir"])) / "final"
+            checkpoint = Path(str(config["training"]["output_dir"])) / "best"
         if args.output_dir:
             prediction_path = Path(args.output_dir) / Path(str(config["evaluation"]["prediction_path"])).name
         else:
@@ -65,9 +79,14 @@ def main() -> None:
             output_path=prediction_path,
             manifest=args.manifest,
             limit=args.limit,
-            batch_size=args.batch_size,
+            batch_size=(
+                int(config["evaluation"]["batch_size"])
+                if args.batch_size is None
+                else args.batch_size
+            ),
             device_arg=args.device,
             overwrite=args.overwrite,
+            resume=args.resume,
         )
         artifacts.append((checkpoint, prediction_path))
     if not artifacts:
@@ -80,7 +99,13 @@ def main() -> None:
     else:
         results_path = Path(str(pipeline["results_path"]))
     required = None if args.allow_partial or selected else (0.0, 0.05, 0.1, 0.3, 0.5)
-    write_ablation_results(artifacts, results_path, require_lambdas=required, overwrite=args.overwrite)
+    write_ablation_results(
+        artifacts,
+        results_path,
+        require_lambdas=required,
+        overwrite=args.overwrite,
+        resume=args.resume,
+    )
     print(results_path)
 
 

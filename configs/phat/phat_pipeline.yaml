@@ -4,5 +4,6 @@ experiment_configs:
   - configs/phat/lambda_01.yaml
   - configs/phat/lambda_03.yaml
   - configs/phat/lambda_05.yaml
-results_path: outputs/phat/reports/lambda_ablation_results.csv
-best_lambda_report: outputs/phat/reports/best_lambda_report.md
+results_path: outputs/paper_v2/dev_screen/lambda_ablation_results.csv
+best_lambda_report: outputs/paper_v2/dev_screen/best_lambda_report.md
+decision_lock: outputs/paper_v2/protocol/best_lambda_decision.json
