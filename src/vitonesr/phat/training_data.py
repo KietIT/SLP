@@ -34,6 +34,30 @@ def validate_jsonl_audio_manifest(path: str | Path, *, max_rows: int | None = No
     return rows
 
 
+def validate_manifest_declared_split(
+    path: str | Path,
+    *,
+    expected_split: str,
+) -> list[dict[str, Any]]:
+    manifest_path = Path(path)
+    if not manifest_path.exists():
+        raise FileNotFoundError(f"Manifest does not exist: {manifest_path}")
+    rows = read_jsonl(str(manifest_path))
+    if not rows:
+        raise ValueError(f"Manifest is empty: {manifest_path}")
+    expected = str(expected_split).strip().casefold()
+    observed = {
+        str(row.get("split", "")).strip().casefold()
+        for row in rows
+    }
+    if observed != {expected}:
+        raise ValueError(
+            f"Manifest {manifest_path} must contain only split={expected!r}; "
+            f"observed={sorted(observed)}"
+        )
+    return rows
+
+
 class DeterministicASRTrainingDataset(Dataset):
     """Manifest dataset with augmentation fixed by seed, epoch, and item index."""
 
@@ -51,8 +75,20 @@ class DeterministicASRTrainingDataset(Dataset):
         snr_choices: Sequence[float] = (20, 10, 5, 0),
         tone_label_policy: str = "last_subtoken",
         max_samples: int | None = None,
+        expected_split: str | None = None,
     ) -> None:
         rows = validate_jsonl_audio_manifest(manifest_path)
+        if expected_split is not None:
+            expected = str(expected_split).strip().casefold()
+            observed = {
+                str(row.get("split", "")).strip().casefold()
+                for row in rows
+            }
+            if observed != {expected}:
+                raise ValueError(
+                    f"Manifest {manifest_path} must contain only split={expected!r}; "
+                    f"observed={sorted(observed)}"
+                )
         self.items = rows if max_samples is None else rows[:max_samples]
         if max_samples is not None and len(self.items) < max_samples:
             raise ValueError(f"Requested {max_samples} samples but manifest only has {len(rows)} rows")
