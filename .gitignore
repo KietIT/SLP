@@ -16,6 +16,23 @@ env/
 # Datasets and generated audio are intentionally not committed.
 data/
 
+# Paper-v2 split manifests are small, path-portable protocol artifacts. Raw audio stays ignored.
+!data/
+data/*
+!data/manifests/
+data/manifests/*
+!data/manifests/paper_v2/
+!data/manifests/paper_v2/*.jsonl
+!data/manifests/noise/
+data/manifests/noise/*
+!data/manifests/noise/paper_v2/
+!data/manifests/noise/paper_v2/*.jsonl
+!data/manifests/fleurs/
+data/manifests/fleurs/*
+!data/manifests/fleurs/paper_v2/
+data/manifests/fleurs/paper_v2/*
+!data/manifests/fleurs/paper_v2/*.jsonl
+
 # Generated experiment artifacts
 outputs/
 experiments/
@@ -48,6 +65,7 @@ Thumbs.db
 *.md
 !README.md
 !readme.md
+!Guide.md
 !docs/PHAT_LORA_GUIDE.md
 
 # This branch publishes the completed Phat experiment artifacts.
@@ -68,4 +86,47 @@ outputs/external/fleurs/smoke_duration/
 !outputs/paper_v2/
 outputs/paper_v2/*
 !outputs/paper_v2/audits/
-!outputs/paper_v2/audits/**
+outputs/paper_v2/audits/*
+!outputs/paper_v2/audits/*_summary.md
+!outputs/paper_v2/protocol/
+!outputs/paper_v2/protocol/**
+outputs/paper_v2/protocol/environment_diagnostic.json
+!outputs/paper_v2/benchmark/
+!outputs/paper_v2/benchmark/*.jsonl
+!outputs/paper_v2/dev_screen/
+!outputs/paper_v2/dev_screen/*.csv
+!outputs/paper_v2/dev_screen/*.json
+!outputs/paper_v2/dev_screen/*.md
+!outputs/paper_v2/logs/
+!outputs/paper_v2/logs/*.csv
+!outputs/paper_v2/predictions/
+!outputs/paper_v2/predictions/**
+!outputs/paper_v2/final_predictions/
+!outputs/paper_v2/final_predictions/**
+!outputs/paper_v2/analysis/
+!outputs/paper_v2/analysis/**
+!outputs/paper_v2/error_analysis/
+!outputs/paper_v2/error_analysis/**
+!outputs/paper_v2/bootstrap/
+!outputs/paper_v2/bootstrap/**
+!outputs/paper_v2/statistics/
+!outputs/paper_v2/statistics/**
+!outputs/paper_v2/external/
+!outputs/paper_v2/external/**
+!outputs/paper_v2/reports/
+!outputs/paper_v2/reports/**
+
+# Final allow-lists above publish reviewed artifacts, never transient state or weights.
+outputs/**/checkpoints/
+outputs/paper_v2/**/*.log
+outputs/**/*.resume.json
+outputs/**/*.recovery.json
+outputs/**/*.tmp
+outputs/**/*.bak
+outputs/**/.*
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.onnx
