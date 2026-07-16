@@ -120,7 +120,12 @@ def atomic_write_csv(path: str | Path, rows: Iterable[dict], fieldnames: Sequenc
     tmp = path.with_name(f".{path.name}.tmp")
     row_list = list(rows)
     with tmp.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=list(fieldnames), extrasaction="ignore")
+        writer = csv.DictWriter(
+            f,
+            fieldnames=list(fieldnames),
+            extrasaction="ignore",
+            lineterminator="\n",
+        )
         writer.writeheader()
         for row in row_list:
             writer.writerow({name: row.get(name, "") for name in fieldnames})

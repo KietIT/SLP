@@ -63,7 +63,7 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fieldnames = ["utt_id", "audio", "text", "prediction", "snr", "noise_type", "dataset"]
     with out_path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in tqdm(rows):
             wav = read_audio(row["audio"], sr=args.sample_rate)

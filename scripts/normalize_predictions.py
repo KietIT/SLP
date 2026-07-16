@@ -384,7 +384,12 @@ def atomic_write_csv(path: Path, rows: Sequence[dict[str, object]], columns: Seq
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(f".{path.name}.tmp")
     with temporary.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(columns), extrasaction="raise")
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=list(columns),
+            extrasaction="raise",
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
     temporary.replace(path)
