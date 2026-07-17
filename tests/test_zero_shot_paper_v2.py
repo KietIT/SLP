@@ -30,11 +30,10 @@ from src.vitonesr.phat.protocol import canonical_sha256
 
 REVISION = "a" * 40
 HASHES = {
-    "split": "1" * 64,
-    "decision": "2" * 64,
     "benchmark": "3" * 64,
     "manifest": "4" * 64,
-    "source": "5" * 64,
+    "inventory": "5" * 64,
+    "audit": "b" * 64,
     "snapshot": "6" * 64,
     "model": "7" * 64,
     "processor": "8" * 64,
@@ -47,16 +46,9 @@ def _repo_ref(path: Path) -> str:
 
 def _config(root: Path) -> dict:
     return {
-        "protocol": {
-            "formal": True,
-            "final_test_unlocked": True,
-            "split_lock": _repo_ref(root / "split_lock.json"),
-            "expected_split_lock_sha256": HASHES["split"],
-            "decision_lock": _repo_ref(root / "decision_lock.json"),
-            "expected_decision_lock_sha256": HASHES["decision"],
-        },
+        "protocol": {"formal": True},
         "benchmark": {
-            "lock_protocol_version": "paper_v2_final_benchmark_v1",
+            "lock_protocol_version": "paper_v2_final_benchmark_v2",
             "lock": _repo_ref(root / "benchmark_lock.json"),
             "expected_lock_sha256": HASHES["benchmark"],
             "manifest": _repo_ref(root / "benchmark.jsonl"),
@@ -103,15 +95,15 @@ def _write_config(root: Path, config: dict) -> Path:
     return Path(_repo_ref(path))
 
 
-def _evidence() -> AuthorizationEvidence:
+def _evidence(*, audio_dir: str = "data/derived/paper_v2/final_benchmark") -> AuthorizationEvidence:
     return AuthorizationEvidence(
-        split_lock_sha256=HASHES["split"],
-        decision_lock_sha256=HASHES["decision"],
         benchmark_lock_sha256=HASHES["benchmark"],
         manifest_sha256=HASHES["manifest"],
         manifest_num_rows=2,
-        source_test_manifest_sha256=HASHES["source"],
-        benchmark_lock_protocol_version="paper_v2_final_benchmark_v1",
+        audio_dir=audio_dir,
+        audio_inventory_sha256=HASHES["inventory"],
+        audit_sha256=HASHES["audit"],
+        benchmark_lock_protocol_version="paper_v2_final_benchmark_v2",
     )
 
 
@@ -210,6 +202,10 @@ class ZeroShotPaperV2Tests(unittest.TestCase):
             self.assertEqual(provenance["prediction_sha256"], sha256_file(prediction))
             self.assertEqual(provenance["manifest_sha256"], HASHES["manifest"])
             self.assertEqual(provenance["benchmark_lock_sha256"], HASHES["benchmark"])
+            self.assertEqual(provenance["audio_inventory_sha256"], HASHES["inventory"])
+            self.assertEqual(provenance["audit_sha256"], HASHES["audit"])
+            self.assertNotIn("decision_lock_sha256", provenance)
+            self.assertNotIn("method_lock_sha256", provenance)
             self.assertEqual(provenance["model_revision"], REVISION)
             self.assertEqual(provenance["snapshot_sha256"], HASHES["snapshot"])
             self.assertNotIn("snapshot_path", provenance)
@@ -252,18 +248,19 @@ class ZeroShotPaperV2Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=REPOSITORY_ROOT) as tmp:
             root = Path(tmp)
             config = _config(root)
-            for section, field in (
-                ("protocol", "split_lock"),
-                ("protocol", "decision_lock"),
-                ("benchmark", "lock"),
-                ("benchmark", "manifest"),
-            ):
+            for section, field in (("benchmark", "lock"), ("benchmark", "manifest")):
                 candidate = json.loads(json.dumps(config))
                 candidate[section][field] = str((root / field).resolve())
                 with self.subTest(field=f"{section}.{field}"):
                     with self.assertRaisesRegex(
                         ZeroShotProtocolError, "repository-relative"
                     ):
+                        validate_suite_config(candidate)
+            for legacy in ("decision_lock", "method_lock", "split_lock"):
+                candidate = json.loads(json.dumps(config))
+                candidate["protocol"][legacy] = "outputs/forbidden.json"
+                with self.subTest(legacy=legacy):
+                    with self.assertRaisesRegex(ZeroShotProtocolError, "method-selection"):
                         validate_suite_config(candidate)
             candidate = json.loads(json.dumps(config))
             candidate["output_dir"] = "outputs\\nonportable"
@@ -344,7 +341,10 @@ class ZeroShotPaperV2Tests(unittest.TestCase):
                             "benchmark_lock_sha256": state[
                                 "benchmark_lock_sha256"
                             ],
-                            "decision_lock_sha256": state["decision_lock_sha256"],
+                            "audio_inventory_sha256": state[
+                                "audio_inventory_sha256"
+                            ],
+                            "audit_sha256": state["audit_sha256"],
                             "completed_rows": 2,
                             "prediction_sha256": intended_sha,
                             "previous_completed_rows": 1,
@@ -470,105 +470,42 @@ class ZeroShotPaperV2Tests(unittest.TestCase):
             with self.assertRaisesRegex(ZeroShotProtocolError, "immutable"):
                 validate_suite_config(config)
 
-    def test_real_authorizer_uses_full_transitive_verifiers_without_manifest_access(self) -> None:
+    def test_real_authorizer_requires_only_portable_bundle_without_manifest_access(self) -> None:
         with tempfile.TemporaryDirectory(dir=REPOSITORY_ROOT) as tmp:
             root = Path(tmp)
-            split = root / "split_lock.json"
-            decision = root / "decision_lock.json"
-            split.write_text("{}\n", encoding="utf-8")
-            split_hash = sha256_file(split)
-            noise_lock = root / "noise_split_lock.json"
-            noise_lock.write_text("{}\n", encoding="utf-8")
-            noise_hash = sha256_file(noise_lock)
-            method_lock = root / "method_lock.json"
-            method = {
-                "schema_version": "paper_v2_method_contract_v1",
-                "status": "LOCKED",
-                "mode": "formal",
-                "artifacts": {
-                    "noise_split_lock": {
-                        "path": _repo_ref(noise_lock),
-                        "sha256": noise_hash,
-                    }
-                },
-            }
-            method["identity_sha256"] = canonical_sha256(method)
-            method_lock.write_text(
-                json.dumps(method, sort_keys=True) + "\n", encoding="utf-8"
-            )
-            method_hash = sha256_file(method_lock)
-            decision_payload = {
-                "method_lock": _repo_ref(method_lock),
-                "method_lock_sha256": method_hash,
-                "method_identity_sha256": method["identity_sha256"],
-            }
-            decision.write_text(
-                json.dumps(decision_payload, sort_keys=True) + "\n", encoding="utf-8"
-            )
-            decision_hash = sha256_file(decision)
             manifest = root / "not-created.jsonl"
+            audio_dir = root / "audio"
+            audio_dir.mkdir()
             benchmark_lock = root / "benchmark_lock.json"
             benchmark_lock.write_text("{}\n", encoding="utf-8")
             config = _config(root)
-            config["protocol"]["expected_split_lock_sha256"] = split_hash
-            config["protocol"]["expected_decision_lock_sha256"] = decision_hash
             config["benchmark"]["expected_lock_sha256"] = sha256_file(benchmark_lock)
             config["benchmark"]["manifest"] = _repo_ref(manifest)
 
-            def verified(**kwargs):
-                self.assertIs(kwargs.get("verify_checkpoints"), False)
-                return {
-                    "split_lock_sha256": split_hash,
-                    "decision_lock_sha256": decision_hash,
-                    "test_manifest_sha256": HASHES["source"],
-                    "method_lock_sha256": method_hash,
-                    "method_identity_sha256": method["identity_sha256"],
-                }
-
-            def verified_noise(path, **kwargs):
-                self.assertEqual(path.resolve(), noise_lock.resolve())
-                self.assertIs(kwargs.get("verify_audio"), False)
-                return {"lock_sha256": noise_hash, "lock": {}}
-
-            def verified_method(path, **kwargs):
-                self.assertEqual(path.resolve(), method_lock.resolve())
-                self.assertEqual(kwargs.get("repo_root"), REPOSITORY_ROOT)
-                self.assertIs(kwargs.get("formal"), True)
-                return {
-                    "method_lock_sha256": method_hash,
-                    "method_identity_sha256": method["identity_sha256"],
-                    "mode": "formal",
-                    "artifacts": {
-                        "noise_split_lock": {
-                            "path": _repo_ref(noise_lock),
-                            "sha256": noise_hash,
-                        }
-                    },
-                }
-
             def verified_benchmark(path, **kwargs):
                 self.assertEqual(path.resolve(), benchmark_lock.resolve())
-                self.assertEqual(kwargs["method_lock_sha256"], method_hash)
-                self.assertEqual(
-                    kwargs["method_identity_sha256"], method["identity_sha256"]
-                )
-                self.assertEqual(kwargs["noise_split_lock_sha256"], noise_hash)
-                self.assertEqual(kwargs["source_test_manifest_sha256"], HASHES["source"])
+                self.assertEqual(set(kwargs), {
+                    "expected_lock_sha256",
+                    "expected_manifest",
+                    "expected_manifest_sha256",
+                    "expected_rows",
+                })
                 return {
                     "lock_sha256": sha256_file(benchmark_lock),
-                    "protocol_version": "paper_v2_final_benchmark_v1",
+                    "protocol_version": "paper_v2_final_benchmark_v2",
                     "manifest_sha256": HASHES["manifest"],
                     "row_count": 2,
+                    "audio_dir": str(audio_dir),
+                    "audio_inventory_sha256": HASHES["inventory"],
+                    "audit_sha256": HASHES["audit"],
                 }
 
             evidence = authorize_final_benchmark(
                 config,
-                decision_verifier=verified,
-                method_artifact_verifier=verified_method,
-                noise_verifier=verified_noise,
                 benchmark_verifier=verified_benchmark,
             )
             self.assertEqual(evidence.manifest_sha256, HASHES["manifest"])
+            self.assertEqual(evidence.audio_dir, _repo_ref(audio_dir))
             self.assertFalse(manifest.exists(), "authorization must not read/create manifest")
 
             def rejected_benchmark(*_args, **_kwargs):
@@ -577,9 +514,6 @@ class ZeroShotPaperV2Tests(unittest.TestCase):
             with self.assertRaisesRegex(ZeroShotProtocolError, "builder contract"):
                 authorize_final_benchmark(
                     config,
-                    decision_verifier=verified,
-                    method_artifact_verifier=verified_method,
-                    noise_verifier=verified_noise,
                     benchmark_verifier=rejected_benchmark,
                 )
 
@@ -743,6 +677,16 @@ class ZeroShotPaperV2Tests(unittest.TestCase):
                 **{
                     **_evidence().__dict__,
                     "manifest_sha256": sha256_file(manifest),
+                    "audio_dir": _repo_ref(root),
+                    "audio_inventory_sha256": canonical_sha256(
+                        [
+                            {
+                                "utt_id": row["utt_id"],
+                                "audio_sha256": row["audio_sha256"],
+                            }
+                            for row in records
+                        ]
+                    ),
                 }
             )
             rows = load_authorized_benchmark(config, evidence)

@@ -277,6 +277,19 @@ class FinalEvaluationTests(unittest.TestCase):
 
             def benchmark_verifier(*_args, **_kwargs):
                 events.append("final_lock")
+                self.assertEqual(len(_args), 1)
+                self.assertEqual(
+                    set(_kwargs),
+                    {
+                        "expected_lock_sha256",
+                        "expected_manifest",
+                        "expected_manifest_sha256",
+                        "expected_rows",
+                    },
+                )
+                self.assertNotIn("decision_lock_sha256", _kwargs)
+                self.assertNotIn("method_lock_sha256", _kwargs)
+                self.assertNotIn("noise_integrity", _kwargs)
                 return {
                     "lock_sha256": _hash("5"),
                     "audio_inventory_sha256": _hash("9"),

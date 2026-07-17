@@ -16,7 +16,10 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.vitonesr.final_benchmark import FINAL_BENCHMARK_VERSION  # noqa: E402
+from src.vitonesr.final_benchmark import (  # noqa: E402
+    FINAL_BENCHMARK_VERSION,
+    verify_portable_final_benchmark_bundle,
+)
 from src.vitonesr.phat.final_evaluation import (  # noqa: E402
     FinalLoraProtocolError,
     validate_final_lora_config,
@@ -51,7 +54,7 @@ def _read_yaml(path: Path) -> dict[str, Any]:
 
 
 def materialize_config(template: Mapping[str, Any]) -> dict[str, Any]:
-    """Pin current lock hashes after decision, without opening final data/model."""
+    """Pin authorized method hashes and verify the portable benchmark bundle."""
 
     config = deepcopy(dict(template))
     protocol = config.get("protocol")
@@ -105,18 +108,6 @@ def materialize_config(template: Mapping[str, Any]) -> dict[str, Any]:
         or lock.get("status") != "LOCKED"
     ):
         raise FinalLoraProtocolError("Final benchmark lock is not a locked paper-v2 artifact")
-    bindings = {
-        "split_lock_sha256": hashes["expected_split_lock_sha256"],
-        "decision_lock_sha256": hashes["expected_decision_lock_sha256"],
-        "method_lock_sha256": hashes["expected_method_lock_sha256"],
-        "noise_split_lock_sha256": hashes["expected_noise_split_lock_sha256"],
-        "source_test_manifest_sha256": str(decision["test_manifest_sha256"]),
-    }
-    if any(
-        str(lock.get(field, "")).casefold() != str(expected).casefold()
-        for field, expected in bindings.items()
-    ):
-        raise FinalLoraProtocolError("Final benchmark lock has stale protocol bindings")
     output = lock.get("output")
     if not isinstance(output, dict) or not is_sha256(output.get("manifest_sha256")):
         raise FinalLoraProtocolError("Final benchmark lock has no manifest identity")
@@ -126,9 +117,20 @@ def materialize_config(template: Mapping[str, Any]) -> dict[str, Any]:
     locked_manifest = _repo_path(output.get("manifest"), label="lock.output.manifest")
     if configured_manifest != locked_manifest:
         raise FinalLoraProtocolError("Template and final lock name different manifests")
+    manifest_hash = str(output["manifest_sha256"]).casefold()
+    # The portable benchmark is deliberately independent of the decision and
+    # method locks.  Verify only its self-contained data bundle here; the
+    # decision above and the runtime authorizer remain responsible for roles.
+    verify_portable_final_benchmark_bundle(
+        final_lock,
+        expected_lock_sha256=lock_hash,
+        expected_manifest=configured_manifest,
+        expected_manifest_sha256=manifest_hash,
+        expected_rows=int(benchmark.get("expected_rows", 0)),
+    )
     protocol.update(hashes)
     protocol["expected_final_benchmark_lock_sha256"] = lock_hash
-    benchmark["expected_manifest_sha256"] = str(output["manifest_sha256"]).casefold()
+    benchmark["expected_manifest_sha256"] = manifest_hash
     validate_final_lora_config(config)
     return config
 
@@ -158,7 +160,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Materialize a hash-pinned final LoRA runtime config after the "
-            "decision and final-benchmark locks exist."
+            "method decision exists and the portable benchmark is available."
         )
     )
     parser.add_argument(

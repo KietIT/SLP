@@ -7,7 +7,7 @@ Trong cửa sổ online khoảng ba giờ hiện tại, chỉ chốt source/test
 ## 1. Ranh giới khoa học bắt buộc
 
 - VIVOS `train` có 8.835 câu/36 speaker; `dev` có 2.825 câu/10 speaker. Hai tập tách speaker hoàn toàn.
-- Trong 760 câu official test, 300 câu đã xuất hiện trong benchmark lịch sử nên chỉ là `test_legacy_exposed`; 460 câu còn lại là `test_locked` và không được mở trước khi khóa quyết định lambda.
+- Trong 760 câu official test, 300 câu đã xuất hiện trong benchmark lịch sử nên chỉ là `test_legacy_exposed`; 460 câu còn lại là `test_locked`. Có thể build và khóa **benchmark data-only** trước quyết định lambda để chạy baseline song song, nhưng prediction/metric final tuyệt đối không được dùng để chọn lambda.
 - Năm lambda `0, 0.05, 0.1, 0.3, 0.5` chỉ được so sánh trên noisy-dev 14.125 dòng. Không chạy cả năm lambda trên final test.
 - Final test chỉ so sánh đúng ba vai trò đã ghi trong decision lock: `ordinary_baseline`, `selected_method`, `locked_control`.
 - Final robustness benchmark có 460 nguồn × `(clean, 20, 10, 5, 0 dB)` = 2.300 dòng và chỉ dùng MUSAN `test`.
@@ -68,14 +68,14 @@ foreach ($Item in $Expected.GetEnumerator()) {
 | Preflight, formal environment và method lock | Phát trên máy train chuẩn | `environment_lock.json`, `method_lock.json` | Source commit + VIVOS + MUSAN + noisy-dev hoàn chỉnh |
 | Train năm lambda | Phát, cùng một máy/GPU | 5 thư mục checkpoint + log | Method lock |
 | Evaluate noisy-dev năm lambda | Phát, cùng một máy inference | 5 prediction + `lambda_ablation_results.csv` | 5 checkpoint |
-| Chọn method và khóa decision | Trung review/approve; Phát chạy lệnh trên reference machine | report + `best_lambda_decision.json` | Full five-lambda results + exact method environment + checkpoints |
-| Build final benchmark đúng một lần | Phát trên reference machine sau khi Trung duyệt decision | 2.300-row manifest/audio/lock/audit | Decision + method/environment/noise locks + 3 checkpoint |
-| Sáu zero-shot | Phúc | 6 prediction + provenance | Final benchmark lock |
+| Build và publish final benchmark đúng một lần | Phúc | self-contained 2.300-WAV bundle + manifest/lock/audit/handoff SHA | VIVOS locked split + MUSAN test lock; **không phụ thuộc model/lambda** |
+| Sáu zero-shot | Phúc, ngay sau khi benchmark được khóa | 6 prediction + provenance | Cùng final benchmark bundle v2 |
+| Chọn method và khóa decision | Trung review/approve; Phát chạy lệnh trên reference machine | report + `best_lambda_decision.json` | Full five-lambda results + exact method environment + checkpoints; không dùng final prediction/metric |
 | Ba LoRA role trên final | Phát chạy trên reference/exact-lock runtime; Trung nhận artifact | 3 prediction + provenance/results | Decision + final benchmark + 3 checkpoint |
 | FLEURS 857 | Phát trên reference environment/hardware đã khóa | 3 prediction + result/provenance | Decision + method/environment lock + 3 checkpoint + portable FLEURS bundle |
 | Aggregate, error analysis, confusion và bootstrap | Trung | CSV/PNG/report cuối | Tất cả prediction cần thiết |
 
-Nguyên tắc tốt nhất là một máy chuẩn train cả năm lambda. Như vậy GPU, package, thứ tự dữ liệu, preprocessing và runtime giống nhau; lambda là biến khác biệt duy nhất. Sau khi decision đã khóa, Phát build final benchmark trước. Khi final-benchmark lock đã publish, Phúc có thể chạy zero-shot song song với final LoRA/FLEURS trên reference machine.
+Nguyên tắc tốt nhất là một máy chuẩn train cả năm lambda. Như vậy GPU, package, thứ tự dữ liệu, preprocessing và runtime giống nhau; lambda là biến khác biệt duy nhất. Phúc build/publish benchmark data-only trước và chạy sáu zero-shot; cùng lúc Phát train/evaluate năm lambda và chọn best chỉ trên noisy-dev. Sau decision lock, Phát pull đúng bundle byte-identical rồi chạy ba final LoRA role. Không rebuild benchmark trên máy Phát.
 
 Nếu máy Trung không khớp exact formal environment/GPU đã khóa trên máy Phát thì final LoRA và FLEURS formal phải chạy trong reference environment/hardware đó; Trung chỉ nhận artifact đã verify SHA để phân tích. Chạy FLEURS trên máy khác environment/hardware chỉ là diagnostic, không được thay cho endpoint paper.
 
@@ -422,7 +422,7 @@ $ControlConfig = $ConfigByLambda[$ControlLambda]
 
 ## 8. Build final benchmark đúng một lần
 
-Chỉ Phát chạy sau decision lock trên reference machine. Builder xác minh exact method environment, ba checkpoint trong decision và MUSAN audio trước khi tạo final transaction:
+Phúc chạy ngay khi đã có đúng VIVOS locked split và MUSAN test lock. Builder v2 là **data-only**: identity chỉ phụ thuộc split/noise locks, source audio, seed và mixing contract; không đọc decision, method lock hay checkpoint. Vì vậy job này chạy song song an toàn với việc Phát train/chọn lambda trên noisy-dev:
 
 ```powershell
 & $Python scripts/build_final_benchmark.py
@@ -437,24 +437,19 @@ outputs/paper_v2/protocol/final_benchmark_lock.json
 outputs/paper_v2/protocol/final_benchmark_audit.csv
 ```
 
-Không dùng `--overwrite`. Phát tạo bundle final benchmark một lần, sinh handoff SHA cho manifest + lock + audit + 2.300 audio, rồi Trung/Phúc chỉ nhận bản sao byte-identical. Trung verify bundle và điều phối phân tích; không rebuild final benchmark trên máy khác.
+`data/derived/paper_v2/final_benchmark/` phải self-contained đúng 2.300 WAV: `clean/` có 460 file và bốn thư mục SNR có 1.840 file. Không dùng `--overwrite`. Phúc tạo bundle một lần, sinh handoff SHA cho manifest + lock + audit + đủ 2.300 WAV, rồi Phát/Trung chỉ nhận bản byte-identical; không rebuild trên máy khác.
+
+Trước khi public audio lên GitHub, Trung phải xác nhận quyền tái phân phối và attribution của VIVOS/MUSAN-derived audio. Nếu chưa có xác nhận, dùng private repository/Git LFS hoặc chuyển bundle ngoài Git; không public raw VIVOS/MUSAN. Phần Git LFS và verify sau `pull` nằm ở mục 15.
 
 ## 9. Sáu zero-shot trên final benchmark
 
-`configs/paper_v2_zero_shot.yaml` là template fail-closed. Tạo một runtime copy dưới `outputs`, rồi điền các giá trị động sau decision/final benchmark:
+`configs/paper_v2_zero_shot.yaml` là template fail-closed. Tạo một runtime copy dưới `outputs`, rồi điền các SHA động sau khi benchmark v2 được khóa; zero-shot không chờ hoặc đọc `best_lambda_decision.json`:
 
-Trước khi validate, máy Phúc phải nhận đúng relative path: split lock
-cùng `split_audit.csv`, `legacy_test_exposure.csv` và historical benchmark mà
-split lock tham chiếu; decision lock cùng `method_lock.json`,
-`noisy_dev_lock.json` và `lambda_ablation_results.csv`; noise split lock cùng
-`noise_split_audit.csv` và bốn manifest `musan_registry/train/dev/test.jsonl`;
-final-benchmark lock, manifest và 2.300 audio file. Zero-shot verifier dùng checkpoint identities đã
-khóa như evidence text nhưng **không** đọc ba thư mục LoRA checkpoint, nên
-Phúc không cần nhận weights của Phát cho job này.
+Trước khi validate, máy Phúc phải có đúng relative path của final-benchmark lock, manifest và 2.300 WAV. Các source/noise hashes đã được builder v2 khóa trong final lock; runner zero-shot xác minh bundle nhận được nhưng không yêu cầu decision, method lock, LoRA checkpoint, raw VIVOS hay raw MUSAN.
 
-- SHA của `split_lock.json`, `best_lambda_decision.json`, `final_benchmark_lock.json` và final manifest.
+- SHA của `final_benchmark_lock.json` và final manifest.
 - Immutable Hugging Face commit SHA cho năm model còn placeholder. PhoWhisper-base đã khóa revision `7ebdb9e88f5cc5271fb88f4d642c82ff9388650e`.
-- Xác nhận `protocol.final_test_unlocked: true`; missing/tampered decision và final-benchmark lock vẫn làm runner fail-closed.
+- Xác nhận protocol v2/data-only; missing/tampered lock, manifest hoặc WAV làm runner fail-closed.
 - Sau khi đủ sáu exact snapshots trong cache, đặt `runtime.local_files_only: true`.
 
 Lấy commit SHA hiện tại rồi khóa nó; không ghi `main`:
@@ -490,8 +485,17 @@ $env:TRANSFORMERS_OFFLINE = '1'
 
 ```powershell
 New-Item -ItemType Directory -Force outputs/paper_v2/protocol/runtime | Out-Null
-Copy-Item configs/paper_v2_zero_shot.yaml outputs/paper_v2/protocol/runtime/paper_v2_zero_shot.locked.yaml
+$RuntimeZeroShot = 'outputs/paper_v2/protocol/runtime/paper_v2_zero_shot.locked.yaml'
+Copy-Item configs/paper_v2_zero_shot.yaml $RuntimeZeroShot
+$BenchmarkLockSha = (Get-FileHash -Algorithm SHA256 outputs/paper_v2/protocol/final_benchmark_lock.json).Hash.ToLowerInvariant()
+$BenchmarkManifestSha = (Get-FileHash -Algorithm SHA256 outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl).Hash.ToLowerInvariant()
+$Yaml = [IO.File]::ReadAllText($RuntimeZeroShot)
+$Yaml = [regex]::Replace($Yaml, '(?m)^  expected_lock_sha256:.*$', "  expected_lock_sha256: $BenchmarkLockSha")
+$Yaml = [regex]::Replace($Yaml, '(?m)^  expected_manifest_sha256:.*$', "  expected_manifest_sha256: $BenchmarkManifestSha")
+[IO.File]::WriteAllText($RuntimeZeroShot, $Yaml, [Text.UTF8Encoding]::new($false))
 ```
+
+Sau đó mở runtime YAML và điền năm immutable model SHA ở các placeholder còn lại. Không sửa template trong `configs/`.
 
 Sau khi điền runtime YAML, validate mà chưa mở test/model:
 
@@ -537,6 +541,8 @@ Output đủ phải là sáu file `outputs/paper_v2/predictions/zero_shot/pred_*
 ## 10. Ba role LoRA trên final benchmark
 
 Phần này dùng runner final-LoRA fail-closed. Runner không nhận lambda trên CLI; nó chỉ resolve đúng `ordinary_baseline`, `selected_method`, `locked_control` từ decision v3. Không tự đổi các config dev thành test và không hard-code lambda.
+
+Phát chỉ bắt đầu bước này sau khi đã khóa decision từ noisy-dev. Phát pull bundle benchmark do Phúc publish, verify handoff SHA/LFS và dùng nguyên lock/manifest/audio đó; decision được verifier đối chiếu với source-test identity trong benchmark nhưng không làm thay đổi hoặc rebuild benchmark.
 
 Sau decision v3 và final-benchmark lock, materialize runtime config tự động. Bước này pin SHA của split/noise/method/decision/final lock và final manifest, nhưng chưa mở final manifest/audio/model:
 
@@ -982,6 +988,97 @@ Mỗi output có 3 pair × 4 metric (`ΔWER`, `ΔCER`, `ΔTER`, `ΔDER`) = 12 d�
 
 Luôn giữ nguyên relative path trong repository. Trước khi copy một bundle, tạo manifest SHA:
 
+### Final benchmark qua Git LFS
+
+Bundle mà Phúc publish và Phát/Trung pull phải gồm đúng các path sau:
+
+```text
+data/derived/paper_v2/final_benchmark/                         # 2.300 WAV, Git LFS
+outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl
+outputs/paper_v2/protocol/final_benchmark_lock.json
+outputs/paper_v2/protocol/final_benchmark_audit.csv
+outputs/paper_v2/protocol/final_benchmark_handoff_sha256.csv
+```
+
+Chỉ **một máy builder được chạy** `build_final_benchmark.py`. Sau khi
+publish, Phúc và Phát chỉ pull và đọc bundle; không chạy builder lại. Metadata
+benchmark là **một file JSONL duy nhất, đúng 2.300 dòng**:
+`outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl`. Mỗi dòng trỏ tới
+một WAV trong LFS, vì vậy bundle vẫn có 2.300 WAV riêng; không nhúng binary
+audio vào JSONL.
+
+Trước khi public, builder phải đọc
+`docs/final_benchmark_attribution.md` và xác nhận repository/kênh phân phối
+phù hợp CC BY-NC-SA 4.0 của VIVOS cùng license/attribution theo từng
+nguồn MUSAN. Nếu chưa xác nhận, chỉ dùng private LFS hoặc external
+handoff.
+
+Builder kiểm tra allow-list/LFS, stage đúng bundle và xác nhận JSONL
+không bị chia nhỏ:
+
+```powershell
+git lfs install
+
+$Manifest = 'outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl'
+$AudioDir = 'data/derived/paper_v2/final_benchmark'
+$Rows = @(Get-Content -LiteralPath $Manifest)
+$Wavs = @(Get-ChildItem -LiteralPath $AudioDir -Recurse -File -Filter *.wav)
+if ($Rows.Count -ne 2300) { throw "Expected one 2300-line JSONL, got $($Rows.Count)" }
+if ($Wavs.Count -ne 2300) { throw "Expected 2300 WAVs, got $($Wavs.Count)" }
+
+$Repo = (Resolve-Path .).Path.TrimEnd('\')
+$Probe = $Wavs[0].FullName.Substring($Repo.Length + 1).Replace('\', '/')
+git check-ignore -q -- $Probe
+if ($LASTEXITCODE -eq 0) { throw 'Final benchmark WAV allow-list is not active' }
+$Attr = git check-attr filter -- $Probe
+if ($Attr -notmatch ': filter: lfs$') { throw "Final benchmark WAV is not Git LFS: $Attr" }
+
+git add -- `
+  .gitattributes `
+  .gitignore `
+  docs/final_benchmark_attribution.md `
+  $AudioDir `
+  $Manifest `
+  outputs/paper_v2/protocol/final_benchmark_lock.json `
+  outputs/paper_v2/protocol/final_benchmark_audit.csv `
+  outputs/paper_v2/protocol/final_benchmark_handoff_sha256.csv
+
+$LfsCount = @(git lfs ls-files | Select-String 'data/derived/paper_v2/final_benchmark/.+\.wav$').Count
+if ($LfsCount -ne 2300) { throw "Expected 2300 staged LFS WAVs, got $LfsCount" }
+git lfs fsck
+git diff --cached --check
+git diff --cached --stat
+```
+
+Chỉ commit/push sau khi Trung duyệt staged diff. Không dùng `git add .`,
+`git add -A` hoặc `git add -f`.
+
+Sau khi staged diff được duyệt:
+
+```powershell
+git commit -m "data(benchmark): publish locked self-contained final benchmark"
+$Branch = git branch --show-current
+git push origin $Branch
+```
+
+Không add raw VIVOS, raw MUSAN hoặc toàn bộ `data/`. Audio final chỉ được track ở allow-list trên và phải là Git LFS, không phải Git blob thường. Mỗi máy nhận cài LFS rồi materialize object trước khi verify:
+
+```powershell
+git lfs install
+git pull --ff-only
+git lfs pull --include="data/derived/paper_v2/final_benchmark/**"
+
+$Manifest = 'outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl'
+$Rows = @(Get-Content -LiteralPath $Manifest)
+if ($Rows.Count -ne 2300) { throw "Expected one 2300-line JSONL, got $($Rows.Count)" }
+$Wavs = @(Get-ChildItem data/derived/paper_v2/final_benchmark -Recurse -File -Filter *.wav)
+if ($Wavs.Count -ne 2300) { throw "Expected 2300 benchmark WAVs, got $($Wavs.Count)" }
+$FirstLine = Get-Content -LiteralPath $Wavs[0].FullName -TotalCount 1 -ErrorAction SilentlyContinue
+if ($FirstLine -eq 'version https://git-lfs.github.com/spec/v1') { throw 'Git LFS objects were not materialized' }
+```
+
+Nếu `git lfs pull` báo quota/permission hoặc quyền tái phân phối audio chưa được xác nhận, dừng; dùng private LFS/external handoff, không force-add WAV vào Git thường.
+
 ```powershell
 function New-HandoffManifest {
   param(
@@ -1013,12 +1110,15 @@ New-HandoffManifest `
   -OutputCsv outputs/paper_v2/handoff/phat_to_trung_sha256.csv
 ```
 
-Sau khi build final benchmark trên reference machine, Phát tạo manifest handoff riêng cho transaction 2.300 dòng; không bỏ sót WAV hoặc audit:
+Sau khi build final benchmark, Phúc tạo manifest handoff riêng; transaction self-contained phải có 2.300 WAV cộng manifest, lock và audit:
 
 ```powershell
 New-HandoffManifest `
   -InputPath outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl, outputs/paper_v2/protocol/final_benchmark_lock.json, outputs/paper_v2/protocol/final_benchmark_audit.csv, data/derived/paper_v2/final_benchmark `
-  -OutputCsv outputs/paper_v2/handoff/phat_final_benchmark_sha256.csv
+  -OutputCsv outputs/paper_v2/protocol/final_benchmark_handoff_sha256.csv
+
+$Handoff = @(Import-Csv outputs/paper_v2/protocol/final_benchmark_handoff_sha256.csv)
+if ($Handoff.Count -ne 2303) { throw "Expected 2303 handoff entries, got $($Handoff.Count)" }
 ```
 
 Bundle FLEURS chuyển sang reference inference environment/hardware phải gồm cả WAV, manifest, lock và audit:
@@ -1034,7 +1134,7 @@ Tương tự, Phúc bàn giao nguyên directory `outputs/paper_v2/predictions/ze
 Máy nhận đặt file đúng relative path rồi verify:
 
 ```powershell
-$Manifest = Import-Csv outputs/paper_v2/handoff/phat_to_trung_sha256.csv
+$Manifest = Import-Csv outputs/paper_v2/protocol/final_benchmark_handoff_sha256.csv
 $Bad = foreach ($Row in $Manifest) {
   if (-not (Test-Path -LiteralPath $Row.path)) {
     $Row.path
@@ -1063,7 +1163,8 @@ Dừng pipeline và báo Trung nếu gặp một trong các trường hợp sau:
 - Một trong năm training run dùng seed/config/batch/decode khác.
 - Ablation thiếu lambda, prediction không đủ 14.125 dòng hoặc provenance không phải full noisy-dev.
 - Decision không khóa đúng ordinary + selected positive tone-aware + distinct locked control.
-- Final benchmark được mở/build trước decision, không đủ 2.300 dòng hoặc không chỉ dùng MUSAN test.
+- Final benchmark v2 không data-only, không self-contained đủ 2.300 WAV, bị rebuild khác hash hoặc không chỉ dùng MUSAN test.
+- Phát dùng bất kỳ final prediction/metric nào để chọn lambda thay vì chỉ dùng noisy-dev.
 - Zero-shot config còn placeholder/floating revision hoặc prediction thiếu provenance.
 - FLEURS formal không verify được exact current method environment/source cho cả ba config, hoặc provenance không ghi `method_runtime_verified=true`.
 - Final/FLEURS ba role khác decision lock, checkpoint SHA khác hoặc ref/utt_id không paired.
@@ -1122,7 +1223,7 @@ Ghi rõ checkpoint cũ được train trước tone-alignment/protocol fix. Khô
 
 ## 18. Không commit các file sau
 
-- Raw VIVOS, MUSAN, FLEURS audio; derived noisy-dev/final WAV.
+- Raw VIVOS, MUSAN, FLEURS audio và derived noisy-dev. Ngoại lệ duy nhất là self-contained final-benchmark WAV đã được Trung duyệt, allow-list đúng path và track bằng Git LFS theo mục 15.
 - Archive dataset, Hugging Face cache hoặc model snapshot cache.
 - Checkpoint weights/adapters/optimizer states (`*.safetensors`, `*.bin`, `*.pt`, `*.ckpt`) và checkpoint step trung gian.
 - Smoke outputs, partial/resume/temp/backup files, lock file tạm, log chứa path/token riêng của máy.
@@ -1137,8 +1238,8 @@ Chỉ chuẩn bị để review/commit: source, tests, config/template, `Guide.m
 - [ ] VIVOS/MUSAN/noisy-dev bytes khớp locks.
 - [ ] Formal environment + method lock được khóa trước training.
 - [ ] Năm lambda được train lại và evaluate đủ trên noisy-dev.
-- [ ] Decision khóa selected lambda và locked control trước khi mở final.
-- [ ] Final benchmark 2.300 dòng được build đúng một lần.
+- [ ] Final benchmark v2 self-contained 2.300 WAV được Phúc build đúng một lần, handoff SHA PASS và publish qua kênh đã duyệt.
+- [ ] Decision khóa selected lambda và locked control chỉ từ noisy-dev; final prediction/metric không tham gia selection.
 - [ ] Sáu zero-shot và ba final LoRA predictions hoàn chỉnh.
 - [ ] FLEURS 857 được chạy lại và ghi đúng nhãn legacy-exposed replication.
 - [ ] Aggregate, error artifacts, WER/DER breakdown và hai bootstrap hoàn chỉnh.

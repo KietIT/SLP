@@ -22,7 +22,11 @@ import yaml
 
 from .analysis import CANONICAL_PREDICTION_COLUMNS, METRIC_VERSION
 from .artifact_bundle import BUNDLE_PROTOCOL_VERSION, canonical_json_bytes
-from .final_benchmark import FinalBenchmarkError, verify_final_benchmark_lock
+from .final_benchmark import (
+    FinalBenchmarkError,
+    verify_final_benchmark_lock,
+    verify_portable_final_benchmark_bundle,
+)
 from .noise_protocol import NoiseProtocolError, verify_noise_split_lock
 from .phat.method_contract import (
     MethodContractError,
@@ -32,7 +36,9 @@ from .phat.protocol import ProtocolIntegrityError, verify_test_decision_lock
 
 
 ROOT = Path(__file__).resolve().parents[2]
-ZERO_SHOT_VERSION = "paper_v2_zero_shot_prediction_v1"
+ZERO_SHOT_VERSION = "paper_v2_zero_shot_prediction_v2"
+ZERO_SHOT_RUN_CONTRACT_VERSION = "paper_v2_zero_shot_run_v2"
+PORTABLE_FINAL_BENCHMARK_VERSION = "paper_v2_final_benchmark_v2"
 FINAL_LORA_VERSION = "paper_v2_final_lora_prediction_v1"
 FLEURS_VERSION = "paper_v2_fleurs_prediction_v3"
 NOISY_DEV_VERSIONS = frozenset({"prediction_evaluation_v3", "prediction_evaluation_v4"})
@@ -63,6 +69,9 @@ class BenchmarkEvidence:
     row_count: int
     final_benchmark_lock_path: Path | None
     final_benchmark_lock_sha256: str
+    final_benchmark_protocol_version: str = ""
+    audio_inventory_sha256: str = ""
+    audit_sha256: str = ""
 
 
 @dataclass(frozen=True, slots=True)
@@ -358,6 +367,46 @@ def verify_benchmark_evidence(
 
     final_lock = Path(final_benchmark_lock_path)
     final_lock_sha = sha256_file(final_lock)
+    raw_final_lock = _load_json(final_lock, label="final benchmark lock")
+    if raw_final_lock.get("protocol_version") == PORTABLE_FINAL_BENCHMARK_VERSION:
+        try:
+            verified = verify_portable_final_benchmark_bundle(
+                final_lock,
+                expected_lock_sha256=final_lock_sha,
+                expected_manifest=benchmark,
+                expected_manifest_sha256=benchmark_sha,
+                expected_rows=row_count,
+            )
+        except (FinalBenchmarkError, FileNotFoundError, OSError, ValueError) as exc:
+            raise PredictionEvidenceError(
+                f"Portable final benchmark verification failed: {exc}"
+            ) from exc
+        if (
+            str(verified.get("manifest_sha256", "")).casefold() != benchmark_sha
+            or int(verified.get("row_count", -1)) != row_count
+            or str(verified.get("lock_sha256", "")).casefold() != final_lock_sha
+            or str(verified.get("protocol_version", ""))
+            != PORTABLE_FINAL_BENCHMARK_VERSION
+        ):
+            raise PredictionEvidenceError(
+                "Portable final benchmark verifier returned another artifact"
+            )
+        return BenchmarkEvidence(
+            path=benchmark,
+            sha256=benchmark_sha,
+            row_count=row_count,
+            final_benchmark_lock_path=final_lock,
+            final_benchmark_lock_sha256=final_lock_sha,
+            final_benchmark_protocol_version=PORTABLE_FINAL_BENCHMARK_VERSION,
+            audio_inventory_sha256=_require_sha256(
+                verified.get("audio_inventory_sha256"),
+                label="final benchmark audio inventory",
+            ),
+            audit_sha256=_require_sha256(
+                verified.get("audit_sha256"), label="final benchmark audit"
+            ),
+        )
+
     method_sha, noise_sha, noise = _method_and_noise_evidence(
         decision, root=repository_root
     )
@@ -430,10 +479,36 @@ def _verify_zero_shot_contract(
     provenance: Mapping[str, Any],
     *,
     metadata: Mapping[str, str],
-    decision: DecisionEvidence,
     benchmark: BenchmarkEvidence,
     root: Path,
 ) -> None:
+    forbidden_provenance_fields = {
+        "decision_lock_sha256",
+        "split_lock_sha256",
+        "method_lock_sha256",
+        "method_identity_sha256",
+        "source_test_manifest_sha256",
+        "noise_split_lock_sha256",
+    }
+    present_forbidden = sorted(forbidden_provenance_fields.intersection(provenance))
+    if present_forbidden:
+        raise PredictionEvidenceError(
+            "Portable zero-shot provenance contains method/raw-data dependencies: "
+            + ", ".join(present_forbidden)
+        )
+    try:
+        authorized_rows = int(provenance.get("manifest_num_rows", -1))
+    except (TypeError, ValueError) as exc:
+        raise PredictionEvidenceError(
+            "Zero-shot authorized manifest row count is invalid"
+        ) from exc
+    if (
+        provenance.get("audio_hashes_verified") is not True
+        or authorized_rows != benchmark.row_count
+    ):
+        raise PredictionEvidenceError(
+            "Zero-shot provenance did not verify the complete audio inventory"
+        )
     contract = provenance.get("run_contract")
     if not isinstance(contract, Mapping):
         raise PredictionEvidenceError("Zero-shot provenance has no run contract")
@@ -442,7 +517,7 @@ def _verify_zero_shot_contract(
     )
     if _canonical_json_sha256(contract) != recorded_hash:
         raise PredictionEvidenceError("Zero-shot run contract SHA-256 is invalid")
-    if contract.get("contract_version") != "paper_v2_zero_shot_run_v1" or (
+    if contract.get("contract_version") != ZERO_SHOT_RUN_CONTRACT_VERSION or (
         tuple(contract.get("schema", ())) != tuple(CANONICAL_PREDICTION_COLUMNS)
     ):
         raise PredictionEvidenceError("Zero-shot run contract version/schema is invalid")
@@ -475,17 +550,21 @@ def _verify_zero_shot_contract(
     benchmark_contract = contract.get("benchmark")
     if not isinstance(protocol, Mapping) or not isinstance(benchmark_contract, Mapping):
         raise PredictionEvidenceError("Zero-shot run contract lacks protocol/benchmark")
-    if (
-        protocol.get("formal") is not True
-        or protocol.get("final_test_unlocked") is not True
-        or str(protocol.get("expected_split_lock_sha256", "")).casefold()
-        != str(decision.integrity["split_lock_sha256"]).casefold()
-        or str(protocol.get("expected_decision_lock_sha256", "")).casefold()
-        != decision.sha256
-    ):
+    forbidden_protocol_fields = {
+        "final_test_unlocked",
+        "split_lock",
+        "expected_split_lock_sha256",
+        "decision_lock",
+        "expected_decision_lock_sha256",
+        "method_lock",
+        "expected_method_lock_sha256",
+    }
+    if protocol != {"formal": True} or forbidden_protocol_fields.intersection(protocol):
         raise PredictionEvidenceError("Zero-shot run contract protocol binding is stale")
     if (
-        str(benchmark_contract.get("expected_manifest_sha256", "")).casefold()
+        str(benchmark_contract.get("lock_protocol_version", ""))
+        != PORTABLE_FINAL_BENCHMARK_VERSION
+        or str(benchmark_contract.get("expected_manifest_sha256", "")).casefold()
         != benchmark.sha256
         or str(benchmark_contract.get("expected_lock_sha256", "")).casefold()
         != benchmark.final_benchmark_lock_sha256
@@ -495,6 +574,24 @@ def _verify_zero_shot_contract(
         or benchmark_contract.get("verify_audio_sha256") is not True
     ):
         raise PredictionEvidenceError("Zero-shot run contract benchmark binding is stale")
+    if (
+        benchmark.final_benchmark_protocol_version
+        != PORTABLE_FINAL_BENCHMARK_VERSION
+        or not _is_sha256(benchmark.audio_inventory_sha256)
+        or not _is_sha256(benchmark.audit_sha256)
+    ):
+        raise PredictionEvidenceError(
+            "Zero-shot prediction requires a verified portable benchmark v2 inventory"
+        )
+    for field, expected in (
+        ("audio_inventory_sha256", benchmark.audio_inventory_sha256),
+        ("audit_sha256", benchmark.audit_sha256),
+        ("benchmark_lock_protocol_version", PORTABLE_FINAL_BENCHMARK_VERSION),
+    ):
+        if str(provenance.get(field, "")).casefold() != expected.casefold():
+            raise PredictionEvidenceError(
+                f"Zero-shot provenance binds another {field}"
+            )
 
     config_path = _repo_path(
         provenance.get("suite_config", ""), root=root, label="suite_config"
@@ -526,15 +623,22 @@ def _verify_zero_shot_contract(
         config_benchmark, Mapping
     ):
         raise PredictionEvidenceError("Zero-shot suite config lacks protocol/benchmark")
-    for field in (
-        "expected_split_lock_sha256",
-        "expected_decision_lock_sha256",
+    if config_protocol != {"formal": True} or forbidden_protocol_fields.intersection(
+        config_protocol
     ):
-        if str(config_protocol.get(field, "")).casefold() != str(
-            protocol.get(field, "")
-        ).casefold():
-            raise PredictionEvidenceError(f"Zero-shot suite config {field} is stale")
-    for field in ("expected_lock_sha256", "expected_manifest_sha256", "expected_rows"):
+        raise PredictionEvidenceError(
+            "Zero-shot suite config contains method-selection protocol fields"
+        )
+    for field in (
+        "lock_protocol_version",
+        "lock",
+        "expected_lock_sha256",
+        "manifest",
+        "expected_manifest_sha256",
+        "expected_rows",
+        "dataset",
+        "verify_audio_sha256",
+    ):
         if str(config_benchmark.get(field, "")).casefold() != str(
             benchmark_contract.get(field, "")
         ).casefold():
@@ -899,42 +1003,45 @@ def verify_prediction_evidence(
     schema = provenance.get("schema", provenance.get("prediction_columns"))
     if schema is not None and tuple(schema) != tuple(CANONICAL_PREDICTION_COLUMNS):
         raise PredictionEvidenceError("Prediction provenance schema is not canonical")
-    split_sha = _require_sha256(
-        decision.integrity.get("split_lock_sha256"), label="verified split lock"
-    )
-    for field, expected in (
-        ("decision_lock_sha256", decision.sha256),
-        ("split_lock_sha256", split_sha),
-        (
-            "method_lock_sha256",
-            _require_sha256(
-                decision.integrity.get("method_lock_sha256"),
-                label="verified method lock",
+    if version != ZERO_SHOT_VERSION:
+        split_sha = _require_sha256(
+            decision.integrity.get("split_lock_sha256"), label="verified split lock"
+        )
+        for field, expected in (
+            ("decision_lock_sha256", decision.sha256),
+            ("split_lock_sha256", split_sha),
+            (
+                "method_lock_sha256",
+                _require_sha256(
+                    decision.integrity.get("method_lock_sha256"),
+                    label="verified method lock",
+                ),
             ),
-        ),
-        (
-            "method_identity_sha256",
-            _require_sha256(
-                decision.integrity.get("method_identity_sha256"),
-                label="verified method identity",
+            (
+                "method_identity_sha256",
+                _require_sha256(
+                    decision.integrity.get("method_identity_sha256"),
+                    label="verified method identity",
+                ),
             ),
-        ),
-    ):
-        # Zero-shot provenance binds method transitively through the verified
-        # decision and therefore intentionally has no duplicated method fields.
-        if (
-            field == "decision_lock_sha256"
-            and version in NOISY_DEV_VERSIONS
-            and not str(provenance.get(field, "")).strip()
         ):
-            continue
-        if field in provenance and str(provenance[field]).casefold() != expected:
-            raise PredictionEvidenceError(f"Prediction provenance binds another {field}")
-        required_fields = {"split_lock_sha256"}
-        if version not in NOISY_DEV_VERSIONS:
-            required_fields.add("decision_lock_sha256")
-        if field in required_fields and field not in provenance:
-            raise PredictionEvidenceError(f"Prediction provenance is missing {field}")
+            if (
+                field == "decision_lock_sha256"
+                and version in NOISY_DEV_VERSIONS
+                and not str(provenance.get(field, "")).strip()
+            ):
+                continue
+            if field in provenance and str(provenance[field]).casefold() != expected:
+                raise PredictionEvidenceError(
+                    f"Prediction provenance binds another {field}"
+                )
+            required_fields = {"split_lock_sha256"}
+            if version not in NOISY_DEV_VERSIONS:
+                required_fields.add("decision_lock_sha256")
+            if field in required_fields and field not in provenance:
+                raise PredictionEvidenceError(
+                    f"Prediction provenance is missing {field}"
+                )
 
     if version in {FINAL_LORA_VERSION, ZERO_SHOT_VERSION}:
         if benchmark.final_benchmark_lock_path is None:
@@ -1022,7 +1129,6 @@ def verify_prediction_evidence(
         _verify_zero_shot_contract(
             provenance,
             metadata=metadata,
-            decision=decision,
             benchmark=benchmark,
             root=repository_root,
         )
@@ -1116,6 +1222,11 @@ def formal_protocol_parameters(evidence: FormalPredictionSet) -> dict[str, Any]:
         "benchmark_manifest_sha256": evidence.benchmark.sha256,
         "benchmark_rows": evidence.benchmark.row_count,
         "final_benchmark_lock_sha256": evidence.benchmark.final_benchmark_lock_sha256,
+        "final_benchmark_protocol_version": (
+            evidence.benchmark.final_benchmark_protocol_version
+        ),
+        "audio_inventory_sha256": evidence.benchmark.audio_inventory_sha256,
+        "final_benchmark_audit_sha256": evidence.benchmark.audit_sha256,
         "predictions": [
             {
                 "prediction_sha256": item.prediction_sha256,

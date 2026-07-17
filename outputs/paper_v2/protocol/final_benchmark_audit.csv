@@ -1,0 +1,20 @@
+protocol_version,check_id,status,observed,expected,details
+paper_v2_final_benchmark_v2,source_count,PASS,460,460,only locked unseen VIVOS source utterances
+paper_v2_final_benchmark_v2,expected_row_count,PASS,2300,2300,clean plus four SNR conditions
+paper_v2_final_benchmark_v2,clean_row_count,PASS,460,460,one clean row per source utterance
+paper_v2_final_benchmark_v2,noisy_row_count,PASS,1840,1840,one noisy row per source utterance/SNR
+paper_v2_final_benchmark_v2,condition_completeness,PASS,2300,2300,every source occurs exactly once in clean/20/10/5/0
+paper_v2_final_benchmark_v2,unique_utterance_ids,PASS,2300,2300,derived utterance IDs are unique
+paper_v2_final_benchmark_v2,source_identity_linkage,PASS,2300,2300,every row preserves its locked source audio/text identity
+paper_v2_final_benchmark_v2,noise_partition_is_test,PASS,1840,1840,no MUSAN train/dev may enter final test
+paper_v2_final_benchmark_v2,noise_disjoint_from_train_dev,PASS,0,0,assigned test noise is file/content disjoint
+paper_v2_final_benchmark_v2,noise_registry_linkage,PASS,1840,1840,every noisy row binds an exact locked MUSAN-test registry entry
+paper_v2_final_benchmark_v2,measured_snr_tolerance,PASS,0.0,1e-06,component-power SNR error before PCM16 quantization
+paper_v2_final_benchmark_v2,stored_audio_has_no_clipping,PASS,0,0,post-write full-scale samples
+paper_v2_final_benchmark_v2,bundle_audio_paths_contained,PASS,2300,2300,all inference and clean-reference audio is inside output_audio_dir
+paper_v2_final_benchmark_v2,portable_manifest_paths,PASS,2300,2300,manifest paths are repository-relative and contain no parent traversal
+paper_v2_final_benchmark_v2,unique_collision_safe_audio_paths,PASS,2300,2300,hashed source stems prevent clean/noisy path collisions
+paper_v2_final_benchmark_v2,derived_audio_inventory_exact,PASS,2300,2300,output audio directory has no missing or unrecorded files
+paper_v2_final_benchmark_v2,audio_hash_integrity,PASS,2300,2300,manifest hashes match every clean and derived audio artifact
+paper_v2_final_benchmark_v2,eligibility_flags,PASS,2300,2300,final benchmark is never selection eligible
+paper_v2_final_benchmark_v2,sample_rate,PASS,2300,2300,all clean and derived audio is 16 kHz

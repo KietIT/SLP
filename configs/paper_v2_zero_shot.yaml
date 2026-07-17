@@ -1,18 +1,15 @@
 protocol:
   formal: true
-  # Missing/tampered decision and final-benchmark locks still fail closed.
-  final_test_unlocked: true
-  split_lock: outputs/paper_v2/protocol/split_lock.json
-  expected_split_lock_sha256: a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2
-  decision_lock: outputs/paper_v2/protocol/best_lambda_decision.json
-  expected_decision_lock_sha256: REQUIRED_SHA256_AFTER_GATE4_DECISION
+  # Zero-shot baselines are method-independent. The immutable v2 benchmark
+  # lock below is their sole data-authorization root; no LoRA decision/method
+  # files or original VIVOS/MUSAN trees are needed on Phuc's worker.
 
 benchmark:
-  lock_protocol_version: paper_v2_final_benchmark_v1
+  lock_protocol_version: paper_v2_final_benchmark_v2
   lock: outputs/paper_v2/protocol/final_benchmark_lock.json
-  expected_lock_sha256: REQUIRED_SHA256_AFTER_GATE5_BENCHMARK
+  expected_lock_sha256: REQUIRED_SHA256_AFTER_BENCHMARK_BUILD
   manifest: outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl
-  expected_manifest_sha256: REQUIRED_SHA256_AFTER_GATE5_BENCHMARK
+  expected_manifest_sha256: REQUIRED_SHA256_AFTER_BENCHMARK_BUILD
   expected_rows: 2300
   dataset: vivos
   verify_audio_sha256: true

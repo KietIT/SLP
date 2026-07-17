@@ -32,7 +32,7 @@ from src.vitonesr.final_benchmark import (
     FINAL_SAMPLE_RATE,
     FINAL_SNRS,
     FINAL_SOURCE_COUNT,
-    verify_final_benchmark_lock,
+    verify_portable_final_benchmark_bundle,
 )
 from src.vitonesr.noise_protocol import verify_noise_split_lock
 
@@ -362,7 +362,9 @@ def authorize_final_lora(
     method_config_loader: Callable[[str | Path], Mapping[str, Any]] = load_experiment_config,
     method_verifier: Callable[..., Mapping[str, str]] = verify_method_lock,
     noise_verifier: Callable[..., Mapping[str, Any]] = verify_noise_split_lock,
-    benchmark_verifier: Callable[..., Mapping[str, Any]] = verify_final_benchmark_lock,
+    benchmark_verifier: Callable[..., Mapping[str, Any]] = (
+        verify_portable_final_benchmark_bundle
+    ),
     role_verifier: Callable[..., FinalLoraRole] = _default_role_verifier,
 ) -> FinalLoraAuthorization:
     """Verify every lock before returning any final-data/model access grant."""
@@ -435,7 +437,9 @@ def authorize_final_lora(
             "decision.test_manifest must already be canonical repository-relative POSIX"
         )
 
-    # Method and MUSAN locks are verified before the derived benchmark lock.
+    # Method and MUSAN locks authorize the selected LoRA roles.  The benchmark
+    # itself is a method-independent, self-contained data bundle that may have
+    # been prepared before the lambda decision.
     method_config = dict(method_config_loader(method_config_path))
     method = dict(
         method_verifier(
@@ -458,7 +462,9 @@ def authorize_final_lora(
     if str(noise.get("lock_sha256", "")).casefold() != expected_noise:
         raise FinalLoraProtocolError("Verified MUSAN split lock differs from config")
 
-    # This metadata-only verifier must succeed before manifest/audio/model access.
+    # This metadata-only portable verifier must succeed before manifest/audio/model
+    # access.  Decision/method bindings stay in this LoRA authorization layer; they
+    # are deliberately not embedded in the reusable benchmark lock.
     final = dict(
         benchmark_verifier(
             final_lock_path,
@@ -466,13 +472,6 @@ def authorize_final_lora(
             expected_manifest=manifest_path,
             expected_manifest_sha256=expected_manifest,
             expected_rows=int(benchmark["expected_rows"]),
-            split_lock_sha256=expected_split,
-            decision_lock_sha256=expected_decision,
-            source_test_manifest_sha256=str(decision["test_manifest_sha256"]),
-            method_lock_sha256=expected_method,
-            method_identity_sha256=str(decision["method_identity_sha256"]),
-            noise_split_lock_sha256=expected_noise,
-            noise_integrity=noise,
         )
     )
     if str(final.get("lock_sha256", "")).casefold() != expected_final:
