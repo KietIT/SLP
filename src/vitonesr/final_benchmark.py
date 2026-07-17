@@ -15,7 +15,7 @@ from typing import Any, Callable, Iterable, Mapping, Sequence
 
 
 ROOT = Path(__file__).resolve().parents[2]
-FINAL_BENCHMARK_VERSION = "paper_v2_final_benchmark_v1"
+FINAL_BENCHMARK_VERSION = "paper_v2_final_benchmark_v2"
 FINAL_BENCHMARK_ALGORITHM = "sha256_musan_test_power_mix_v1"
 FINAL_SNRS = (20.0, 10.0, 5.0, 0.0)
 FINAL_SOURCE_COUNT = 460
@@ -73,10 +73,7 @@ class FinalBenchmarkError(ValueError):
 @dataclass(frozen=True)
 class FinalBenchmarkConfig:
     split_lock: Path
-    decision_lock: Path
     noise_split_lock: Path
-    method_lock: Path
-    method_config: Path
     source_test_manifest: Path
     output_manifest: Path
     output_audio_dir: Path
@@ -294,10 +291,7 @@ def _validate_config(config: FinalBenchmarkConfig) -> dict[str, object]:
 
     inputs = {
         "split lock": config.split_lock,
-        "decision lock": config.decision_lock,
         "noise split lock": config.noise_split_lock,
-        "method lock": config.method_lock,
-        "method config": config.method_config,
         "source test manifest": config.source_test_manifest,
     }
     outputs = {
@@ -342,15 +336,12 @@ def _validate_config(config: FinalBenchmarkConfig) -> dict[str, object]:
     }
 
 
-def _validate_resolved_paths_after_authorization(
+def _validate_resolved_paths(
     config: FinalBenchmarkConfig,
 ) -> None:
     inputs = {
         "split lock": config.split_lock,
-        "decision lock": config.decision_lock,
         "noise split lock": config.noise_split_lock,
-        "method lock": config.method_lock,
-        "method config": config.method_config,
         "source test manifest": config.source_test_manifest,
     }
     outputs = {
@@ -377,12 +368,6 @@ def _validate_resolved_paths_after_authorization(
                 )
 
 
-def _default_decision_verifier(**kwargs: Any) -> Mapping[str, Any]:
-    from .phat.protocol import verify_test_decision_lock
-
-    return verify_test_decision_lock(**kwargs)
-
-
 def _default_source_verifier(
     manifest_path: Path, *, split_lock_path: Path
 ) -> Mapping[str, Any]:
@@ -402,56 +387,6 @@ def _default_noise_verifier(lock_path: Path) -> Mapping[str, Any]:
     return verify_noise_split_lock(lock_path, verify_audio=True)
 
 
-def _default_method_verifier(config: FinalBenchmarkConfig) -> Mapping[str, Any]:
-    from .phat.config import load_experiment_config
-    from .phat.method_contract import verify_method_lock
-
-    experiment = load_experiment_config(config.method_config)
-    return verify_method_lock(
-        config.method_lock,
-        config=experiment,
-        repo_root=ROOT,
-        formal=True,
-        verify_audio=True,
-    )
-
-
-def _authorize_before_test_access(
-    config: FinalBenchmarkConfig,
-    decision_verifier: Callable[..., Mapping[str, Any]],
-) -> dict[str, Any]:
-    """Validate decision first; this function never opens test manifests/audio."""
-
-    decision = dict(
-        decision_verifier(
-            split_lock_path=config.split_lock,
-            decision_lock_path=config.decision_lock,
-        )
-    )
-    for field in (
-        "split_lock_sha256",
-        "decision_lock_sha256",
-        "test_manifest_sha256",
-        "method_lock_sha256",
-        "method_identity_sha256",
-    ):
-        if not _is_sha256(decision.get(field)):
-            raise FinalBenchmarkError(
-                f"Decision authorization returned invalid {field}"
-            )
-    if not config.split_lock.is_file() or (
-        sha256_file(config.split_lock)
-        != str(decision["split_lock_sha256"]).casefold()
-    ):
-        raise FinalBenchmarkError("Decision does not bind the configured split lock")
-    if not config.decision_lock.is_file() or (
-        sha256_file(config.decision_lock)
-        != str(decision["decision_lock_sha256"]).casefold()
-    ):
-        raise FinalBenchmarkError("Decision verifier did not bind its decision lock")
-    return decision
-
-
 def _validate_source_rows(
     path: Path,
     *,
@@ -461,7 +396,7 @@ def _validate_source_rows(
 ) -> list[dict[str, Any]]:
     if sha256_file(path) != expected_hash:
         raise FinalBenchmarkError(
-            "Locked unseen-test manifest differs from the authorized decision"
+            "Locked unseen-test manifest differs from the verified split lock"
         )
     rows = _read_jsonl(path)
     if len(rows) != expected_count:
@@ -648,14 +583,16 @@ def _audit_rows(
         source = source_by_id.get(str(row["source_utt_id"]))
         if source is None:
             return False
-        source_audio = Path(source["audio_path"])
+        expected_clean = output_audio_dir / "clean" / (
+            f"{_safe_stem(str(source['source_utt_id']))}_clean.wav"
+        )
         if (
             str(row["dataset"]) != "vivos"
             or str(row["split"]) != "test"
             or str(row["transcript"]) != str(source["transcript"])
             or str(row["text_sha256"]) != str(source["text_sha256"])
             or str(row["clean_audio_sha256"]) != str(source["audio_sha256"])
-            or not _same_path(_artifact_path(row["clean_path"]), source_audio)
+            or not _same_path(_artifact_path(row["clean_path"]), expected_clean)
         ):
             return False
         if row["condition"] == "clean":
@@ -663,7 +600,7 @@ def _audit_rows(
                 str(row["snr"]) == "clean"
                 and str(row["noise_type"]) == "clean"
                 and str(row["audio_sha256"]) == str(source["audio_sha256"])
-                and _same_path(_artifact_path(row["audio_path"]), source_audio)
+                and _same_path(_artifact_path(row["audio_path"]), expected_clean)
             )
         return str(row["snr"]) in expected_snr_labels
 
@@ -675,10 +612,7 @@ def _audit_rows(
             str(row["noise_split"]) == "test"
             and str(row["noise_audio_sha256"]) == str(noise["audio_sha256"])
             and str(row["noise_type"]) == str(noise["noise_type"])
-            and _same_path(
-                _artifact_path(row["noise_path"]),
-                _artifact_path(noise["audio"]),
-            )
+            and str(row["noise_path"]) == ""
         )
 
     def expected_noisy_path(row: Mapping[str, object]) -> Path:
@@ -690,7 +624,7 @@ def _audit_rows(
 
     def stored_audio_path(row: Mapping[str, object]) -> Path:
         final_path = _artifact_path(row["audio_path"])
-        if row["condition"] != "noisy" or staged_audio_dir is None:
+        if staged_audio_dir is None:
             return final_path
         relative = final_path.resolve().relative_to(output_audio_dir.resolve())
         return staged_audio_dir / relative
@@ -702,13 +636,13 @@ def _audit_rows(
             return False
         return audio.is_file() and sha256_file(audio) == str(row["audio_sha256"])
 
-    derived_paths = [_artifact_path(row["audio_path"]).resolve() for row in noisy]
+    derived_paths = [_artifact_path(row["audio_path"]).resolve() for row in rows]
     actual_audio_root = staged_audio_dir or output_audio_dir
     actual_derived_files = {
         path.resolve() for path in actual_audio_root.rglob("*") if path.is_file()
     }
     expected_derived_files = {
-        stored_audio_path(row).resolve() for row in noisy
+        stored_audio_path(row).resolve() for row in rows
     }
     source_link_results = [source_link_matches(row) for row in rows]
     noise_link_results = [noise_link_matches(row) for row in noisy]
@@ -716,9 +650,7 @@ def _audit_rows(
     portable_path_results = [
         _is_portable_reference(row["audio_path"])
         and _is_portable_reference(row["clean_path"])
-        and _is_portable_reference(
-            row["noise_path"], allow_empty=row["condition"] == "clean"
-        )
+        and _is_portable_reference(row["noise_path"], allow_empty=True)
         for row in rows
     ]
     checks: list[tuple[str, bool, object, object, str]] = [
@@ -829,16 +761,19 @@ def _audit_rows(
             "post-write full-scale samples",
         ),
         (
-            "derived_audio_paths_contained",
+            "bundle_audio_paths_contained",
             all(
                 _artifact_path(row["audio_path"]).resolve().is_relative_to(
                     output_audio_dir.resolve()
                 )
-                for row in noisy
+                and _artifact_path(row["clean_path"]).resolve().is_relative_to(
+                    output_audio_dir.resolve()
+                )
+                for row in rows
             ),
-            len(noisy),
-            len(noisy),
-            "all noisy artifacts are inside output_audio_dir",
+            len(rows),
+            len(rows),
+            "all inference and clean-reference audio is inside output_audio_dir",
         ),
         (
             "portable_manifest_paths",
@@ -855,8 +790,8 @@ def _audit_rows(
                 for row in noisy
             ),
             len(set(derived_paths)),
-            len(noisy),
-            "hashed source stems prevent derived path collisions",
+            len(rows),
+            "hashed source stems prevent clean/noisy path collisions",
         ),
         (
             "derived_audio_inventory_exact",
@@ -983,7 +918,6 @@ def _verify_existing(
     bindings: Mapping[str, str],
     builder_params: Mapping[str, object],
     builder_sha256: str,
-    method_identity_sha256: str,
     source_rows: Sequence[Mapping[str, object]],
     noise_lock: Mapping[str, object],
     noise_rows: Sequence[Mapping[str, object]],
@@ -1001,11 +935,14 @@ def _verify_existing(
     for field, expected in bindings.items():
         if str(lock.get(field, "")).casefold() != expected.casefold():
             raise FinalBenchmarkError(f"Existing lock binds another {field}")
-    if (
-        str(lock.get("method_identity_sha256", "")).casefold()
-        != method_identity_sha256.casefold()
-    ):
-        raise FinalBenchmarkError("Existing lock binds another method identity")
+    if {
+        "decision_lock_sha256",
+        "method_lock_sha256",
+        "method_identity_sha256",
+    }.intersection(lock):
+        raise FinalBenchmarkError(
+            "Existing final benchmark lock is not method/decision independent"
+        )
     builder = lock.get("builder", {})
     if (
         not isinstance(builder, Mapping)
@@ -1168,6 +1105,301 @@ def _verify_existing(
     return {"status": "verified_existing", "rows": len(rows), "lock": lock}
 
 
+def verify_portable_final_benchmark_bundle(
+    lock_path: str | Path,
+    *,
+    expected_lock_sha256: str,
+    expected_manifest: str | Path,
+    expected_manifest_sha256: str,
+    expected_rows: int,
+) -> dict[str, Any]:
+    """Verify a copied final-benchmark bundle without raw data dependencies.
+
+    The lock, audit, one JSONL manifest and every clean/noisy WAV are checked.
+    VIVOS/MUSAN source audio, method locks and lambda decisions are deliberately
+    neither opened nor required.
+    """
+
+    digest_fields = {
+        "expected_lock_sha256": expected_lock_sha256,
+        "expected_manifest_sha256": expected_manifest_sha256,
+    }
+    invalid = [name for name, value in digest_fields.items() if not _is_sha256(value)]
+    if invalid:
+        raise FinalBenchmarkError(
+            "Invalid SHA-256 value(s) for portable benchmark authorization: "
+            + ", ".join(invalid)
+        )
+    try:
+        row_count = int(expected_rows)
+    except (TypeError, ValueError) as exc:
+        raise FinalBenchmarkError("Expected final benchmark row count is invalid") from exc
+    if row_count != FINAL_ROW_COUNT:
+        raise FinalBenchmarkError(
+            f"Formal final benchmark requires exactly {FINAL_ROW_COUNT} rows"
+        )
+
+    lock_file = Path(lock_path)
+    manifest_file = Path(expected_manifest)
+    _require_portable_path(lock_file, label="final benchmark lock")
+    _require_portable_path(manifest_file, label="final benchmark manifest")
+    if not lock_file.is_file():
+        raise FileNotFoundError(f"Final benchmark lock does not exist: {lock_file}")
+    actual_lock_hash = sha256_file(lock_file)
+    if actual_lock_hash != str(expected_lock_sha256).casefold():
+        raise FinalBenchmarkError("Final benchmark lock SHA-256 has changed")
+
+    lock = _read_json(lock_file)
+    if (
+        lock.get("protocol_version") != FINAL_BENCHMARK_VERSION
+        or lock.get("status") != "LOCKED"
+        or lock.get("selection_eligible") is not False
+        or lock.get("final_test_eligible") is not True
+    ):
+        raise FinalBenchmarkError("Final benchmark lock status/policy is invalid")
+    forbidden_method_fields = {
+        "decision_lock_sha256",
+        "method_lock_sha256",
+        "method_identity_sha256",
+    }
+    if forbidden_method_fields.intersection(lock):
+        raise FinalBenchmarkError(
+            "Portable final benchmark lock must be method/decision independent"
+        )
+    for field in (
+        "split_lock_sha256",
+        "source_test_manifest_sha256",
+        "noise_split_lock_sha256",
+    ):
+        if not _is_sha256(lock.get(field)):
+            raise FinalBenchmarkError(f"Final benchmark lock has invalid {field}")
+
+    expected_builder = {
+        "algorithm": FINAL_BENCHMARK_ALGORITHM,
+        "seed": FINAL_SEED,
+        "snrs_db": list(FINAL_SNRS),
+        "sample_rate": FINAL_SAMPLE_RATE,
+        "peak_limit": FINAL_PEAK_LIMIT,
+        "include_clean": True,
+        "expected_source_count": FINAL_SOURCE_COUNT,
+        "expected_row_count": FINAL_ROW_COUNT,
+        "audio_container": "WAV",
+        "audio_subtype": "PCM_16",
+        "input_sample_rate_policy": "require_exact",
+        "channel_policy": "mean_to_mono",
+        "snr_measurement": "component_power_after_anti_clip_before_pcm16",
+        "clipping_measurement": "pre_scale_over_1_and_stored_full_scale",
+        "source_partition": "vivos_test_locked",
+        "noise_partition": "musan_test",
+    }
+    builder = lock.get("builder")
+    if (
+        not isinstance(builder, Mapping)
+        or builder.get("params") != expected_builder
+        or builder.get("params_sha256") != _canonical_sha256(expected_builder)
+    ):
+        raise FinalBenchmarkError("Final benchmark builder contract is invalid")
+    if lock.get("schema") != list(FINAL_BENCHMARK_COLUMNS):
+        raise FinalBenchmarkError("Final benchmark schema lock is invalid")
+
+    output = lock.get("output")
+    if not isinstance(output, Mapping):
+        raise FinalBenchmarkError("Final benchmark lock has no output object")
+    if not _is_portable_reference(output.get("manifest", "")) or not _is_portable_reference(
+        output.get("audio_dir", "")
+    ):
+        raise FinalBenchmarkError("Final benchmark output paths are not portable")
+    if not _same_path(_artifact_path(output["manifest"]), manifest_file):
+        raise FinalBenchmarkError("Final benchmark lock binds another manifest path")
+    if str(output.get("manifest_sha256", "")).casefold() != str(
+        expected_manifest_sha256
+    ).casefold():
+        raise FinalBenchmarkError("Final benchmark manifest SHA-256 is not locked")
+    if (
+        _locked_int(output.get("row_count"), label="output.row_count")
+        != FINAL_ROW_COUNT
+        or _locked_int(output.get("clean_row_count"), label="output.clean_row_count")
+        != FINAL_SOURCE_COUNT
+        or _locked_int(output.get("noisy_row_count"), label="output.noisy_row_count")
+        != FINAL_ROW_COUNT - FINAL_SOURCE_COUNT
+        or output.get("audio_hashes_recorded") is not True
+        or not _is_sha256(output.get("audio_inventory_sha256"))
+    ):
+        raise FinalBenchmarkError("Final benchmark output inventory is invalid")
+
+    source = lock.get("source_test")
+    if (
+        not isinstance(source, Mapping)
+        or not _is_portable_reference(source.get("manifest", ""))
+        or str(source.get("manifest_sha256", "")).casefold()
+        != str(lock["source_test_manifest_sha256"]).casefold()
+        or _locked_int(source.get("utterance_count"), label="source_test.utterance_count")
+        != FINAL_SOURCE_COUNT
+        or not _is_sha256(source.get("audio_text_inventory_sha256"))
+    ):
+        raise FinalBenchmarkError("Final benchmark source-test provenance is invalid")
+
+    noise = lock.get("noise")
+    if (
+        not isinstance(noise, Mapping)
+        or not _is_portable_reference(noise.get("split_lock", ""))
+        or not _is_portable_reference(noise.get("test_manifest", ""))
+        or str(noise.get("split_lock_sha256", "")).casefold()
+        != str(lock["noise_split_lock_sha256"]).casefold()
+        or not _is_sha256(noise.get("registry_manifest_sha256"))
+        or not _is_sha256(noise.get("test_manifest_sha256"))
+        or noise.get("partition") != "test"
+        or _locked_int(noise.get("file_count"), label="noise.file_count") < 1
+        or not _is_sha256(noise.get("audio_inventory_sha256"))
+    ):
+        raise FinalBenchmarkError("Final benchmark MUSAN-test provenance is invalid")
+
+    audit = lock.get("audit")
+    if not isinstance(audit, Mapping) or not _is_portable_reference(audit.get("path", "")):
+        raise FinalBenchmarkError("Final benchmark audit binding is invalid")
+    audit_path = _artifact_path(audit["path"])
+    if not audit_path.is_file() or sha256_file(audit_path) != str(
+        audit.get("sha256", "")
+    ).casefold():
+        raise FinalBenchmarkError("Final benchmark audit SHA-256 mismatch")
+    with audit_path.open("r", encoding="utf-8-sig", newline="") as handle:
+        audit_rows = list(csv.DictReader(handle))
+    if (
+        len(audit_rows) != _locked_int(audit.get("checks"), label="audit.checks")
+        or _locked_int(audit.get("failed_checks"), label="audit.failed_checks") != 0
+        or any(row.get("status") != "PASS" for row in audit_rows)
+    ):
+        raise FinalBenchmarkError("Final benchmark audit contains failed checks")
+
+    if not manifest_file.is_file() or sha256_file(manifest_file) != str(
+        expected_manifest_sha256
+    ).casefold():
+        raise FinalBenchmarkError("Final benchmark manifest SHA-256 mismatch")
+    rows = _read_jsonl(manifest_file)
+    if len(rows) != FINAL_ROW_COUNT:
+        raise FinalBenchmarkError("Final benchmark manifest row count mismatch")
+    audio_dir = _artifact_path(output["audio_dir"])
+    clean_rows = [row for row in rows if row.get("condition") == "clean"]
+    noisy_rows = [row for row in rows if row.get("condition") == "noisy"]
+    expected_conditions = {"clean", *(_snr_label(value) for value in FINAL_SNRS)}
+    source_conditions: dict[str, set[str]] = {}
+    inventory: list[dict[str, str]] = []
+    expected_files: set[Path] = set()
+    for number, row in enumerate(rows, start=1):
+        if tuple(row) != FINAL_BENCHMARK_COLUMNS:
+            raise FinalBenchmarkError(
+                f"Final benchmark manifest schema mismatch at row {number}"
+            )
+        if (
+            row.get("selection_eligible") is not False
+            or row.get("final_test_eligible") is not True
+            or row.get("dataset") != "vivos"
+            or row.get("split") != "test"
+        ):
+            raise FinalBenchmarkError(
+                f"Final benchmark row policy mismatch at row {number}"
+            )
+        if not _is_portable_reference(row.get("audio_path", "")) or not _is_portable_reference(
+            row.get("clean_path", "")
+        ):
+            raise FinalBenchmarkError(
+                f"Final benchmark row has a non-portable audio path at row {number}"
+            )
+        audio_path = _artifact_path(row["audio_path"])
+        clean_path = _artifact_path(row["clean_path"])
+        try:
+            audio_path.resolve().relative_to(audio_dir.resolve())
+            clean_path.resolve().relative_to(audio_dir.resolve())
+        except ValueError as exc:
+            raise FinalBenchmarkError(
+                f"Final benchmark audio escapes its bundle at row {number}"
+            ) from exc
+        if (
+            not audio_path.is_file()
+            or not _is_sha256(row.get("audio_sha256"))
+            or sha256_file(audio_path) != str(row["audio_sha256"]).casefold()
+        ):
+            raise FinalBenchmarkError(
+                f"Final benchmark audio hash mismatch: {audio_path}"
+            )
+        if (
+            not clean_path.is_file()
+            or not _is_sha256(row.get("clean_audio_sha256"))
+            or sha256_file(clean_path)
+            != str(row["clean_audio_sha256"]).casefold()
+        ):
+            raise FinalBenchmarkError(
+                f"Final benchmark clean-reference hash mismatch: {clean_path}"
+            )
+        _, rate, _, _ = _audio_info(audio_path)
+        if rate != FINAL_SAMPLE_RATE or int(row.get("sample_rate", -1)) != rate:
+            raise FinalBenchmarkError(
+                f"Final benchmark sample-rate mismatch: {audio_path}"
+            )
+        condition = str(row.get("condition", ""))
+        snr = str(row.get("snr", ""))
+        if condition == "clean":
+            if (
+                snr != "clean"
+                or row.get("noise_type") != "clean"
+                or str(row.get("noise_path", "")) != ""
+                or not _same_path(audio_path, clean_path)
+                or row.get("audio_sha256") != row.get("clean_audio_sha256")
+            ):
+                raise FinalBenchmarkError(
+                    f"Final benchmark clean row is invalid at row {number}"
+                )
+        elif condition == "noisy":
+            if (
+                snr not in expected_conditions - {"clean"}
+                or row.get("noise_split") != "test"
+                or str(row.get("noise_path", "")) != ""
+                or not str(row.get("noise_id", ""))
+                or not _is_sha256(row.get("noise_audio_sha256"))
+            ):
+                raise FinalBenchmarkError(
+                    f"Final benchmark noisy row is invalid at row {number}"
+                )
+        else:
+            raise FinalBenchmarkError(
+                f"Final benchmark condition is invalid at row {number}"
+            )
+        source_id = str(row.get("source_utt_id", ""))
+        source_conditions.setdefault(source_id, set()).add(snr)
+        expected_files.add(audio_path.resolve())
+        inventory.append(
+            {
+                "utt_id": str(row["utt_id"]),
+                "audio_sha256": str(row["audio_sha256"]).casefold(),
+            }
+        )
+    if (
+        len(clean_rows) != FINAL_SOURCE_COUNT
+        or len(noisy_rows) != FINAL_ROW_COUNT - FINAL_SOURCE_COUNT
+        or len(source_conditions) != FINAL_SOURCE_COUNT
+        or any(value != expected_conditions for value in source_conditions.values())
+    ):
+        raise FinalBenchmarkError("Final benchmark condition coverage is invalid")
+    actual_files = {
+        path.resolve() for path in audio_dir.rglob("*") if path.is_file()
+    }
+    if actual_files != expected_files:
+        raise FinalBenchmarkError("Final benchmark audio bundle inventory is not exact")
+    if _canonical_sha256(inventory) != str(output["audio_inventory_sha256"]).casefold():
+        raise FinalBenchmarkError("Final benchmark audio inventory SHA-256 mismatch")
+
+    return {
+        "lock_sha256": actual_lock_hash,
+        "protocol_version": FINAL_BENCHMARK_VERSION,
+        "manifest_path": str(manifest_file),
+        "manifest_sha256": str(expected_manifest_sha256).casefold(),
+        "row_count": FINAL_ROW_COUNT,
+        "audio_dir": str(audio_dir),
+        "audio_inventory_sha256": str(output["audio_inventory_sha256"]).casefold(),
+        "audit_sha256": str(audit["sha256"]).casefold(),
+    }
+
+
 def verify_final_benchmark_lock(
     lock_path: str | Path,
     *,
@@ -1176,28 +1408,26 @@ def verify_final_benchmark_lock(
     expected_manifest_sha256: str,
     expected_rows: int,
     split_lock_sha256: str,
-    decision_lock_sha256: str,
+    decision_lock_sha256: str | None = None,
     source_test_manifest_sha256: str,
-    method_lock_sha256: str,
-    method_identity_sha256: str,
+    method_lock_sha256: str | None = None,
+    method_identity_sha256: str | None = None,
     noise_split_lock_sha256: str,
     noise_integrity: Mapping[str, Any],
 ) -> dict[str, Any]:
     """Verify final-benchmark metadata without opening its manifest or audio.
 
     This is the authorization boundary shared by final inference runners.  It
-    checks the exact lock digest and every transitive protocol binding first.
-    Callers may open the returned manifest only after this function succeeds.
+    checks the exact data lock and its split/noise bindings.  Decision/method
+    arguments remain accepted for API compatibility but are intentionally not
+    bound by the method-independent benchmark-v2 lock.
     """
 
     digest_fields = {
         "expected_lock_sha256": expected_lock_sha256,
         "expected_manifest_sha256": expected_manifest_sha256,
         "split_lock_sha256": split_lock_sha256,
-        "decision_lock_sha256": decision_lock_sha256,
         "source_test_manifest_sha256": source_test_manifest_sha256,
-        "method_lock_sha256": method_lock_sha256,
-        "method_identity_sha256": method_identity_sha256,
         "noise_split_lock_sha256": noise_split_lock_sha256,
     }
     invalid = [name for name, value in digest_fields.items() if not _is_sha256(value)]
@@ -1233,12 +1463,17 @@ def verify_final_benchmark_lock(
         or lock.get("final_test_eligible") is not True
     ):
         raise FinalBenchmarkError("Final benchmark lock status/policy is invalid")
+    if {
+        "decision_lock_sha256",
+        "method_lock_sha256",
+        "method_identity_sha256",
+    }.intersection(lock):
+        raise FinalBenchmarkError(
+            "Final benchmark lock must be method/decision independent"
+        )
     expected_bindings = {
         "split_lock_sha256": split_lock_sha256,
-        "decision_lock_sha256": decision_lock_sha256,
         "source_test_manifest_sha256": source_test_manifest_sha256,
-        "method_lock_sha256": method_lock_sha256,
-        "method_identity_sha256": method_identity_sha256,
         "noise_split_lock_sha256": noise_split_lock_sha256,
     }
     for field, expected in expected_bindings.items():
@@ -1403,48 +1638,28 @@ def build_final_benchmark(
     config: FinalBenchmarkConfig,
     *,
     overwrite: bool = False,
-    decision_verifier: Callable[..., Mapping[str, Any]] | None = None,
     source_verifier: Callable[..., Mapping[str, Any]] | None = None,
     noise_verifier: Callable[[Path], Mapping[str, Any]] | None = None,
-    method_verifier: Callable[[FinalBenchmarkConfig], Mapping[str, Any]] | None = None,
 ) -> dict[str, object]:
-    """Build final VIVOS robustness data after a valid method decision unlock."""
+    """Build a method-independent, self-contained final VIVOS benchmark."""
 
     builder_params = _validate_config(config)
-
-    # Security boundary: no VIVOS-test manifest, MUSAN-test manifest/audio, or method
-    # verifier is touched before this decision verifier succeeds.
-    decision = _authorize_before_test_access(
-        config, decision_verifier or _default_decision_verifier
-    )
-    _validate_resolved_paths_after_authorization(config)
-
-    method = dict((method_verifier or _default_method_verifier)(config))
-    method_hash = str(method.get("method_lock_sha256", "")).casefold()
-    method_identity = str(method.get("method_identity_sha256", "")).casefold()
-    if not _is_sha256(method_hash) or sha256_file(config.method_lock) != method_hash:
-        raise FinalBenchmarkError("Method verifier returned another method lock")
-    if not _is_sha256(method_identity):
-        raise FinalBenchmarkError("Method verifier returned an invalid method identity")
-    if (
-        method_hash != str(decision["method_lock_sha256"]).casefold()
-        or method_identity
-        != str(decision["method_identity_sha256"]).casefold()
-    ):
-        raise FinalBenchmarkError(
-            "Verified method lock/identity differs from the authorized decision"
-        )
+    _validate_resolved_paths(config)
     source_integrity = dict(
         (source_verifier or _default_source_verifier)(
             config.source_test_manifest,
             split_lock_path=config.split_lock,
         )
     )
-    source_hash = str(decision["test_manifest_sha256"]).casefold()
+    source_hash = str(source_integrity.get("manifest_sha256", "")).casefold()
+    split_hash = str(source_integrity.get("split_lock_sha256", "")).casefold()
     if (
-        str(source_integrity.get("manifest_sha256", "")).casefold() != source_hash
-        or str(source_integrity.get("split_lock_sha256", "")).casefold()
-        != str(decision["split_lock_sha256"]).casefold()
+        not _is_sha256(source_hash)
+        or not _is_sha256(split_hash)
+        or not config.split_lock.is_file()
+        or sha256_file(config.split_lock) != split_hash
+        or not config.source_test_manifest.is_file()
+        or sha256_file(config.source_test_manifest) != source_hash
         or int(source_integrity.get("utterance_count", -1))
         != config.expected_source_count
     ):
@@ -1466,14 +1681,10 @@ def build_final_benchmark(
         forbidden_hashes,
     ) = _validate_noise_integrity(noise_verified, config)
 
-    decision_hash = str(decision["decision_lock_sha256"]).casefold()
-    split_hash = str(decision["split_lock_sha256"]).casefold()
     bindings = {
         "split_lock_sha256": split_hash,
-        "decision_lock_sha256": decision_hash,
         "source_test_manifest_sha256": source_hash,
         "noise_split_lock_sha256": noise_lock_sha,
-        "method_lock_sha256": method_hash,
     }
     builder_sha = _canonical_sha256(builder_params)
     targets = (
@@ -1490,7 +1701,6 @@ def build_final_benchmark(
                     bindings=bindings,
                     builder_params=builder_params,
                     builder_sha256=builder_sha,
-                    method_identity_sha256=method_identity,
                     source_rows=source_rows,
                     noise_lock=noise_lock,
                     noise_rows=noise_rows,
@@ -1526,6 +1736,17 @@ def build_final_benchmark(
             transcript = str(source["transcript"])
             text_sha = str(source["text_sha256"])
             duration = float(source["duration_seconds"])
+            clean_relative = Path("clean") / (
+                f"{_safe_stem(source_id)}_clean.wav"
+            )
+            staged_clean_path = stage / clean_relative
+            final_clean_path = config.output_audio_dir / clean_relative
+            staged_clean_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(clean_path, staged_clean_path)
+            if sha256_file(staged_clean_path) != clean_sha:
+                raise FinalBenchmarkError(
+                    f"Byte-identical clean copy verification failed: {clean_path}"
+                )
             rows.append(
                 {
                     "utt_id": f"{source_id}_clean",
@@ -1534,9 +1755,9 @@ def build_final_benchmark(
                     "dataset": "vivos",
                     "split": "test",
                     "condition": "clean",
-                    "audio_path": _display_path(clean_path),
+                    "audio_path": _display_path(final_clean_path),
                     "audio_sha256": clean_sha,
-                    "clean_path": _display_path(clean_path),
+                    "clean_path": _display_path(final_clean_path),
                     "clean_audio_sha256": clean_sha,
                     "transcript": transcript,
                     "text_sha256": text_sha,
@@ -1606,7 +1827,7 @@ def build_final_benchmark(
                         "condition": "noisy",
                         "audio_path": _display_path(final_path),
                         "audio_sha256": sha256_file(staged_path),
-                        "clean_path": _display_path(clean_path),
+                        "clean_path": _display_path(final_clean_path),
                         "clean_audio_sha256": clean_sha,
                         "transcript": transcript,
                         "text_sha256": text_sha,
@@ -1617,7 +1838,7 @@ def build_final_benchmark(
                         ),
                         "noise_id": noise_row["noise_id"],
                         "noise_type": noise_row["noise_type"],
-                        "noise_path": _display_path(noise_path),
+                        "noise_path": "",
                         "noise_audio_sha256": noise_row["audio_sha256"],
                         "noise_split": "test",
                         "seed": item_seed,
@@ -1678,7 +1899,6 @@ def build_final_benchmark(
             "selection_eligible": False,
             "final_test_eligible": True,
             **bindings,
-            "method_identity_sha256": method_identity,
             "source_test": {
                 "manifest": _display_path(config.source_test_manifest),
                 "manifest_sha256": source_hash,
@@ -1758,4 +1978,5 @@ __all__ = [
     "build_final_benchmark",
     "sha256_file",
     "verify_final_benchmark_lock",
+    "verify_portable_final_benchmark_bundle",
 ]

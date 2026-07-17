@@ -29,9 +29,10 @@ PREDICTION_COLUMNS = [
     "hyp",
 ]
 
-PROVENANCE_VERSION = "paper_v2_zero_shot_prediction_v1"
-RESUME_VERSION = "paper_v2_zero_shot_resume_v2"
-RECOVERY_VERSION = "paper_v2_zero_shot_recovery_v1"
+PROVENANCE_VERSION = "paper_v2_zero_shot_prediction_v2"
+RESUME_VERSION = "paper_v2_zero_shot_resume_v3"
+RECOVERY_VERSION = "paper_v2_zero_shot_recovery_v2"
+FINAL_BENCHMARK_PROTOCOL_VERSION = "paper_v2_final_benchmark_v2"
 DEFAULT_CONFIG = Path("configs/paper_v2_zero_shot.yaml")
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 _HEX_DIGITS = frozenset("0123456789abcdef")
@@ -99,12 +100,12 @@ def _assert_no_absolute_path_strings(value: Any, *, label: str) -> None:
 
 @dataclass(frozen=True)
 class AuthorizationEvidence:
-    split_lock_sha256: str
-    decision_lock_sha256: str
     benchmark_lock_sha256: str
     manifest_sha256: str
     manifest_num_rows: int
-    source_test_manifest_sha256: str
+    audio_dir: str
+    audio_inventory_sha256: str
+    audit_sha256: str
     benchmark_lock_protocol_version: str
 
 
@@ -278,23 +279,22 @@ def validate_suite_config(
         )
     if protocol.get("formal") is not True:
         raise ZeroShotProtocolError("paper-v2 zero-shot inference requires protocol.formal=true")
-    if protocol.get("final_test_unlocked") is not True:
+    legacy_method_fields = {
+        "final_test_unlocked",
+        "split_lock",
+        "expected_split_lock_sha256",
+        "decision_lock",
+        "expected_decision_lock_sha256",
+        "method_lock",
+        "expected_method_lock_sha256",
+    }
+    present_legacy_fields = sorted(legacy_method_fields.intersection(protocol))
+    if present_legacy_fields:
         raise ZeroShotProtocolError(
-            "Final test is still locked; set protocol.final_test_unlocked=true only "
-            "after the reviewed method/lambda decision is LOCKED"
+            "Zero-shot baselines are authorized only by the immutable portable "
+            "benchmark bundle; remove method-selection fields from protocol: "
+            + ", ".join(present_legacy_fields)
         )
-    for field in ("split_lock", "decision_lock"):
-        _portable_repository_path(
-            protocol.get(field, ""), label=f"protocol.{field}"
-        )
-    _require_sha256(
-        protocol.get("expected_split_lock_sha256"),
-        label="protocol.expected_split_lock_sha256",
-    )
-    _require_sha256(
-        protocol.get("expected_decision_lock_sha256"),
-        label="protocol.expected_decision_lock_sha256",
-    )
     for field in ("lock", "manifest"):
         _portable_repository_path(
             benchmark.get(field, ""), label=f"benchmark.{field}"
@@ -302,6 +302,11 @@ def validate_suite_config(
     for field in ("lock_protocol_version", "dataset"):
         if not str(benchmark.get(field, "")).strip():
             raise ZeroShotProtocolError(f"benchmark.{field} is required")
+    if benchmark.get("lock_protocol_version") != FINAL_BENCHMARK_PROTOCOL_VERSION:
+        raise ZeroShotProtocolError(
+            "Zero-shot inference requires the self-contained paper-v2 final "
+            "benchmark v2 bundle"
+        )
     _require_sha256(
         benchmark.get("expected_lock_sha256"),
         label="benchmark.expected_lock_sha256",
@@ -342,38 +347,21 @@ def validate_suite_config(
 def authorize_final_benchmark(
     config: Mapping[str, Any],
     *,
-    decision_verifier: Callable[..., Mapping[str, Any]] | None = None,
-    method_artifact_verifier: Callable[..., Mapping[str, Any]] | None = None,
-    noise_verifier: Callable[..., Mapping[str, Any]] | None = None,
     benchmark_verifier: Callable[..., Mapping[str, Any]] | None = None,
 ) -> AuthorizationEvidence:
-    """Authorize final-test access without opening the benchmark manifest/model.
+    """Authorize a portable data-only benchmark before manifest/model access.
 
-    The decision lock is the root of trust.  Its hash-pinned formal method lock
-    names the MUSAN split lock; the complete final-benchmark verifier then binds
-    the builder, schema, source test, MUSAN-test inventory, and audit.  Keeping
-    this transitive verification here prevents a self-consistent but fabricated
-    final manifest/lock pair from reaching inference.
+    The configured benchmark-lock digest is the root of trust for zero-shot
+    baselines.  The portable verifier checks the immutable builder/schema,
+    internal source/noise provenance, manifest binding, audit and audio-inventory
+    commitment without requiring the original VIVOS/MUSAN trees or any LoRA
+    method/decision artifact on the worker machine.  The manifest loader then
+    verifies every one of the committed audio files before model access.
     """
 
-    protocol = config["protocol"]
     benchmark = config["benchmark"]
-    split_path = _repository_path(
-        protocol["split_lock"], label="protocol.split_lock"
-    )
-    decision_path = _repository_path(
-        protocol["decision_lock"], label="protocol.decision_lock"
-    )
     benchmark_lock_path = _repository_path(
         benchmark["lock"], label="benchmark.lock"
-    )
-    expected_split_hash = _require_sha256(
-        protocol["expected_split_lock_sha256"],
-        label="protocol.expected_split_lock_sha256",
-    )
-    expected_decision_hash = _require_sha256(
-        protocol["expected_decision_lock_sha256"],
-        label="protocol.expected_decision_lock_sha256",
     )
     expected_benchmark_hash = _require_sha256(
         benchmark["expected_lock_sha256"], label="benchmark.expected_lock_sha256"
@@ -382,113 +370,16 @@ def authorize_final_benchmark(
         benchmark["expected_manifest_sha256"],
         label="benchmark.expected_manifest_sha256",
     )
-    if not split_path.is_file() or sha256_file(split_path) != expected_split_hash:
-        raise ZeroShotProtocolError("Configured split lock is missing or has changed")
-    if not decision_path.is_file() or sha256_file(decision_path) != expected_decision_hash:
-        raise ZeroShotProtocolError("Configured method/lambda decision lock is missing or has changed")
-
-    if decision_verifier is None:
-        from src.vitonesr.phat.protocol import verify_test_decision_lock
-
-        decision_verifier = verify_test_decision_lock
-    decision = dict(
-        decision_verifier(
-            split_lock_path=split_path,
-            decision_lock_path=decision_path,
-            verify_checkpoints=False,
-        )
-    )
-    if str(decision.get("split_lock_sha256", "")).casefold() != expected_split_hash:
-        raise ZeroShotProtocolError("Decision verifier returned another split lock")
-    if str(decision.get("decision_lock_sha256", "")).casefold() != expected_decision_hash:
-        raise ZeroShotProtocolError("Decision verifier returned another decision lock")
-    source_test_hash = _require_sha256(
-        decision.get("test_manifest_sha256"),
-        label="decision.test_manifest_sha256",
-    )
-
-    # The verified decision hash-pins this method lock.  Validate its canonical
-    # identity before using its noise binding as an authorization dependency.
-    raw_decision = _load_object(decision_path, label="Method/lambda decision lock")
-    method_lock_hash = _require_sha256(
-        decision.get("method_lock_sha256"), label="decision.method_lock_sha256"
-    )
-    method_identity_hash = _require_sha256(
-        decision.get("method_identity_sha256"),
-        label="decision.method_identity_sha256",
-    )
-    if str(raw_decision.get("method_lock_sha256", "")).casefold() != method_lock_hash:
-        raise ZeroShotProtocolError("Decision verifier and lock disagree on method lock")
-    if (
-        str(raw_decision.get("method_identity_sha256", "")).casefold()
-        != method_identity_hash
-    ):
-        raise ZeroShotProtocolError("Decision verifier and lock disagree on method identity")
-    method_lock_path = _repository_path(
-        raw_decision.get("method_lock", ""), label="decision.method_lock"
-    )
-    if not method_lock_path.is_file() or sha256_file(method_lock_path) != method_lock_hash:
-        raise ZeroShotProtocolError("Decision-bound method lock is missing or has changed")
-    if method_artifact_verifier is None:
-        from src.vitonesr.phat.method_contract import (
-            verify_method_artifact_bindings,
-        )
-
-        method_artifact_verifier = verify_method_artifact_bindings
-    try:
-        method_evidence = dict(
-            method_artifact_verifier(
-                method_lock_path,
-                repo_root=REPOSITORY_ROOT,
-                formal=True,
-            )
-        )
-    except (ImportError, OSError, ValueError) as exc:
-        raise ZeroShotProtocolError(f"Decision-bound method lock is invalid: {exc}") from exc
-    if str(method_evidence.get("method_lock_sha256", "")).casefold() != (
-        method_lock_hash
-    ):
-        raise ZeroShotProtocolError("Method artifact verifier returned another lock")
-    if method_evidence.get("mode") != "formal":
-        raise ZeroShotProtocolError("Final zero-shot evaluation requires a formal method lock")
-    if str(method_evidence.get("method_identity_sha256", "")).casefold() != (
-        method_identity_hash
-    ):
-        raise ZeroShotProtocolError("Method lock identity differs from the decision lock")
-    artifacts = method_evidence.get("artifacts")
-    noise_binding = (
-        artifacts.get("noise_split_lock") if isinstance(artifacts, Mapping) else None
-    )
-    if not isinstance(noise_binding, Mapping):
-        raise ZeroShotProtocolError("Method lock has no MUSAN split-lock binding")
-    noise_lock_hash = _require_sha256(
-        noise_binding.get("sha256"), label="method artifacts.noise_split_lock.sha256"
-    )
-    noise_lock_path = _repository_path(
-        noise_binding.get("path", ""),
-        label="method artifacts.noise_split_lock.path",
-    )
-    if not noise_lock_path.is_file() or sha256_file(noise_lock_path) != noise_lock_hash:
-        raise ZeroShotProtocolError("Method-bound MUSAN split lock is missing or has changed")
-    if noise_verifier is None:
-        from src.vitonesr.noise_protocol import verify_noise_split_lock
-
-        noise_verifier = verify_noise_split_lock
-    try:
-        noise_integrity = dict(noise_verifier(noise_lock_path, verify_audio=False))
-    except (OSError, ValueError) as exc:
-        raise ZeroShotProtocolError(f"MUSAN split-lock verification failed: {exc}") from exc
-    if str(noise_integrity.get("lock_sha256", "")).casefold() != noise_lock_hash:
-        raise ZeroShotProtocolError("MUSAN verifier returned another split lock")
-
     configured_manifest = _repository_path(
         benchmark["manifest"], label="benchmark.manifest"
     )
     lock_version = str(benchmark["lock_protocol_version"])
     if benchmark_verifier is None:
-        from src.vitonesr.final_benchmark import verify_final_benchmark_lock
+        from src.vitonesr.final_benchmark import (
+            verify_portable_final_benchmark_bundle,
+        )
 
-        benchmark_verifier = verify_final_benchmark_lock
+        benchmark_verifier = verify_portable_final_benchmark_bundle
     try:
         verified_benchmark = dict(
             benchmark_verifier(
@@ -497,13 +388,6 @@ def authorize_final_benchmark(
                 expected_manifest=configured_manifest,
                 expected_manifest_sha256=expected_manifest_hash,
                 expected_rows=int(benchmark["expected_rows"]),
-                split_lock_sha256=expected_split_hash,
-                decision_lock_sha256=expected_decision_hash,
-                source_test_manifest_sha256=source_test_hash,
-                method_lock_sha256=method_lock_hash,
-                method_identity_sha256=method_identity_hash,
-                noise_split_lock_sha256=noise_lock_hash,
-                noise_integrity=noise_integrity,
             )
         )
     except (OSError, ValueError) as exc:
@@ -522,13 +406,36 @@ def authorize_final_benchmark(
         raise ZeroShotProtocolError("Final benchmark verifier returned another row count")
     if str(verified_benchmark.get("protocol_version", "")) != lock_version:
         raise ZeroShotProtocolError("Final benchmark verifier returned another protocol version")
+    audio_inventory_sha256 = _require_sha256(
+        verified_benchmark.get("audio_inventory_sha256"),
+        label="verified benchmark audio_inventory_sha256",
+    )
+    audit_sha256 = _require_sha256(
+        verified_benchmark.get("audit_sha256"),
+        label="verified benchmark audit_sha256",
+    )
+    raw_audio_dir_value = str(verified_benchmark.get("audio_dir", "")).strip()
+    if not raw_audio_dir_value:
+        raise ZeroShotProtocolError(
+            "Final benchmark verifier returned no portable audio directory"
+        )
+    raw_audio_dir = Path(raw_audio_dir_value)
+    try:
+        audio_dir = raw_audio_dir.resolve().relative_to(
+            REPOSITORY_ROOT.resolve()
+        ).as_posix()
+    except (OSError, ValueError) as exc:
+        raise ZeroShotProtocolError(
+            "Final benchmark verifier returned an audio directory outside the repository"
+        ) from exc
+    _portable_repository_path(audio_dir, label="verified benchmark audio_dir")
     return AuthorizationEvidence(
-        split_lock_sha256=expected_split_hash,
-        decision_lock_sha256=expected_decision_hash,
         benchmark_lock_sha256=expected_benchmark_hash,
         manifest_sha256=expected_manifest_hash,
         manifest_num_rows=locked_rows,
-        source_test_manifest_sha256=source_test_hash,
+        audio_dir=audio_dir,
+        audio_inventory_sha256=audio_inventory_sha256,
+        audit_sha256=audit_sha256,
         benchmark_lock_protocol_version=lock_version,
     )
 
@@ -587,10 +494,18 @@ def load_authorized_benchmark(
             f"Benchmark has {len(raw_rows)} rows, expected {evidence.manifest_num_rows}"
         )
     expected_dataset = str(benchmark["dataset"])
+    audio_root = _repository_path(
+        evidence.audio_dir, label="authorized benchmark audio_dir"
+    ).resolve()
+    if not audio_root.is_dir():
+        raise FileNotFoundError(
+            f"Authorized benchmark audio directory is missing: {audio_root}"
+        )
     rows: list[dict[str, str]] = []
+    audio_inventory: list[dict[str, str]] = []
     seen: set[str] = set()
     for row_number, raw in enumerate(raw_rows, start=1):
-        audio = raw.get("audio_path") or raw.get("audio") or raw.get("noisy_path") or raw.get("clean_path")
+        audio = raw.get("audio_path")
         reference = raw.get("transcript") or raw.get("text") or raw.get("ref")
         utt_id = str(raw.get("utt_id", "")).strip()
         dataset = str(raw.get("dataset", "")).strip()
@@ -615,6 +530,13 @@ def load_authorized_benchmark(
         audio_path = _repository_path(
             audio, label=f"benchmark row {row_number} audio_path"
         )
+        try:
+            audio_path.resolve().relative_to(audio_root)
+        except (OSError, ValueError) as exc:
+            raise ZeroShotProtocolError(
+                f"Benchmark row {row_number} audio is outside the locked portable "
+                "audio directory"
+            ) from exc
         if not audio_path.is_file():
             raise FileNotFoundError(f"Benchmark audio is missing: {audio_path}")
         if benchmark["verify_audio_sha256"] is True and sha256_file(audio_path) != audio_sha:
@@ -637,6 +559,11 @@ def load_authorized_benchmark(
                 "noise_type": noise_type,
                 "ref": unicodedata.normalize("NFC", str(reference)),
             }
+        )
+        audio_inventory.append({"utt_id": utt_id, "audio_sha256": audio_sha})
+    if canonical_sha256(audio_inventory) != evidence.audio_inventory_sha256:
+        raise ZeroShotProtocolError(
+            "Benchmark manifest/audio inventory differs from the locked bundle"
         )
     return rows
 
@@ -1045,21 +972,14 @@ def _run_contract(
     decoding = config["decoding"]
     runtime = config["runtime"]
     return {
-        "contract_version": "paper_v2_zero_shot_run_v1",
+        "contract_version": "paper_v2_zero_shot_run_v2",
         "suite_config_sha256": suite_config_sha256,
         "schema": PREDICTION_COLUMNS,
         "model": dict(spec),
         "seed": int(config["seed"]),
         "protocol": {
             field: protocol[field]
-            for field in (
-                "formal",
-                "final_test_unlocked",
-                "split_lock",
-                "expected_split_lock_sha256",
-                "decision_lock",
-                "expected_decision_lock_sha256",
-            )
+            for field in ("formal",)
         },
         "benchmark": {
             field: benchmark[field]
@@ -1100,12 +1020,12 @@ def _run_contract(
 
 def _authorization_payload(evidence: AuthorizationEvidence) -> dict[str, Any]:
     return {
-        "split_lock_sha256": evidence.split_lock_sha256,
-        "decision_lock_sha256": evidence.decision_lock_sha256,
         "benchmark_lock_sha256": evidence.benchmark_lock_sha256,
         "manifest_sha256": evidence.manifest_sha256,
         "manifest_num_rows": evidence.manifest_num_rows,
-        "source_test_manifest_sha256": evidence.source_test_manifest_sha256,
+        "audio_dir": evidence.audio_dir,
+        "audio_inventory_sha256": evidence.audio_inventory_sha256,
+        "audit_sha256": evidence.audit_sha256,
         "benchmark_lock_protocol_version": evidence.benchmark_lock_protocol_version,
     }
 
@@ -1131,7 +1051,8 @@ def _validate_resume_state(
         "selected_rows_sha256": selected_rows_sha256,
         "manifest_sha256": evidence.manifest_sha256,
         "benchmark_lock_sha256": evidence.benchmark_lock_sha256,
-        "decision_lock_sha256": evidence.decision_lock_sha256,
+        "audio_inventory_sha256": evidence.audio_inventory_sha256,
+        "audit_sha256": evidence.audit_sha256,
         "prediction_sha256": sha256_file(prediction_path),
     }
     for field, value in expected.items():
@@ -1168,8 +1089,8 @@ def _validate_completed_provenance(
         "prediction_sha256": sha256_file(prediction_path),
         "manifest_sha256": evidence.manifest_sha256,
         "benchmark_lock_sha256": evidence.benchmark_lock_sha256,
-        "split_lock_sha256": evidence.split_lock_sha256,
-        "decision_lock_sha256": evidence.decision_lock_sha256,
+        "audio_inventory_sha256": evidence.audio_inventory_sha256,
+        "audit_sha256": evidence.audit_sha256,
         "selected_rows_sha256": selected_rows_sha256,
         "run_contract_sha256": run_contract_sha256,
         "model_revision": str(spec["revision"]),
@@ -1203,7 +1124,8 @@ def _resume_payload(
         "selected_rows_sha256": selected_rows_sha256,
         "manifest_sha256": evidence.manifest_sha256,
         "benchmark_lock_sha256": evidence.benchmark_lock_sha256,
-        "decision_lock_sha256": evidence.decision_lock_sha256,
+        "audio_inventory_sha256": evidence.audio_inventory_sha256,
+        "audit_sha256": evidence.audit_sha256,
         "completed_rows": row_count,
         "prediction_sha256": sha256_file(prediction_path),
         "snapshot": {
@@ -1242,7 +1164,8 @@ def _recovery_payload(
         "selected_rows_sha256": selected_rows_sha256,
         "manifest_sha256": evidence.manifest_sha256,
         "benchmark_lock_sha256": evidence.benchmark_lock_sha256,
-        "decision_lock_sha256": evidence.decision_lock_sha256,
+        "audio_inventory_sha256": evidence.audio_inventory_sha256,
+        "audit_sha256": evidence.audit_sha256,
         "completed_rows": row_count,
         "prediction_sha256": prediction_sha256,
         "previous_completed_rows": previous_row_count,
@@ -1271,7 +1194,8 @@ def _validate_recovery_state(
         "selected_rows_sha256": selected_rows_sha256,
         "manifest_sha256": evidence.manifest_sha256,
         "benchmark_lock_sha256": evidence.benchmark_lock_sha256,
-        "decision_lock_sha256": evidence.decision_lock_sha256,
+        "audio_inventory_sha256": evidence.audio_inventory_sha256,
+        "audit_sha256": evidence.audit_sha256,
     }
     for field, value in expected.items():
         if str(recovery.get(field, "")).casefold() != value.casefold():
@@ -1659,7 +1583,7 @@ def run_zero_shot_suite(
     suite_config_sha = sha256_file(config_file)
 
     # This order is a protocol guarantee: no benchmark row/audio or model may be
-    # accessed until split, method decision, and final benchmark locks all pass.
+    # accessed until the hash-pinned portable benchmark bundle passes.
     evidence = authorizer(config)
     benchmark_rows = manifest_loader(config, evidence)
     if len(benchmark_rows) != evidence.manifest_num_rows:
@@ -1684,7 +1608,8 @@ def run_zero_shot_suite(
         "models": results,
         "manifest_sha256": evidence.manifest_sha256,
         "benchmark_lock_sha256": evidence.benchmark_lock_sha256,
-        "decision_lock_sha256": evidence.decision_lock_sha256,
+        "audio_inventory_sha256": evidence.audio_inventory_sha256,
+        "audit_sha256": evidence.audit_sha256,
     }
 
 

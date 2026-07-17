@@ -31,7 +31,7 @@ def _h(character: str) -> str:
 
 
 class FinalBenchmarkLockVerifierTests(unittest.TestCase):
-    def test_metadata_authorization_binds_all_protocols_without_manifest_access(self) -> None:
+    def test_metadata_authorization_binds_data_protocols_without_manifest_access(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
             audit_path = root / "protocol/final_audit.csv"
@@ -86,10 +86,7 @@ class FinalBenchmarkLockVerifierTests(unittest.TestCase):
                 "selection_eligible": False,
                 "final_test_eligible": True,
                 "split_lock_sha256": _h("1"),
-                "decision_lock_sha256": _h("2"),
                 "source_test_manifest_sha256": _h("3"),
-                "method_lock_sha256": _h("4"),
-                "method_identity_sha256": _h("5"),
                 "noise_split_lock_sha256": _h("6"),
                 "builder": {
                     "params": builder,
@@ -153,10 +150,7 @@ class FinalBenchmarkLockVerifierTests(unittest.TestCase):
                 "expected_manifest_sha256": _h("7"),
                 "expected_rows": 2300,
                 "split_lock_sha256": _h("1"),
-                "decision_lock_sha256": _h("2"),
                 "source_test_manifest_sha256": _h("3"),
-                "method_lock_sha256": _h("4"),
-                "method_identity_sha256": _h("5"),
                 "noise_split_lock_sha256": _h("6"),
                 "noise_integrity": noise,
             }
@@ -165,9 +159,9 @@ class FinalBenchmarkLockVerifierTests(unittest.TestCase):
                 evidence = verify_final_benchmark_lock(lock_path, **kwargs)
                 self.assertEqual(evidence["row_count"], 2300)
                 self.assertFalse((root / "benchmark/final.jsonl").exists())
-                with self.assertRaisesRegex(FinalBenchmarkError, "another method"):
+                with self.assertRaisesRegex(FinalBenchmarkError, "another split_lock"):
                     verify_final_benchmark_lock(
-                        lock_path, **{**kwargs, "method_lock_sha256": _h("d")}
+                        lock_path, **{**kwargs, "split_lock_sha256": _h("d")}
                     )
                 with self.assertRaisesRegex(FinalBenchmarkError, "has changed"):
                     verify_final_benchmark_lock(

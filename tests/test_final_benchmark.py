@@ -13,7 +13,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import src.vitonesr.final_benchmark as final_benchmark_module
-import src.vitonesr.zero_shot_paper_v2 as zero_shot_module
 from src.vitonesr.final_benchmark import (
     FINAL_BENCHMARK_COLUMNS,
     FINAL_PEAK_LIMIT,
@@ -23,6 +22,7 @@ from src.vitonesr.final_benchmark import (
     FinalBenchmarkError,
     build_final_benchmark,
     sha256_file,
+    verify_portable_final_benchmark_bundle,
 )
 from src.vitonesr.noise_protocol import (
     MUSAN_TYPES,
@@ -31,7 +31,6 @@ from src.vitonesr.noise_protocol import (
     verify_noise_split_lock,
     write_locked_noise_outputs,
 )
-from src.vitonesr.zero_shot_paper_v2 import authorize_final_benchmark
 
 
 def _write_wav(
@@ -129,59 +128,11 @@ def _fixture(root: Path) -> tuple[FinalBenchmarkConfig, list[str]]:
     source = _write_source(root)
     noise_lock = _write_noise_protocol(root)
     split = root / "protocol" / "split_lock.json"
-    decision = root / "protocol" / "decision_lock.json"
-    method = root / "protocol" / "method_lock.json"
-    method_config = root / "method.yaml"
-    method_source = root / "method_source.py"
     split.parent.mkdir(parents=True, exist_ok=True)
     split.write_text("{}\n", encoding="utf-8")
-    method_source.write_text("# locked fixture source\n", encoding="utf-8")
-    source_binding = {
-        "path": method_source.relative_to(root).as_posix(),
-        "sha256": sha256_file(method_source),
-    }
-    method_payload = {
-        "schema_version": "paper_v2_method_contract_v1",
-        "status": "LOCKED",
-        "mode": "formal",
-        "artifacts": {
-            "noise_split_lock": {
-                "path": noise_lock.relative_to(root).as_posix(),
-                "sha256": sha256_file(noise_lock),
-            }
-        },
-        "source": {
-            "components": [source_binding],
-            "tree_sha256": zero_shot_module.canonical_sha256([source_binding]),
-        },
-    }
-    method_payload["identity_sha256"] = zero_shot_module.canonical_sha256(
-        method_payload
-    )
-    method.write_text(
-        json.dumps(method_payload, ensure_ascii=False, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-    decision.write_text(
-        json.dumps(
-            {
-                "method_lock": method.relative_to(root).as_posix(),
-                "method_lock_sha256": sha256_file(method),
-                "method_identity_sha256": method_payload["identity_sha256"],
-            },
-            ensure_ascii=False,
-            sort_keys=True,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
-    method_config.write_text("unused: true\n", encoding="utf-8")
     config = FinalBenchmarkConfig(
         split_lock=split,
-        decision_lock=decision,
         noise_split_lock=noise_lock,
-        method_lock=method,
-        method_config=method_config,
         source_test_manifest=source,
         output_manifest=root / "outputs" / "final_benchmark.jsonl",
         output_audio_dir=root / "derived" / "final_audio",
@@ -194,29 +145,6 @@ def _fixture(root: Path) -> tuple[FinalBenchmarkConfig, list[str]]:
 
 def _verifiers(config: FinalBenchmarkConfig, access: list[str]):
     split_hash = sha256_file(config.split_lock)
-    decision_hash = sha256_file(config.decision_lock)
-    source_hash = sha256_file(config.source_test_manifest)
-    method_hash = sha256_file(config.method_lock)
-    method_identity = str(
-        json.loads(config.method_lock.read_text(encoding="utf-8"))["identity_sha256"]
-    )
-
-    def decision(**_kwargs):
-        access.append("decision")
-        return {
-            "split_lock_sha256": split_hash,
-            "decision_lock_sha256": decision_hash,
-            "test_manifest_sha256": source_hash,
-            "method_lock_sha256": method_hash,
-            "method_identity_sha256": method_identity,
-        }
-
-    def method(_config):
-        access.append("method")
-        return {
-            "method_lock_sha256": method_hash,
-            "method_identity_sha256": method_identity,
-        }
 
     def source(path, *, split_lock_path):
         access.append("source")
@@ -230,11 +158,11 @@ def _verifiers(config: FinalBenchmarkConfig, access: list[str]):
         access.append("noise")
         return verify_noise_split_lock(path, verify_audio=True)
 
-    return decision, source, noise, method
+    return source, noise
 
 
 def _build(config: FinalBenchmarkConfig, access: list[str], **kwargs):
-    decision, source, noise, method = _verifiers(config, access)
+    source, noise = _verifiers(config, access)
     fixture_root = config.split_lock.parents[1]
     with (
         patch.object(final_benchmark_module, "ROOT", fixture_root),
@@ -243,10 +171,8 @@ def _build(config: FinalBenchmarkConfig, access: list[str], **kwargs):
     ):
         return build_final_benchmark(
             config,
-            decision_verifier=decision,
             source_verifier=source,
             noise_verifier=noise,
-            method_verifier=method,
             **kwargs,
         )
 
@@ -262,7 +188,7 @@ def _transaction_snapshot(config: FinalBenchmarkConfig) -> dict[str, bytes]:
 
 
 class FinalBenchmarkTests(unittest.TestCase):
-    def test_authorization_precedes_access_and_build_is_locked_deterministic(self) -> None:
+    def test_locked_data_build_is_method_independent_and_deterministic(self) -> None:
         self.assertEqual(FINAL_SOURCE_COUNT, 460)
         self.assertEqual(FINAL_ROW_COUNT, 2300)
         with tempfile.TemporaryDirectory() as temporary_directory:
@@ -271,8 +197,7 @@ class FinalBenchmarkTests(unittest.TestCase):
             result = _build(config, access)
             self.assertEqual(result["status"], "written")
             self.assertEqual(result["rows"], 10)
-            self.assertEqual(access[0], "decision")
-            self.assertEqual(set(access[1:]), {"method", "source", "noise"})
+            self.assertEqual(access, ["source", "noise"])
 
             rows = _read_jsonl(config.output_manifest)
             self.assertTrue(all(tuple(row) == FINAL_BENCHMARK_COLUMNS for row in rows))
@@ -293,7 +218,19 @@ class FinalBenchmarkTests(unittest.TestCase):
                 {str(row["snr"]) for row in rows}, {"clean", "20", "10", "5", "0"}
             )
             noisy = [row for row in rows if row["condition"] == "noisy"]
+            clean = [row for row in rows if row["condition"] == "clean"]
             self.assertEqual(len({row["audio_path"] for row in noisy}), len(noisy))
+            self.assertEqual(
+                len(list(config.output_audio_dir.rglob("*.wav"))), len(rows)
+            )
+            self.assertTrue(
+                all(
+                    Path(str(row["audio_path"])).parts[-2] == "clean"
+                    and sha256_file(root / str(row["audio_path"]))
+                    == row["clean_audio_sha256"]
+                    for row in clean
+                )
+            )
             self.assertTrue(all(row["noise_split"] == "test" for row in noisy))
             self.assertTrue(all(row["selection_eligible"] is False for row in rows))
             self.assertTrue(all(row["final_test_eligible"] is True for row in rows))
@@ -327,47 +264,13 @@ class FinalBenchmarkTests(unittest.TestCase):
             )
             lock_hash = sha256_file(config.protocol_lock)
             manifest_hash = sha256_file(config.output_manifest)
-            split_hash = sha256_file(config.split_lock)
-            decision_hash = sha256_file(config.decision_lock)
-            method_payload = json.loads(config.method_lock.read_text(encoding="utf-8"))
-            method_hash = sha256_file(config.method_lock)
-            with (
-                patch.object(zero_shot_module, "REPOSITORY_ROOT", root),
-                patch.object(final_benchmark_module, "ROOT", root),
-                patch.object(final_benchmark_module, "FINAL_SOURCE_COUNT", 2),
-                patch.object(final_benchmark_module, "FINAL_ROW_COUNT", 10),
-            ):
-                evidence = authorize_final_benchmark(
-                    {
-                        "protocol": {
-                            "split_lock": config.split_lock.relative_to(root).as_posix(),
-                            "decision_lock": config.decision_lock.relative_to(root).as_posix(),
-                        "expected_split_lock_sha256": split_hash,
-                        "expected_decision_lock_sha256": decision_hash,
-                        },
-                        "benchmark": {
-                            "lock": config.protocol_lock.relative_to(root).as_posix(),
-                            "lock_protocol_version": "paper_v2_final_benchmark_v1",
-                            "expected_lock_sha256": lock_hash,
-                            "manifest": json.loads(
-                                config.protocol_lock.read_text(encoding="utf-8")
-                            )["output"]["manifest"],
-                            "expected_manifest_sha256": manifest_hash,
-                            "expected_rows": 10,
-                        },
-                    },
-                    decision_verifier=lambda **_kwargs: {
-                        "split_lock_sha256": split_hash,
-                        "decision_lock_sha256": decision_hash,
-                        "test_manifest_sha256": sha256_file(
-                            config.source_test_manifest
-                        ),
-                        "method_lock_sha256": method_hash,
-                        "method_identity_sha256": method_payload["identity_sha256"],
-                    },
-                )
-            self.assertEqual(evidence.benchmark_lock_sha256, lock_hash)
-            self.assertEqual(evidence.manifest_sha256, manifest_hash)
+            locked = json.loads(config.protocol_lock.read_text(encoding="utf-8"))
+            self.assertEqual(locked["protocol_version"], "paper_v2_final_benchmark_v2")
+            self.assertNotIn("decision_lock_sha256", locked)
+            self.assertNotIn("method_lock_sha256", locked)
+            self.assertNotIn("method_identity_sha256", locked)
+            self.assertEqual(locked["output"]["manifest_sha256"], manifest_hash)
+            self.assertEqual(sha256_file(config.protocol_lock), lock_hash)
             manifest_before = config.output_manifest.read_bytes()
             inventory_before = sorted(
                 (path.relative_to(config.output_audio_dir).as_posix(), sha256_file(path))
@@ -391,33 +294,64 @@ class FinalBenchmarkTests(unittest.TestCase):
                 ),
                 inventory_before,
             )
+            shutil.rmtree(root / "vivos_test")
+            shutil.rmtree(root / "musan")
+            self.assertFalse((root / "vivos_test").exists())
+            self.assertFalse((root / "musan").exists())
+            with (
+                patch.object(final_benchmark_module, "ROOT", root),
+                patch.object(final_benchmark_module, "FINAL_SOURCE_COUNT", 2),
+                patch.object(final_benchmark_module, "FINAL_ROW_COUNT", 10),
+            ):
+                portable = verify_portable_final_benchmark_bundle(
+                    config.protocol_lock,
+                    expected_lock_sha256=sha256_file(config.protocol_lock),
+                    expected_manifest=config.output_manifest,
+                    expected_manifest_sha256=sha256_file(config.output_manifest),
+                    expected_rows=10,
+                )
+            self.assertEqual(portable["row_count"], 10)
+            copied_rows = _read_jsonl(config.output_manifest)
+            self.assertTrue(all(row["noise_path"] == "" for row in copied_rows))
+            self.assertTrue(
+                all(
+                    (root / str(row["audio_path"])).resolve().is_relative_to(
+                        config.output_audio_dir.resolve()
+                    )
+                    and (root / str(row["clean_path"])).resolve().is_relative_to(
+                        config.output_audio_dir.resolve()
+                    )
+                    for row in copied_rows
+                )
+            )
+            for row in copied_rows:
+                with wave.open(str(root / str(row["audio_path"])), "rb") as handle:
+                    self.assertGreater(handle.getnframes(), 0)
 
-    def test_failed_decision_cannot_touch_test_or_noise(self) -> None:
+    def test_failed_split_verification_cannot_touch_noise_or_write_outputs(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             config, _ = _fixture(Path(temporary_directory))
             touched: list[str] = []
 
-            def rejected(**_kwargs):
-                touched.append("decision")
-                raise FinalBenchmarkError("not unlocked")
+            def rejected(*_args, **_kwargs):
+                touched.append("source")
+                raise FinalBenchmarkError("split lock rejected")
 
             def forbidden(*_args, **_kwargs):
-                raise AssertionError("test-side verifier ran before authorization")
+                raise AssertionError("noise verifier ran after rejected split lock")
 
             with (
                 patch.object(final_benchmark_module, "ROOT", config.split_lock.parents[1]),
                 patch.object(final_benchmark_module, "FINAL_SOURCE_COUNT", 2),
                 patch.object(final_benchmark_module, "FINAL_ROW_COUNT", 10),
             ):
-                with self.assertRaisesRegex(FinalBenchmarkError, "not unlocked"):
+                with self.assertRaisesRegex(FinalBenchmarkError, "split lock rejected"):
                     build_final_benchmark(
                         config,
-                        decision_verifier=rejected,
-                        source_verifier=forbidden,
+                        source_verifier=rejected,
                         noise_verifier=forbidden,
-                        method_verifier=forbidden,
                     )
-            self.assertEqual(touched, ["decision"])
+            self.assertEqual(touched, ["source"])
             self.assertFalse(config.output_manifest.exists())
             self.assertFalse(config.output_audio_dir.exists())
 
@@ -446,16 +380,13 @@ class FinalBenchmarkTests(unittest.TestCase):
             with self.assertRaisesRegex(Exception, "audio|Audio"):
                 _build(config, [])
 
-    def test_zero_shot_authorizer_rejects_semantic_lock_tampering_pre_manifest(self) -> None:
+    def test_portable_bundle_authorizer_rejects_semantic_lock_tampering(self) -> None:
         cases = {
             "builder_params": "builder contract",
             "schema": "schema lock",
             "audit": "audit contains failed",
             "noise_inventory": "MUSAN-test provenance",
-            "noise_count": "MUSAN-test provenance",
-            "method_mode": "requires a formal method lock",
-            "method_hash": "method lock is missing or has changed",
-            "noise_lock_hash": "method artifact noise_split_lock SHA-256 mismatch",
+            "method_binding": "method/decision independent",
             "benchmark_lock_hash": "SHA-256 has changed",
         }
         for case, message in cases.items():
@@ -465,9 +396,6 @@ class FinalBenchmarkTests(unittest.TestCase):
                 _build(config, [])
                 lock = json.loads(config.protocol_lock.read_text(encoding="utf-8"))
                 original_lock_hash = sha256_file(config.protocol_lock)
-                method = json.loads(config.method_lock.read_text(encoding="utf-8"))
-                method_hash = sha256_file(config.method_lock)
-
                 if case == "builder_params":
                     lock["builder"]["params"]["seed"] = 999
                 elif case == "schema":
@@ -482,140 +410,61 @@ class FinalBenchmarkTests(unittest.TestCase):
                         "w", encoding="utf-8", newline=""
                     ) as handle:
                         writer = csv.DictWriter(
-                            handle,
-                            fieldnames=list(rows[0]),
-                            lineterminator="\n",
+                            handle, fieldnames=list(rows[0]), lineterminator="\n"
                         )
                         writer.writeheader()
                         writer.writerows(rows)
                     lock["audit"]["sha256"] = sha256_file(config.protocol_audit)
                 elif case == "noise_inventory":
-                    lock["noise"]["audio_inventory_sha256"] = "f" * 64
-                elif case == "noise_count":
-                    lock["noise"]["file_count"] += 1
-                elif case == "method_mode":
-                    method.pop("identity_sha256")
-                    method["mode"] = "diagnostic"
-                    method["identity_sha256"] = zero_shot_module.canonical_sha256(
-                        method
-                    )
-                    config.method_lock.write_text(
-                        json.dumps(method, ensure_ascii=False, sort_keys=True) + "\n",
-                        encoding="utf-8",
-                    )
-                    method_hash = sha256_file(config.method_lock)
-                    decision = json.loads(
-                        config.decision_lock.read_text(encoding="utf-8")
-                    )
-                    decision["method_lock_sha256"] = method_hash
-                    decision["method_identity_sha256"] = method["identity_sha256"]
-                    config.decision_lock.write_text(
-                        json.dumps(decision, ensure_ascii=False, sort_keys=True) + "\n",
-                        encoding="utf-8",
-                    )
-                elif case == "method_hash":
-                    config.method_lock.write_bytes(config.method_lock.read_bytes() + b" ")
-                elif case == "noise_lock_hash":
-                    config.noise_split_lock.write_bytes(
-                        config.noise_split_lock.read_bytes() + b" "
-                    )
+                    lock["noise"]["audio_inventory_sha256"] = "invalid"
+                elif case == "method_binding":
+                    lock["method_lock_sha256"] = "f" * 64
                 elif case == "benchmark_lock_hash":
                     config.protocol_lock.write_bytes(
                         config.protocol_lock.read_bytes() + b" "
                     )
 
-                if case in {
-                    "builder_params",
-                    "schema",
-                    "audit",
-                    "noise_inventory",
-                    "noise_count",
-                }:
+                if case != "benchmark_lock_hash":
                     config.protocol_lock.write_text(
                         json.dumps(lock, ensure_ascii=False, sort_keys=True, indent=2)
                         + "\n",
                         encoding="utf-8",
                     )
-
-                benchmark_hash = (
+                expected_lock_hash = (
                     original_lock_hash
                     if case == "benchmark_lock_hash"
                     else sha256_file(config.protocol_lock)
                 )
-                split_hash = sha256_file(config.split_lock)
-                decision_hash = sha256_file(config.decision_lock)
-                source_hash = sha256_file(config.source_test_manifest)
-                manifest_hash = str(lock["output"]["manifest_sha256"])
-                config.output_manifest.unlink()
-                zero_config = {
-                    "protocol": {
-                        "split_lock": config.split_lock.relative_to(root).as_posix(),
-                        "decision_lock": config.decision_lock.relative_to(root).as_posix(),
-                        "expected_split_lock_sha256": split_hash,
-                        "expected_decision_lock_sha256": decision_hash,
-                    },
-                    "benchmark": {
-                        "lock": config.protocol_lock.relative_to(root).as_posix(),
-                        "lock_protocol_version": "paper_v2_final_benchmark_v1",
-                        "expected_lock_sha256": benchmark_hash,
-                        "manifest": config.output_manifest.relative_to(root).as_posix(),
-                        "expected_manifest_sha256": manifest_hash,
-                        "expected_rows": 10,
-                    },
-                }
-
-                def verified_decision(**_kwargs):
-                    return {
-                        "split_lock_sha256": split_hash,
-                        "decision_lock_sha256": decision_hash,
-                        "test_manifest_sha256": source_hash,
-                        "method_lock_sha256": method_hash,
-                        "method_identity_sha256": method["identity_sha256"],
-                    }
-
                 with (
-                    patch.object(zero_shot_module, "REPOSITORY_ROOT", root),
                     patch.object(final_benchmark_module, "ROOT", root),
                     patch.object(final_benchmark_module, "FINAL_SOURCE_COUNT", 2),
                     patch.object(final_benchmark_module, "FINAL_ROW_COUNT", 10),
-                    self.assertRaisesRegex(
-                        zero_shot_module.ZeroShotProtocolError, message
-                    ),
+                    self.assertRaisesRegex(FinalBenchmarkError, message),
                 ):
-                    authorize_final_benchmark(
-                        zero_config, decision_verifier=verified_decision
+                    verify_portable_final_benchmark_bundle(
+                        config.protocol_lock,
+                        expected_lock_sha256=expected_lock_hash,
+                        expected_manifest=config.output_manifest,
+                        expected_manifest_sha256=str(
+                            lock["output"]["manifest_sha256"]
+                        ),
+                        expected_rows=10,
                     )
-                self.assertFalse(config.output_manifest.exists())
 
-    def test_decision_must_bind_the_exact_verified_method(self) -> None:
+    def test_arbitrary_method_files_do_not_change_benchmark_identity(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            config, access = _fixture(Path(temporary_directory))
-            decision, source, noise, method = _verifiers(config, access)
-
-            def mismatched_decision(**kwargs):
-                value = dict(decision(**kwargs))
-                value["method_lock_sha256"] = "c" * 64
-                value["method_identity_sha256"] = "d" * 64
-                return value
-
-            with (
-                patch.object(final_benchmark_module, "ROOT", config.split_lock.parents[1]),
-                patch.object(final_benchmark_module, "FINAL_SOURCE_COUNT", 2),
-                patch.object(final_benchmark_module, "FINAL_ROW_COUNT", 10),
-            ):
-                with self.assertRaisesRegex(
-                    FinalBenchmarkError, "differs from the authorized decision"
-                ):
-                    build_final_benchmark(
-                        config,
-                        decision_verifier=mismatched_decision,
-                        source_verifier=source,
-                        noise_verifier=noise,
-                        method_verifier=method,
-                    )
-            self.assertEqual(access, ["decision", "method"])
-            self.assertFalse(config.output_manifest.exists())
-            self.assertFalse(config.output_audio_dir.exists())
+            root = Path(temporary_directory)
+            config, _ = _fixture(root)
+            _build(config, [])
+            before = _transaction_snapshot(config)
+            (root / "protocol" / "best_lambda_decision.json").write_text(
+                '{"lambda":0.1}\n', encoding="utf-8"
+            )
+            (root / "protocol" / "method_lock.json").write_text(
+                '{"method":"changed"}\n', encoding="utf-8"
+            )
+            self.assertEqual(_build(config, [])["status"], "verified_existing")
+            self.assertEqual(_transaction_snapshot(config), before)
 
     def test_self_consistent_existing_output_tampering_fails_semantic_recheck(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:

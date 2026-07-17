@@ -130,3 +130,14 @@ outputs/**/.*
 *.bin
 *.safetensors
 *.onnx
+
+# The sole committed audio exception is the reviewed, self-contained paper-v2
+# final benchmark. Keep this block after every generic data/audio ignore rule.
+!data/
+!data/derived/
+data/derived/*
+!data/derived/paper_v2/
+data/derived/paper_v2/*
+!data/derived/paper_v2/final_benchmark/
+!data/derived/paper_v2/final_benchmark/**
+!docs/final_benchmark_attribution.md

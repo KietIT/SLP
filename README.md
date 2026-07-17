@@ -36,10 +36,13 @@ requirements.txt         Python dependencies
 
 Large generated files are intentionally excluded from Git by default. The only
 exceptions are small, reviewed protocol manifests/audits under
-`data/manifests/paper_v2/` and `outputs/paper_v2/`:
+`data/manifests/paper_v2/` and `outputs/paper_v2/`, plus the explicitly
+allow-listed final benchmark under Git LFS:
 
 ```text
-data/                    Downloaded VIVOS/MUSAN and generated noisy audio (ignored)
+data/                    Downloaded VIVOS/MUSAN and generated audio (ignored by default)
+data/derived/paper_v2/final_benchmark/
+                         Sole audio allow-list: 2,300 final WAVs in Git LFS
 outputs/                 Generated CSV/report/slide artifacts
 experiments/             Fine-tuned checkpoints and training outputs
 ```
@@ -48,6 +51,17 @@ Keep raw data and checkpoint weights out of normal Git commits. Reviewed result
 tables, prediction CSVs, protocol locks, and portable provenance may be staged
 selectively; transfer checkpoints with the hash-verified handoff procedure in
 `Guide.md` (or a separately approved Git-LFS workflow).
+
+The final benchmark is built once by the designated builder and consumed
+read-only by every inference machine. Its metadata is one JSONL file with
+exactly 2,300 rows:
+`outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl`. The JSONL is not
+an audio container; the corresponding 2,300 WAV files remain under the LFS
+directory above. Do not rebuild the benchmark after it is published. Install
+Git LFS and run `git lfs pull` after cloning or pulling. See the exact publish,
+pull, and SHA verification commands in [Guide.md](Guide.md), and review
+[dataset licensing and attribution](docs/final_benchmark_attribution.md)
+before making the LFS objects public.
 
 ## Dataset links
 

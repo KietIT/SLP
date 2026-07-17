@@ -21,8 +21,8 @@ from src.vitonesr.final_benchmark import (  # noqa: E402
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "After the method/lambda decision is locked, build the final 460-clean "
-            "+ 1,840 MUSAN-test VIVOS robustness benchmark and its integrity lock."
+            "Build the method-independent final 460-clean + 1,840 MUSAN-test "
+            "VIVOS robustness benchmark as one self-contained 2,300-row bundle."
         )
     )
     parser.add_argument(
@@ -31,25 +31,9 @@ def build_parser() -> argparse.ArgumentParser:
         default=Path("outputs/paper_v2/protocol/split_lock.json"),
     )
     parser.add_argument(
-        "--decision-lock",
-        type=Path,
-        default=Path("outputs/paper_v2/protocol/best_lambda_decision.json"),
-    )
-    parser.add_argument(
         "--noise-split-lock",
         type=Path,
         default=Path("outputs/paper_v2/protocol/noise_split_lock.json"),
-    )
-    parser.add_argument(
-        "--method-lock",
-        type=Path,
-        default=Path("outputs/paper_v2/protocol/method_lock.json"),
-    )
-    parser.add_argument(
-        "--method-config",
-        type=Path,
-        default=Path("configs/phat/lambda_0.yaml"),
-        help="Any lambda-grid config whose contract is bound by method_lock.",
     )
     parser.add_argument(
         "--source-test-manifest",
@@ -98,10 +82,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     config = FinalBenchmarkConfig(
         split_lock=args.split_lock,
-        decision_lock=args.decision_lock,
         noise_split_lock=args.noise_split_lock,
-        method_lock=args.method_lock,
-        method_config=args.method_config,
         source_test_manifest=args.source_test_manifest,
         output_manifest=args.output_manifest,
         output_audio_dir=args.output_audio_dir,

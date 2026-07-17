@@ -13,6 +13,7 @@ from src.vitonesr.prediction_evidence import (
     DecisionEvidence,
     FINAL_LORA_VERSION,
     FLEURS_VERSION,
+    ZERO_SHOT_VERSION,
     PredictionEvidenceError,
     formal_protocol_parameters,
     sha256_file,
@@ -434,6 +435,9 @@ class PredictionEvidenceTests(unittest.TestCase):
             row_count=2,
             final_benchmark_lock_path=self.root / "protocol" / "final_lock.json",
             final_benchmark_lock_sha256=HASH_B,
+            final_benchmark_protocol_version="paper_v2_final_benchmark_v2",
+            audio_inventory_sha256=HASH_C,
+            audit_sha256=HASH_D,
         )
 
         zero = self.root / "predictions" / "zero.csv"
@@ -472,14 +476,12 @@ class PredictionEvidenceTests(unittest.TestCase):
         }
         zero_config = {
             "seed": 42,
-            "protocol": {
-                "formal": True,
-                "final_test_unlocked": True,
-                "expected_split_lock_sha256": sha256_file(self.split),
-                "expected_decision_lock_sha256": decision.sha256,
-            },
+            "protocol": {"formal": True},
             "benchmark": {
+                "lock_protocol_version": "paper_v2_final_benchmark_v2",
+                "lock": "protocol/final_lock.json",
                 "expected_lock_sha256": HASH_B,
+                "manifest": "manifests/fleurs.jsonl",
                 "expected_manifest_sha256": benchmark.sha256,
                 "expected_rows": 2,
                 "dataset": "fleurs",
@@ -491,7 +493,7 @@ class PredictionEvidenceTests(unittest.TestCase):
             json.dumps(zero_config, sort_keys=True) + "\n", encoding="utf-8"
         )
         run_contract = {
-            "contract_version": "paper_v2_zero_shot_run_v1",
+            "contract_version": "paper_v2_zero_shot_run_v2",
             "suite_config_sha256": sha256_file(self.config),
             "schema": list(CANONICAL_PREDICTION_COLUMNS),
             "model": zero_model,
@@ -508,15 +510,18 @@ class PredictionEvidenceTests(unittest.TestCase):
             ).encode("utf-8")
         ).hexdigest()
         zero_sidecar = {
-            "provenance_version": "paper_v2_zero_shot_prediction_v1",
+            "provenance_version": ZERO_SHOT_VERSION,
             "prediction_sha256": sha256_file(zero),
             "num_rows": 2,
             "manifest_sha256": benchmark.sha256,
+            "manifest_num_rows": 2,
+            "audio_hashes_verified": True,
             "metric_version": "aligned_v1",
             "schema": list(CANONICAL_PREDICTION_COLUMNS),
-            "split_lock_sha256": sha256_file(self.split),
-            "decision_lock_sha256": decision.sha256,
             "benchmark_lock_sha256": HASH_B,
+            "benchmark_lock_protocol_version": "paper_v2_final_benchmark_v2",
+            "audio_inventory_sha256": HASH_C,
+            "audit_sha256": HASH_D,
             "suite_config": self._relative(self.config),
             "suite_config_sha256": sha256_file(self.config),
             "run_contract": run_contract,
@@ -533,7 +538,42 @@ class PredictionEvidenceTests(unittest.TestCase):
             verify_prediction_evidence(
                 zero, decision=decision, benchmark=benchmark, root=self.root
             ).provenance_version,
-            "paper_v2_zero_shot_prediction_v1",
+            ZERO_SHOT_VERSION,
+        )
+
+        old_version = dict(zero_sidecar)
+        old_version["provenance_version"] = "paper_v2_zero_shot_prediction_v1"
+        zero.with_suffix(".csv.provenance.json").write_text(
+            json.dumps(old_version, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(
+            PredictionEvidenceError, "Unsupported formal prediction provenance"
+        ):
+            verify_prediction_evidence(
+                zero, decision=decision, benchmark=benchmark, root=self.root
+            )
+
+        tampered_inventory = dict(zero_sidecar)
+        tampered_inventory["audio_inventory_sha256"] = HASH_A
+        zero.with_suffix(".csv.provenance.json").write_text(
+            json.dumps(tampered_inventory, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(PredictionEvidenceError, "audio_inventory_sha256"):
+            verify_prediction_evidence(
+                zero, decision=decision, benchmark=benchmark, root=self.root
+            )
+
+        forbidden_decision = dict(zero_sidecar)
+        forbidden_decision["decision_lock_sha256"] = decision.sha256
+        zero.with_suffix(".csv.provenance.json").write_text(
+            json.dumps(forbidden_decision, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        with self.assertRaisesRegex(PredictionEvidenceError, "method/raw-data"):
+            verify_prediction_evidence(
+                zero, decision=decision, benchmark=benchmark, root=self.root
+            )
+        zero.with_suffix(".csv.provenance.json").write_text(
+            json.dumps(zero_sidecar, sort_keys=True) + "\n", encoding="utf-8"
         )
 
         final_dir = self.root / "final" / "ordinary_baseline"

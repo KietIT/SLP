@@ -1,7 +1,8 @@
 suite_version: paper_v2_final_lora_suite_v1
 
-# Fill every REQUIRED_AFTER_* digest after the corresponding immutable artifact
-# is created. The runner intentionally rejects placeholders.
+# The portable benchmark may be built before lambda selection. Fill every
+# REQUIRED_AFTER_* digest when materializing the runtime config; final LoRA
+# roles remain authorized exclusively by the later decision/method locks.
 protocol:
   formal: true
   final_test_unlocked: true
@@ -25,8 +26,8 @@ benchmark:
 
 runtime:
   device: auto
-  # Set true for the strongest preflight. False still verifies every protocol
-  # manifest/lock hash and all 2,300 final audio hashes before inference.
+  # Set true for the strongest method-data preflight. False still verifies the
+  # decision/method identities and all 2,300 portable benchmark audio hashes.
   verify_method_audio_sha256: false
 
 output:
