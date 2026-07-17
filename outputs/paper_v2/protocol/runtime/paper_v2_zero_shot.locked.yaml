@@ -1,0 +1,63 @@
+protocol:
+  formal: true
+benchmark:
+  lock_protocol_version: paper_v2_final_benchmark_v2
+  lock: outputs/paper_v2/protocol/final_benchmark_lock.json
+  expected_lock_sha256: b34d7b25c320752b8d857a2f7749ad12ffafdf58cdd4a19efd76fdb8985d382d
+  manifest: outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl
+  expected_manifest_sha256: 89712f4873a6de7fb84f912d2380419fc48f56c7499ebed5f62528c749a2a146
+  expected_rows: 2300
+  dataset: vivos
+  verify_audio_sha256: true
+output_dir: outputs/paper_v2/predictions/zero_shot
+seed: 42
+decoding:
+  language: vi
+  task: transcribe
+  sample_rate: 16000
+  max_audio_seconds: 15.0
+  max_new_tokens: 128
+  do_sample: false
+  num_beams: 1
+runtime:
+  batch_size: 1
+  device: auto
+  precision: fp16
+  local_files_only: true
+models:
+  whisper_tiny:
+    repo_id: openai/whisper-tiny
+    revision: 169d4a4341b33bc18d8881c4b69c2e104e1cc0af
+    model: whisper
+    model_size: tiny
+    filename: pred_whisper_tiny.csv
+  whisper_base:
+    repo_id: openai/whisper-base
+    revision: e37978b90ca9030d5170a5c07aadb050351a65bb
+    model: whisper
+    model_size: base
+    filename: pred_whisper_base.csv
+  whisper_small:
+    repo_id: openai/whisper-small
+    revision: 973afd24965f72e36ca33b3055d56a652f456b4d
+    model: whisper
+    model_size: small
+    filename: pred_whisper_small.csv
+  phowhisper_tiny:
+    repo_id: vinai/PhoWhisper-tiny
+    revision: cc51d32be916efebde04ff549854fa1741cb5c02
+    model: phowhisper
+    model_size: tiny
+    filename: pred_phowhisper_tiny.csv
+  phowhisper_base:
+    repo_id: vinai/PhoWhisper-base
+    revision: 7ebdb9e88f5cc5271fb88f4d642c82ff9388650e
+    model: phowhisper
+    model_size: base
+    filename: pred_phowhisper_base.csv
+  phowhisper_small:
+    repo_id: vinai/PhoWhisper-small
+    revision: a86b604c346caf7148c37512eafe783a16420adb
+    model: phowhisper
+    model_size: small
+    filename: pred_phowhisper_small.csv
