@@ -1,0 +1,99 @@
+{
+  "audit": {
+    "checks": 19,
+    "failed_checks": 0,
+    "path": "outputs/paper_v2/protocol/final_benchmark_audit.csv",
+    "sha256": "ed9454f405cf1c102cb774c3607f8dcb142a60bc5d14d1bc93cc3aa4853cd84d"
+  },
+  "builder": {
+    "params": {
+      "algorithm": "sha256_musan_test_power_mix_v1",
+      "audio_container": "WAV",
+      "audio_subtype": "PCM_16",
+      "channel_policy": "mean_to_mono",
+      "clipping_measurement": "pre_scale_over_1_and_stored_full_scale",
+      "expected_row_count": 2300,
+      "expected_source_count": 460,
+      "include_clean": true,
+      "input_sample_rate_policy": "require_exact",
+      "noise_partition": "musan_test",
+      "peak_limit": 0.999,
+      "sample_rate": 16000,
+      "seed": 42,
+      "snr_measurement": "component_power_after_anti_clip_before_pcm16",
+      "snrs_db": [
+        20.0,
+        10.0,
+        5.0,
+        0.0
+      ],
+      "source_partition": "vivos_test_locked"
+    },
+    "params_sha256": "095403aa5126513057cefd6de0decb1ef6855c790238c8473b61cd770798a7f5"
+  },
+  "final_test_eligible": true,
+  "noise": {
+    "audio_inventory_sha256": "26ccecb98e555a596572cabfaea177d1beacb1a7ccec8fa4bdf082d5d0dcace4",
+    "file_count": 202,
+    "partition": "test",
+    "registry_manifest_sha256": "c62de50e5c523c4c8c5b5e4d669793f4e369ec2a2a241e3cc9c2833b36976e28",
+    "split_lock": "outputs/paper_v2/protocol/noise_split_lock.json",
+    "split_lock_sha256": "5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9",
+    "test_manifest": "data/manifests/noise/paper_v2/musan_test.jsonl",
+    "test_manifest_sha256": "6345d11536a99f0584bc96d58d10ad236e4b6995f692748e8eebe12489be9719"
+  },
+  "noise_split_lock_sha256": "5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9",
+  "output": {
+    "audio_dir": "data/derived/paper_v2/final_benchmark",
+    "audio_hashes_recorded": true,
+    "audio_inventory_sha256": "23cdcd4824c8d39b752912fd9a05bfb4ecc837269c25aa33f735fc427d1bb805",
+    "clean_row_count": 460,
+    "manifest": "outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl",
+    "manifest_sha256": "89712f4873a6de7fb84f912d2380419fc48f56c7499ebed5f62528c749a2a146",
+    "noisy_row_count": 1840,
+    "row_count": 2300
+  },
+  "protocol_version": "paper_v2_final_benchmark_v2",
+  "schema": [
+    "utt_id",
+    "source_utt_id",
+    "speaker_id",
+    "dataset",
+    "split",
+    "condition",
+    "audio_path",
+    "audio_sha256",
+    "clean_path",
+    "clean_audio_sha256",
+    "transcript",
+    "text_sha256",
+    "snr",
+    "target_snr_db",
+    "measured_snr_db",
+    "noise_id",
+    "noise_type",
+    "noise_path",
+    "noise_audio_sha256",
+    "noise_split",
+    "seed",
+    "sample_rate",
+    "duration_seconds",
+    "pre_scale_peak",
+    "anti_clip_gain",
+    "pre_scale_clipped_samples",
+    "stored_peak",
+    "clipped_sample_count",
+    "selection_eligible",
+    "final_test_eligible"
+  ],
+  "selection_eligible": false,
+  "source_test": {
+    "audio_text_inventory_sha256": "6a0356e98c5782807bd8194bcef441dbd51a3897a3b8dcfcff3faf40696a8e1c",
+    "manifest": "data/manifests/paper_v2/vivos_test_locked.jsonl",
+    "manifest_sha256": "e85bb3dc20d383da19804adeac5dfefd884acf9675fc547e912822880e2ab6ac",
+    "utterance_count": 460
+  },
+  "source_test_manifest_sha256": "e85bb3dc20d383da19804adeac5dfefd884acf9675fc547e912822880e2ab6ac",
+  "split_lock_sha256": "a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2",
+  "status": "LOCKED"
+}
