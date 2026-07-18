@@ -1,0 +1,84 @@
+{
+  "audio_hashes_verified": true,
+  "benchmark_protocol": "noisy_dev",
+  "checkpoint": "outputs/paper_v2/checkpoints/ckpt_lora_ordinary_lambda0/best",
+  "checkpoint_sha256": "2688df5c9be2a5c34044ba2ec24c1b894087222c58d9ed7c85c117d2df6dae32",
+  "config_file_sha256": "8b1c49e874f7b0ebe9bd1c17539fbe3917fc34623669ebec91260214008af223",
+  "config_identity_sha256": "4921db01400ba0179c167a8ed6685ff6f862f2ec07f3d4e0e7d7aa99c943bc88",
+  "config_path": "configs/phat/lambda_0.yaml",
+  "decision_lock_sha256": "",
+  "environment_artifact_sha256": "7d7ffb0b09168d2ec32c325385d5359ea7134b1bc61de5f9b52c0224a25b8a4d",
+  "environment_identity_sha256": "5145fd94c3b122c576367b20436c7b7cf61bc66b90a35d514f86dcb4101f6960",
+  "evaluation_contract": {
+    "contract_version": "paper_v2_evaluation_contract_v2",
+    "decoding": {
+      "do_sample": false,
+      "implementation": "whisper_generate_greedy_v1",
+      "language": "vi",
+      "max_new_tokens": 128,
+      "num_beams": 1,
+      "task": "transcribe"
+    },
+    "effective_audio": {
+      "max_audio_seconds": 15.0,
+      "sample_rate": 16000
+    },
+    "evaluation": {
+      "batch_size": 1,
+      "benchmark_protocol": "noisy_dev",
+      "data_split": "dev",
+      "expected_manifest_sha256": "e9bb6cdb4934d90f10b0782b7960a609b33476ffbfcd946a08568a46de8c853b",
+      "expected_noise_split_lock_sha256": "5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9",
+      "expected_noisy_dev_lock_sha256": "db263c9dc565a498261a1f912d7389ad4c947015d1b03f12befb89618417cda7",
+      "expected_source_dev_sha256": "3dc1afaaf4aedcaf5e5f472d93bb718df5776630e2e04db59e32f8fd8ef1af79",
+      "expected_total_rows": 14125,
+      "inference_precision": "fp16",
+      "locked_vivos_split": "dev",
+      "max_audio_seconds": 15.0,
+      "max_new_tokens": 128,
+      "noisy_dev_lock": "outputs/paper_v2/protocol/noisy_dev_lock.json",
+      "sample_rate": 16000
+    },
+    "model": {
+      "language": "vi",
+      "name_or_path": "vinai/PhoWhisper-base",
+      "revision": "7ebdb9e88f5cc5271fb88f4d642c82ff9388650e",
+      "task": "transcribe"
+    }
+  },
+  "evaluation_contract_sha256": "647101a414b86db0a8a9896821630904399b2fbb122035692f4d6e19c497a589",
+  "evaluation_scope": "full_manifest",
+  "evaluation_split": "dev",
+  "filters": {
+    "limit": null,
+    "noise_types": [],
+    "snrs": [],
+    "subset": "all"
+  },
+  "manifest": "data/manifests/paper_v2/vivos_dev_noisy.jsonl",
+  "manifest_num_rows": 14125,
+  "manifest_sha256": "e9bb6cdb4934d90f10b0782b7960a609b33476ffbfcd946a08568a46de8c853b",
+  "method_identity_sha256": "e16ff2a045e35ee29ddbd50db9844fca3a610496dc349be6b90d5067f7be70a7",
+  "method_lock_sha256": "0e20238c9b027d75937e4c65644394452990422ceab5f922a57be87c21f9007d",
+  "metric_version": "aligned_v1",
+  "noise_split_lock_sha256": "5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9",
+  "noisy_dev_lock_sha256": "db263c9dc565a498261a1f912d7389ad4c947015d1b03f12befb89618417cda7",
+  "num_rows": 14125,
+  "prediction_sha256": "82b0b1d6cfc7820224187df77b4461b15f162a958e6f7adace964e9241c786d7",
+  "provenance_version": "prediction_evaluation_v4",
+  "resolved_config_sha256": "ef96fbf03d54ced1af19bddb7797b2f31b7e702f47127783dd86ac2216029e5b",
+  "resume_contract_sha256": "2f8a39d8c0d3ae3dbc725eeb01278b3340e84aacc534dfdcddb1aa9ec02e1b8f",
+  "runtime_environment": {
+    "batch_size": 1,
+    "cuda_version": "12.8",
+    "device_type": "cuda",
+    "dtype": "torch.float16",
+    "torch_version": "2.11.0+cu128",
+    "transformers_version": "5.12.1"
+  },
+  "selected_rows_sha256": "d96dc20d79aa91f886f730551b8d12060a201dedf03819c7138a4cfde9d89ae6",
+  "source_tree_sha256": "2d93eeb8bda7bf8de781d1ea53ec466b7cbe6282b7e7e93d724603ea5ab312a5",
+  "split_lock_sha256": "a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2",
+  "training_contract_sha256": "e488b86a6a4d7dbe45ff69159fd672e31cd507893b3ab7caf094d3835eaecf26",
+  "training_scope": "formal"
+}
