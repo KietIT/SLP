@@ -1225,12 +1225,14 @@ Ghi rõ checkpoint cũ được train trước tone-alignment/protocol fix. Khô
 
 - Raw VIVOS, MUSAN, FLEURS audio và derived noisy-dev. Ngoại lệ duy nhất là self-contained final-benchmark WAV đã được Trung duyệt, allow-list đúng path và track bằng Git LFS theo mục 15.
 - Archive dataset, Hugging Face cache hoặc model snapshot cache.
-- Checkpoint weights/adapters/optimizer states (`*.safetensors`, `*.bin`, `*.pt`, `*.ckpt`) và checkpoint step trung gian.
+- Checkpoint weights/adapters bị cấm, ngoại trừ đúng năm bundle `best/` inference-only đã allow-list theo phê duyệt branch ngày 2026-07-18. Kể cả trong năm run đó, `optimizer.pt`, `scheduler.pt`, `scaler.pt`, `rng_state.pt`, `checkpoint_step_*`, `final/` và mọi state phục vụ resume vẫn không được commit.
 - Smoke outputs, partial/resume/temp/backup files, lock file tạm, log chứa path/token riêng của máy.
 - Conda/venv, cache Python, IDE settings, secrets, Hugging Face token.
 - Diagnostic preview old-vs-new; chỉ canonical formal CSV/Markdown/provenance mới được đưa ra review.
 
 Chỉ chuẩn bị để review/commit: source, tests, config/template, `Guide.md`, manifest/lock/audit nhỏ đã được hash, canonical result CSV/Markdown/PNG cuối và provenance không chứa secret. Việc `git add`, commit, push hoặc force-add output phải do Trung duyệt từng nhóm thay đổi.
+
+Phê duyệt ngày 2026-07-18 chỉ cho phép commit và push đúng năm bundle `best/` inference-only cùng kết quả formal lên branch `codex/phat-results-checkpoints` bằng Git LFS; đây không phải là phê duyệt merge vào `main`. Mỗi bundle chỉ gồm `adapter/{adapter_config.json,adapter_model.safetensors,README.md}`, `processor/{processor_config.json,tokenizer.json,tokenizer_config.json}`, `resolved_config.yaml`, `trainer_state.json`; bốn bundle tone-aware có thêm `tone_head.pt`. Trước khi merge, Trung vẫn phải review riêng staged diff, LFS objects và hash provenance.
 
 ## 19. Checklist hoàn tất
 

@@ -1,0 +1,123 @@
+seed: 42
+protocol:
+  split_lock: outputs/paper_v2/protocol/split_lock.json
+  method_lock: outputs/paper_v2/protocol/method_lock.json
+  decision_lock: outputs/paper_v2/protocol/best_lambda_decision.json
+  verify_audio_sha256: true
+  formal_training_unlocked: true
+  final_test_unlocked: true
+model:
+  name_or_path: vinai/PhoWhisper-base
+  revision: 7ebdb9e88f5cc5271fb88f4d642c82ff9388650e
+  language: vi
+  task: transcribe
+  lora:
+    r: 8
+    lora_alpha: 16
+    lora_dropout: 0.05
+    target_modules:
+    - q_proj
+    - v_proj
+training:
+  run_scope: formal
+  num_train_epochs: 3
+  per_device_train_batch_size: 16
+  per_device_eval_batch_size: 16
+  gradient_accumulation_steps: 1
+  learning_rate: 0.0001
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  max_audio_seconds: 15.0
+  max_label_length: 192
+  mixed_precision: fp16
+  gradient_checkpointing: true
+  deterministic: true
+  num_workers: 0
+  save_steps: 100
+  log_steps: 10
+  tone_label_policy: last_subtoken
+  checkpoint_metric: dev_asr_loss
+  checkpoint_mode: min
+  lambda_tone: 0.1
+  output_dir: outputs/paper_v2/checkpoints/ckpt_tone_lora_lambda_01
+data:
+  train_manifest: data/manifests/paper_v2/vivos_train.jsonl
+  valid_manifest: data/manifests/paper_v2/vivos_dev.jsonl
+  sample_rate: 16000
+noise:
+  enable_train_noise: true
+  noise_manifest: data/manifests/noise/paper_v2/musan_train.jsonl
+  snr_choices:
+  - 20
+  - 10
+  - 5
+  - 0
+  prob: 0.7
+evaluation:
+  manifest: data/manifests/paper_v2/vivos_dev_noisy.jsonl
+  data_split: dev
+  benchmark_protocol: noisy_dev
+  locked_vivos_split: dev
+  noisy_dev_lock: outputs/paper_v2/protocol/noisy_dev_lock.json
+  expected_noisy_dev_lock_sha256: db263c9dc565a498261a1f912d7389ad4c947015d1b03f12befb89618417cda7
+  expected_noise_split_lock_sha256: 5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9
+  expected_source_dev_sha256: 3dc1afaaf4aedcaf5e5f472d93bb718df5776630e2e04db59e32f8fd8ef1af79
+  expected_manifest_sha256: e9bb6cdb4934d90f10b0782b7960a609b33476ffbfcd946a08568a46de8c853b
+  expected_total_rows: 14125
+  max_new_tokens: 128
+  batch_size: 1
+  inference_precision: fp16
+  sample_rate: 16000
+  max_audio_seconds: 15.0
+  prediction_path: outputs/paper_v2/dev_screen/pred_tone_lora_lambda_01.csv
+selection:
+  required_evaluation_split: dev
+  expected_manifest_sha256: e9bb6cdb4934d90f10b0782b7960a609b33476ffbfcd946a08568a46de8c853b
+  expected_evaluation_contract_sha256: 647101a414b86db0a8a9896821630904399b2fbb122035692f4d6e19c497a589
+  require_full_manifest: true
+  low_snr:
+  - 0
+  - 5
+  ter_weight: 0.5
+  der_weight: 0.5
+  max_wer_absolute_increase: 0.05
+  max_cer_absolute_increase: 0.03
+  min_ter_coverage_ratio_vs_baseline: 0.98
+  min_der_coverage_ratio_vs_baseline: 0.98
+  min_fcer_coverage_ratio_vs_baseline: 0.98
+  guard_split: all
+  guard_snr: all
+  allow_lambda_zero: false
+  locked_control_strategy: best_eligible_non_selected_tone_aware
+experiment:
+  id: phowhisper_base_tone_lora_lambda_01
+  method_id: corrected_decoder_tone_lora
+  train_type: tone_aware_lora
+logging:
+  file: outputs/paper_v2/logs/train_tone_lora_lambda_01.log
+  metrics_csv: outputs/paper_v2/logs/train_tone_lora_lambda_01.csv
+  dev_metrics_csv: outputs/paper_v2/logs/dev_tone_lora_lambda_01.csv
+runtime_protocol:
+  protocol_version: vivos_exposure_aware_split_v2
+  split_lock_sha256: a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2
+  train_manifest_sha256: 98dc7029d2e9794d68cc1905cf08970ca59b07d653f53493d527ff2dc7ccf7cb
+  dev_manifest_sha256: 3dc1afaaf4aedcaf5e5f472d93bb718df5776630e2e04db59e32f8fd8ef1af79
+  audio_hashes_verified: true
+  training_contract_sha256: c81afcd755babaf92af9507669df8f9496bbd16114036a8ef4aef2ad93ba937a
+  training_scope: formal
+  method_lock_sha256: 0e20238c9b027d75937e4c65644394452990422ceab5f922a57be87c21f9007d
+  method_identity_sha256: e16ff2a045e35ee29ddbd50db9844fca3a610496dc349be6b90d5067f7be70a7
+  environment_artifact_sha256: 7d7ffb0b09168d2ec32c325385d5359ea7134b1bc61de5f9b52c0224a25b8a4d
+  environment_identity_sha256: 5145fd94c3b122c576367b20436c7b7cf61bc66b90a35d514f86dcb4101f6960
+  source_tree_sha256: 2d93eeb8bda7bf8de781d1ea53ec466b7cbe6282b7e7e93d724603ea5ab312a5
+  protocol_split_lock_sha256: a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2
+  noise_split_lock_sha256: 5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9
+  noisy_dev_lock_sha256: db263c9dc565a498261a1f912d7389ad4c947015d1b03f12befb89618417cda7
+  noisy_dev_manifest_sha256: e9bb6cdb4934d90f10b0782b7960a609b33476ffbfcd946a08568a46de8c853b
+  mode: formal
+  noise_enabled: true
+  noise_manifest_sha256: 9f0f840214c4960310c4f6ec20b2da2d5e0cf6cf3dcdf96e6d6d448351951848
+  noise_manifest_rows: 1612
+  noise_audio_paths_verified: true
+  noise_audio_hashes_verified: true
