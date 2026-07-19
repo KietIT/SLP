@@ -1,0 +1,58 @@
+{
+  "dataset": {
+    "config": "vi_vn",
+    "repository": "google/fleurs",
+    "revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+    "split": "test"
+  },
+  "identity_sha256": "4c2aa1248c6cb0bc691e82afa27822785db8ebfc6f4119bb25e6c999d9965ba9",
+  "license": {
+    "id": "CC-BY-4.0",
+    "status": "dataset_card_declared_at_revision",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "lock_version": "paper_v2_fleurs_preparation_v1",
+  "output": {
+    "audio_inventory_sha256": "55853379d3b16a69a1fd697f4aaa9f9c1b5963d68e9242c79e1c1c8901578c99",
+    "audio_total_bytes": 346075468,
+    "audit": "outputs/paper_v2/protocol/fleurs_test_audit.csv",
+    "audit_schema": [
+      "utt_id",
+      "audio_path",
+      "audio_sha256",
+      "num_bytes",
+      "sample_rate",
+      "channels",
+      "sample_width_bytes",
+      "num_frames",
+      "duration_seconds"
+    ],
+    "audit_sha256": "c92d0c4d713ec20b01aab4b4adcd9f98cc83ccc8919ae073af1014ad51305eec",
+    "manifest": "data/manifests/fleurs/paper_v2/test.jsonl",
+    "manifest_schema": [
+      "utt_id",
+      "dataset",
+      "split",
+      "audio_path",
+      "audio_sha256",
+      "transcript",
+      "snr",
+      "noise_type"
+    ],
+    "manifest_sha256": "91e6256c34faf7d26ed459844bd6a3dc390337716d67801f0eca80dcc72bcede",
+    "row_count": 857
+  },
+  "preparation_contract": {
+    "amplitude_policy": "clip_-1_1_round_times_32767",
+    "channel_policy": "decoded_mono_only",
+    "contract_version": "paper_v2_fleurs_pcm16_v1",
+    "decoder": "huggingface_datasets_audio",
+    "ordering": "source_split_iteration_order",
+    "resampling": "linear_interpolation_float64",
+    "sample_format": "PCM_S16LE",
+    "sample_rate": 16000,
+    "transcript_normalization": "strip_then_NFC",
+    "utterance_id": "source_audio_filename_stem"
+  },
+  "status": "LOCKED"
+}
