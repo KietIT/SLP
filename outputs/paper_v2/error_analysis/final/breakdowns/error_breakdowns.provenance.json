@@ -1,0 +1,50 @@
+{
+  "bundle_name": "error_breakdowns",
+  "bundle_version": "error_breakdowns_aligned_v1_bundle_v1",
+  "data_outputs": [
+    {
+      "bytes": 674,
+      "key": "output_00",
+      "path": "wer_decomposition.csv",
+      "sha256": "ebc3bb724b32c059e98d2eddd62cbd9b35e94d5eaa928cb6c642d07a33145c9d"
+    },
+    {
+      "bytes": 1277,
+      "key": "output_01",
+      "path": "ter_breakdown.csv",
+      "sha256": "06d63e2c60390e340cbe7a89658be1cbeebd3e931c65456bdeb56a7ecc546f39"
+    },
+    {
+      "bytes": 1682,
+      "key": "output_02",
+      "path": "der_breakdown.csv",
+      "sha256": "e41c11478b7addb5194e73fe13004075efb16b77bd73f3e4df67e07bad3b5f4a"
+    },
+    {
+      "bytes": 1778,
+      "key": "output_03",
+      "path": "orthographic_breakdown.csv",
+      "sha256": "632d06d16f6568c80aeb32785c0dee89eb6c101d381dc5ad8707acd805162dfe"
+    },
+    {
+      "bytes": 519977,
+      "key": "output_04",
+      "path": "diacritic_error_events.csv",
+      "sha256": "75246987f7b191569da1c3d61fb82f56e48f1104f654bb38436866ba4decd0f4"
+    }
+  ],
+  "inputs": [
+    {
+      "bytes": 21827271,
+      "path": "outputs/paper_v2/error_analysis/final/error_events.csv",
+      "sha256": "b291d535574860a4ce3cae1e87351f228245a7805d7a98bddcc8d79e637d3dc7"
+    }
+  ],
+  "parameters": {
+    "diacritic_event_rows": 1642,
+    "input_event_rows": 70459,
+    "metric_version": "aligned_v1",
+    "run_count": 3
+  },
+  "provenance_version": "analysis_artifact_provenance_v1"
+}

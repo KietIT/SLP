@@ -1,0 +1,4 @@
+metric_version,dataset,model,model_size,train_type,lambda,seed,n_utterances,n_ref_tokens,n_hyp_tokens,matches,substitutions,deletions,insertions,word_errors,substitution_rate,deletion_rate,insertion_rate,wer
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,2300,23300,23409,20454,2747,99,208,3054,0.117896995708,0.004248927039,0.008927038627,0.131072961373
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,2300,23300,23377,20452,2746,102,179,3027,0.117854077253,0.004377682403,0.007682403433,0.129914163090
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,2300,23300,23375,20413,2790,97,172,3059,0.119742489270,0.004163090129,0.007381974249,0.131287553648

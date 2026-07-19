@@ -1,0 +1,71 @@
+{
+  "bundle_name": "tone_confusion_matrix",
+  "bundle_version": "error_artifacts_aligned_v1_bundle_v1",
+  "data_outputs": [
+    {
+      "bytes": 21973,
+      "key": "csv",
+      "path": "tone_confusion_matrix.csv",
+      "sha256": "4b093c8bb0092715d8ea02a8e8efb7197afbbfe15d9e2c316f35d3d87cb0d3f5"
+    },
+    {
+      "bytes": 744916,
+      "key": "png",
+      "path": "tone_confusion_matrix.png",
+      "sha256": "c16763c04c5c8a4919932a9baba3fdee55094957d82113270d0c024c2755d5a9"
+    }
+  ],
+  "inputs": [
+    {
+      "bytes": 21827271,
+      "path": "outputs/paper_v2/error_analysis/final/error_events.csv",
+      "sha256": "b291d535574860a4ce3cae1e87351f228245a7805d7a98bddcc8d79e637d3dc7"
+    }
+  ],
+  "parameters": {
+    "artifact": "tone_confusion_matrix",
+    "event_rows": 70459,
+    "focus_runs": [
+      {
+        "label": "ordinary_lora:0",
+        "run_key": [
+          "vivos",
+          "phowhisper",
+          "base",
+          "ordinary_lora",
+          "0",
+          "42"
+        ]
+      },
+      {
+        "label": "tone_aware_lora:0.05",
+        "run_key": [
+          "vivos",
+          "phowhisper",
+          "base",
+          "tone_aware_lora",
+          "0.05",
+          "42"
+        ]
+      },
+      {
+        "label": "tone_aware_lora:0.1",
+        "run_key": [
+          "vivos",
+          "phowhisper",
+          "base",
+          "tone_aware_lora",
+          "0.1",
+          "42"
+        ]
+      }
+    ],
+    "low_snrs": [
+      "0",
+      "5"
+    ],
+    "matrix_rows": 216,
+    "metric_version": "aligned_v1"
+  },
+  "provenance_version": "analysis_artifact_provenance_v1"
+}
