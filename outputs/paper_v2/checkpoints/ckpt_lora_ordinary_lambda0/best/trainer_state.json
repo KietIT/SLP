@@ -1,0 +1,8 @@
+{
+  "epoch": 3,
+  "next_batch_index": 0,
+  "global_step": 1659,
+  "best_eval_asr_loss": 0.07062980845545651,
+  "best_global_step": 1659,
+  "last_eval_step": 1659
+}
