@@ -1,0 +1,353 @@
+{
+  "artifacts": [
+    {
+      "bytes": 80219,
+      "path": "Guide.md",
+      "sha256": "4ed5c6e8b3f21bbe7bb902aecfb34c499cacf0e5104e84697ada522584da1646"
+    },
+    {
+      "bytes": 11889,
+      "path": "docs/prediction_schema.md",
+      "sha256": "63cddb64c1ef7ed3879690bb4c9d40ba67d4a0cf7abc0f3ef08302974efac5c8"
+    },
+    {
+      "bytes": 9157,
+      "path": "outputs/paper_v2/analysis/final/aggregate_results.provenance.json",
+      "sha256": "b618c23e7a40ce4dbf0e774a11a7f132bcd982e94d7fe7b0d922f3d47d050af6"
+    },
+    {
+      "bytes": 546,
+      "path": "outputs/paper_v2/analysis/final/results.bundle.commit.json",
+      "sha256": "9a22856fd7ce881106e8613c20eb44ce801d485dbd1dd5d2ba0ad5e1eca00df5"
+    },
+    {
+      "bytes": 15638,
+      "path": "outputs/paper_v2/analysis/final/results_by_noise_type.csv",
+      "sha256": "65f1bc32cc0acf2139e031da38881a641be0b043c975ce9d0303ca3ec1ca582c"
+    },
+    {
+      "bytes": 27201,
+      "path": "outputs/paper_v2/analysis/final/results_by_snr.csv",
+      "sha256": "ee80853e084822daeb9f38871c5d2a5992df205f920e689547e71b7858542010"
+    },
+    {
+      "bytes": 891,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/final_coda_confusion_matrix.bundle.commit.json",
+      "sha256": "09cb77078d3de13ea4a5b734e8da357a542ee42833f3ed3a61459c6fddc1af97"
+    },
+    {
+      "bytes": 46869,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/final_coda_confusion_matrix.csv",
+      "sha256": "c2a9fb59136b14f3c2cdc0a142e2d7b71206183a32c5f811d9ee75fdca6df34e"
+    },
+    {
+      "bytes": 978484,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/final_coda_confusion_matrix.png",
+      "sha256": "e68d7e21f7facf1ae11a7cb08e6dc806bb39fe60afb6b8a2007e4f1321fab665"
+    },
+    {
+      "bytes": 1630,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/final_coda_confusion_matrix.provenance.json",
+      "sha256": "baa43853290a5a89bf9c37d55332cb8e8568d36c320924345f6d3e9ed6e37709"
+    },
+    {
+      "bytes": 747,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/short_word_deletion_examples.bundle.commit.json",
+      "sha256": "21d2442852c14e475a84b85ac55cfcdf53cc7d18b63b0ab90b34b3942b93d287"
+    },
+    {
+      "bytes": 5694,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/short_word_deletion_examples.csv",
+      "sha256": "6cd9c0b4b5a4c56ceae45d8f3370d6618a21c48bea67055470fad95453b82cd8"
+    },
+    {
+      "bytes": 1469,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/short_word_deletion_examples.provenance.json",
+      "sha256": "484d873f2606fa519fa16b7bff6be51c6ae952a9408f6652ff809638d9904df2"
+    },
+    {
+      "bytes": 867,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/tone_confusion_matrix.bundle.commit.json",
+      "sha256": "821029f4a25946ee03953f6e0947f93f1ffcb2eefc1e97de59f957955ad17bfe"
+    },
+    {
+      "bytes": 21973,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/tone_confusion_matrix.csv",
+      "sha256": "4b093c8bb0092715d8ea02a8e8efb7197afbbfe15d9e2c316f35d3d87cb0d3f5"
+    },
+    {
+      "bytes": 744916,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/tone_confusion_matrix.png",
+      "sha256": "c16763c04c5c8a4919932a9baba3fdee55094957d82113270d0c024c2755d5a9"
+    },
+    {
+      "bytes": 1606,
+      "path": "outputs/paper_v2/error_analysis/final/artifacts/tone_confusion_matrix.provenance.json",
+      "sha256": "58dc38d164d26ce74e11b25a125ffeb445dcd3b4ff8afd51f760ec8ac65a9eb1"
+    },
+    {
+      "bytes": 1682,
+      "path": "outputs/paper_v2/error_analysis/final/breakdowns/der_breakdown.csv",
+      "sha256": "e41c11478b7addb5194e73fe13004075efb16b77bd73f3e4df67e07bad3b5f4a"
+    },
+    {
+      "bytes": 519977,
+      "path": "outputs/paper_v2/error_analysis/final/breakdowns/diacritic_error_events.csv",
+      "sha256": "75246987f7b191569da1c3d61fb82f56e48f1104f654bb38436866ba4decd0f4"
+    },
+    {
+      "bytes": 1282,
+      "path": "outputs/paper_v2/error_analysis/final/breakdowns/error_breakdowns.bundle.commit.json",
+      "sha256": "a04819fc37bd550bf9fa323b00df8cc11fbaa4bfe85893ef4602a3d27c34e1c5"
+    },
+    {
+      "bytes": 1451,
+      "path": "outputs/paper_v2/error_analysis/final/breakdowns/error_breakdowns.provenance.json",
+      "sha256": "8f268d279b7e92f076c53fcd858702cce368d93c420f78a2cb6dab6f4cd6b09f"
+    },
+    {
+      "bytes": 1778,
+      "path": "outputs/paper_v2/error_analysis/final/breakdowns/orthographic_breakdown.csv",
+      "sha256": "632d06d16f6568c80aeb32785c0dee89eb6c101d381dc5ad8707acd805162dfe"
+    },
+    {
+      "bytes": 1277,
+      "path": "outputs/paper_v2/error_analysis/final/breakdowns/ter_breakdown.csv",
+      "sha256": "06d63e2c60390e340cbe7a89658be1cbeebd3e931c65456bdeb56a7ecc546f39"
+    },
+    {
+      "bytes": 674,
+      "path": "outputs/paper_v2/error_analysis/final/breakdowns/wer_decomposition.csv",
+      "sha256": "ebc3bb724b32c059e98d2eddd62cbd9b35e94d5eaa928cb6c642d07a33145c9d"
+    },
+    {
+      "bytes": 1191,
+      "path": "outputs/paper_v2/error_analysis/final/error_analysis.bundle.commit.json",
+      "sha256": "51ebc8c92fb3ac637de0b56c1b7fb679b53419b370355356f1274ac30bcc5097"
+    },
+    {
+      "bytes": 3545,
+      "path": "outputs/paper_v2/error_analysis/final/error_analysis.provenance.json",
+      "sha256": "8988f13a1196ffd8cbc8ddd98d06f37c2c947dd918f06daaeb0d6de9a5dc51c9"
+    },
+    {
+      "bytes": 21827271,
+      "path": "outputs/paper_v2/error_analysis/final/error_events.csv",
+      "sha256": "b291d535574860a4ce3cae1e87351f228245a7805d7a98bddcc8d79e637d3dc7"
+    },
+    {
+      "bytes": 885,
+      "path": "outputs/paper_v2/error_analysis/final/error_summary.csv",
+      "sha256": "634d694ed466fe8d960eb64b21b78f258062f349289790b612aa21cb9fcc3ef2"
+    },
+    {
+      "bytes": 10744,
+      "path": "outputs/paper_v2/external/fleurs/bootstrap_ci_results.csv",
+      "sha256": "4118ad56506737c3bc71dc83879c2894240bf9f99388e3fa08f65529d57ccc54"
+    },
+    {
+      "bytes": 901,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/final_coda_confusion_matrix.bundle.commit.json",
+      "sha256": "cbfaa1117cb3af315ea9acea8b6e07a979b347d4fa0a178c28a442b77879c457"
+    },
+    {
+      "bytes": 23777,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/final_coda_confusion_matrix.csv",
+      "sha256": "3d65aafb0e1b2c3f59824a36c84102d255bae89b42817cb138b451f42723a8d5"
+    },
+    {
+      "bytes": 506536,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/final_coda_confusion_matrix.png",
+      "sha256": "1f7de3733551e33ce481d96f203c95fe582fb01b72b89ccb11e6245a79773ed1"
+    },
+    {
+      "bytes": 1617,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/final_coda_confusion_matrix.provenance.json",
+      "sha256": "c85cf7f4bca3179931d56db09254ebf6c73d2579b646b108c1350d9f902ba77e"
+    },
+    {
+      "bytes": 758,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/short_word_deletion_examples.bundle.commit.json",
+      "sha256": "cfb5b96ab104a2c5270a93299cc8d614b013a0f6043d0f50d5182e74cffc4afd"
+    },
+    {
+      "bytes": 21125,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/short_word_deletion_examples.csv",
+      "sha256": "4197cd0543a5894fd8fc9763d33b4f408db077d9d20c6c30185754648143a8f5"
+    },
+    {
+      "bytes": 1457,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/short_word_deletion_examples.provenance.json",
+      "sha256": "72efbbd94ee92cb9bb1414472fdcf3dbdb4a7f539fd21e0039ec3312e7cfda18"
+    },
+    {
+      "bytes": 877,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/tone_confusion_matrix.bundle.commit.json",
+      "sha256": "be73b89cffd2302f44fd6043a7d4105751c34d1e3752d485f67a163aed2bca6c"
+    },
+    {
+      "bytes": 11173,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/tone_confusion_matrix.csv",
+      "sha256": "68f2bc0df5b540d5c046c71bf2de81b3cdf2280f675b68b89615e0ec2c31eb8c"
+    },
+    {
+      "bytes": 359224,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/tone_confusion_matrix.png",
+      "sha256": "6d4346f6031d967a822e26ed9cc165f7ecd292fb3dfb218cccf4e32d6267cc72"
+    },
+    {
+      "bytes": 1593,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/artifacts/tone_confusion_matrix.provenance.json",
+      "sha256": "8dd3e6f6a3dd7c1a8849f6f0be1c98e07eae53ddf5dead7e5b7563d2a4c932e2"
+    },
+    {
+      "bytes": 1697,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/breakdowns/der_breakdown.csv",
+      "sha256": "422c7659cb6b2d2f1d03b201985151523bda6f38cad43192a0d11ac469af4767"
+    },
+    {
+      "bytes": 662459,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/breakdowns/diacritic_error_events.csv",
+      "sha256": "ca111859fe380bbd38fa2133efa51a5ec3300421296a8270f9c18e599a58bdc8"
+    },
+    {
+      "bytes": 1292,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/breakdowns/error_breakdowns.bundle.commit.json",
+      "sha256": "9ad116385bf96eec6b2b87a0dcbb6e52c9f2a51593ffbc10d6703bf06cb8e8df"
+    },
+    {
+      "bytes": 1461,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/breakdowns/error_breakdowns.provenance.json",
+      "sha256": "12acb11b76a447d389bb7cb4a4579257bf974fe2c2b893baef4dd5e374c3623f"
+    },
+    {
+      "bytes": 1781,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/breakdowns/orthographic_breakdown.csv",
+      "sha256": "4160db74ed3528791607e9567c73ed0991e3c3e497f19b04e1e3dfa83e9e8120"
+    },
+    {
+      "bytes": 1288,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/breakdowns/ter_breakdown.csv",
+      "sha256": "8afc1466a5329118dd4f2a98ab85eae614474f966be3ef6536d0cb4109db4464"
+    },
+    {
+      "bytes": 679,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/breakdowns/wer_decomposition.csv",
+      "sha256": "d82344219189758f3b05d87891fda2fa875fa26f1a728c035831e143b413ebca"
+    },
+    {
+      "bytes": 1254,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/error_analysis.bundle.commit.json",
+      "sha256": "fd500418201fed0b196232958d6e0105c94bdcd7d7310a1074da53fe0cf8a861"
+    },
+    {
+      "bytes": 1362,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/error_analysis.provenance.json",
+      "sha256": "c482d8d5957db9a770e5eb8c001bb2a96325567a90e0063801412feb4d75ad89"
+    },
+    {
+      "bytes": 48933568,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/error_events.csv",
+      "sha256": "cbb4edfce0278a2aab43de51be2cb41b6afaa7d793ed7dcac433d4f1e3c8daac"
+    },
+    {
+      "bytes": 890,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/error_summary.csv",
+      "sha256": "6cf450cb7a4289ecdf076ea75b5f1e09d69bcdd1bc025775bce62c288ec34628"
+    },
+    {
+      "bytes": 1217,
+      "path": "outputs/paper_v2/external/fleurs/external_fleurs_results.csv",
+      "sha256": "44bd50a5ffc33eb15707b0eeb25df9deee642d0d8f7e936876d7f3beb7a98c31"
+    },
+    {
+      "bytes": 2076,
+      "path": "outputs/paper_v2/external/fleurs/external_fleurs_results.csv.inference_runtime.json",
+      "sha256": "7d9ca9933c6a8656241c8555f29af4c65bd28c09db59fee18f8e7d1cfa4ac1c1"
+    },
+    {
+      "bytes": 3647,
+      "path": "outputs/paper_v2/external/fleurs/external_fleurs_results.csv.provenance.json",
+      "sha256": "bc3a83bf76b297233fbc3537c5d64f638a95ab83d619f610c85fa68b1f529a68"
+    },
+    {
+      "bytes": 607,
+      "path": "outputs/paper_v2/reports/old_vs_new_comparison.bundle.commit.json",
+      "sha256": "b648cbedb79b14982902d3e947144222473c0e0f2cf52799f2f7e26a635f3412"
+    },
+    {
+      "bytes": 674624,
+      "path": "outputs/paper_v2/reports/old_vs_new_comparison.csv",
+      "sha256": "babe0676c34117fc55488e111256412acb9ca9a24cc7789af0deec5955aa9746"
+    },
+    {
+      "bytes": 15929,
+      "path": "outputs/paper_v2/reports/old_vs_new_comparison.md",
+      "sha256": "331458ec41d5a36d4de47d0424dbba45dd3471952c7dfece7c0c45e9d6272f83"
+    },
+    {
+      "bytes": 4097,
+      "path": "outputs/paper_v2/reports/old_vs_new_comparison.provenance.json",
+      "sha256": "8f7287fdf2b9a348b165dd7d534a14953c99fdd8976fac13323968d7993f30d1"
+    },
+    {
+      "bytes": 10573,
+      "path": "outputs/paper_v2/statistics/bootstrap_ci_final.csv",
+      "sha256": "92d6e436bb19148900cf54f3613e57c16903ab51b7a433e54038b988cc8b9d7e"
+    },
+    {
+      "bytes": 4898,
+      "path": "outputs/paper_v2/statistics/bootstrap_ci_final.csv.provenance.json",
+      "sha256": "5317602959e2bf26d65583d7267a377ce8dbda853a8c11384153a7b99b33aa1d"
+    },
+    {
+      "bytes": 2184,
+      "path": "outputs/paper_v2/statistics/cluster_bootstrap.bundle.commit.json",
+      "sha256": "0947d6050c522a40ed5506e0807c04a24427489df112f0fca64f0144f41a6a53"
+    }
+  ],
+  "contract": {
+    "artifact_binding": "explicit_path_sha256_bytes_v1",
+    "final_lora_required": true,
+    "fleurs_required": true,
+    "inference_runtime_current_verified": true
+  },
+  "inference_runtime": {
+    "bytes": 2502,
+    "identity_sha256": "671ec4c5f9b5297b89c9ba16036b54d47431998adf1c6021a4b50a73e3bf6756",
+    "path": "outputs/paper_v2/protocol/inference_runtime_lock.json",
+    "sha256": "427621f0e888f680aa4ff152764566343d79addbae91d237b3d047fc88afe5e7"
+  },
+  "schema_version": "paper_v2_trung_delivery_receipt_v1",
+  "status": "COMPLETE",
+  "upstream": {
+    "final_lora": {
+      "receipt": {
+        "bytes": 3488,
+        "path": "outputs/paper_v2/protocol/final_lora_execution_receipt.json",
+        "sha256": "4a60d3e8feecc7429c248de4a3e48a4b633619df58efbb6198be7e0b0f752bb6"
+      },
+      "verification": {
+        "aggregate_rows": 30,
+        "prediction_rows_per_role": 2300,
+        "roles": [
+          "ordinary_baseline",
+          "selected_method",
+          "locked_control"
+        ],
+        "status": "VERIFIED"
+      }
+    },
+    "fleurs": {
+      "receipt": {
+        "bytes": 5015,
+        "path": "outputs/paper_v2/protocol/fleurs_execution_receipt.json",
+        "sha256": "127d81c541def0108d3552bdb68de8aa43046188e1a1845059d780f335201dac"
+      },
+      "verification": {
+        "prediction_count": 3,
+        "status": "VERIFIED"
+      }
+    }
+  }
+}

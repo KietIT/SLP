@@ -1,0 +1,4 @@
+dataset,model,model_size,train_type,lambda,seed,n_utterances,n_ref_tokens,n_hyp_tokens,n_events,matches,substitutions,deletions,insertions,word_errors,word_error_rate,tone_eligible,tone_errors,tone_error_rate,diacritic_eligible,diacritic_errors,diacritic_error_rate,final_consonant_eligible,final_consonant_errors,final_consonant_error_rate
+vivos,phowhisper,base,ordinary_lora,0,42,2300,23300,23409,23508,20454,2747,99,208,3054,0.131072961373,20790,333,0.016017316017,20897,204,0.009762166818,11618,1030,0.088655534515
+vivos,phowhisper,base,tone_aware_lora,0.05,42,2300,23300,23377,23479,20452,2746,102,179,3027,0.129914163090,20805,349,0.016774813747,20904,199,0.009519709147,11618,1009,0.086847994491
+vivos,phowhisper,base,tone_aware_lora,0.1,42,2300,23300,23375,23472,20413,2790,97,172,3059,0.131287553648,20765,350,0.016855285336,20878,207,0.009914742791,11619,1020,0.087787245030

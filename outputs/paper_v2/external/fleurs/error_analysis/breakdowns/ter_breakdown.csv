@@ -1,0 +1,13 @@
+metric_version,dataset,model,model_size,train_type,lambda,seed,tone_eligible,tone_errors,category,count,rate
+aligned_v1,fleurs,phowhisper,base,ordinary_lora,0,42,23275,248,word_deletion,118,0.005069817401
+aligned_v1,fleurs,phowhisper,base,ordinary_lora,0,42,23275,248,tone_loss,25,0.001074113856
+aligned_v1,fleurs,phowhisper,base,ordinary_lora,0,42,23275,248,tone_addition,18,0.000773361976
+aligned_v1,fleurs,phowhisper,base,ordinary_lora,0,42,23275,248,tone_substitution,87,0.003737916219
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.05,42,23268,237,word_deletion,109,0.004684545298
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.05,42,23268,237,tone_loss,22,0.000945504556
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.05,42,23268,237,tone_addition,18,0.000773594636
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.05,42,23268,237,tone_substitution,88,0.003782018222
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.1,42,23250,227,word_deletion,103,0.004430107527
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.1,42,23250,227,tone_loss,23,0.000989247312
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.1,42,23250,227,tone_addition,16,0.000688172043
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.1,42,23250,227,tone_substitution,85,0.003655913978

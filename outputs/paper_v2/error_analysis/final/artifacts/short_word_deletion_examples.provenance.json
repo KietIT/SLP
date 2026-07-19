@@ -1,0 +1,66 @@
+{
+  "bundle_name": "short_word_deletion_examples",
+  "bundle_version": "error_artifacts_aligned_v1_bundle_v1",
+  "data_outputs": [
+    {
+      "bytes": 5694,
+      "key": "csv",
+      "path": "short_word_deletion_examples.csv",
+      "sha256": "6cd9c0b4b5a4c56ceae45d8f3370d6618a21c48bea67055470fad95453b82cd8"
+    }
+  ],
+  "inputs": [
+    {
+      "bytes": 21827271,
+      "path": "outputs/paper_v2/error_analysis/final/error_events.csv",
+      "sha256": "b291d535574860a4ce3cae1e87351f228245a7805d7a98bddcc8d79e637d3dc7"
+    }
+  ],
+  "parameters": {
+    "artifact": "short_word_deletion_examples",
+    "context_window": 3,
+    "event_rows": 70459,
+    "example_rows": 15,
+    "focus_runs": [
+      {
+        "label": "ordinary_lora:0",
+        "run_key": [
+          "vivos",
+          "phowhisper",
+          "base",
+          "ordinary_lora",
+          "0",
+          "42"
+        ]
+      },
+      {
+        "label": "tone_aware_lora:0.05",
+        "run_key": [
+          "vivos",
+          "phowhisper",
+          "base",
+          "tone_aware_lora",
+          "0.05",
+          "42"
+        ]
+      },
+      {
+        "label": "tone_aware_lora:0.1",
+        "run_key": [
+          "vivos",
+          "phowhisper",
+          "base",
+          "tone_aware_lora",
+          "0.1",
+          "42"
+        ]
+      }
+    ],
+    "low_snrs": [
+      "0",
+      "5"
+    ],
+    "metric_version": "aligned_v1"
+  },
+  "provenance_version": "analysis_artifact_provenance_v1"
+}

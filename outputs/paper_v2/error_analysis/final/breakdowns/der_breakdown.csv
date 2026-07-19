@@ -1,0 +1,16 @@
+metric_version,dataset,model,model_size,train_type,lambda,seed,diacritic_eligible,diacritic_errors,category,count,rate
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20897,204,vowel_quality_loss,95,0.004546107097
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20897,204,vowel_quality_addition,74,0.003541178160
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20897,204,vowel_quality_substitution,34,0.001627027803
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20897,204,d_stroke_loss_or_change,1,0.000047853759
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20897,204,mixed_or_other,0,0.000000000000
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20904,199,vowel_quality_loss,89,0.004257558362
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20904,199,vowel_quality_addition,77,0.003683505549
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20904,199,vowel_quality_substitution,32,0.001530807501
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20904,199,d_stroke_loss_or_change,1,0.000047837734
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20904,199,mixed_or_other,0,0.000000000000
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20878,207,vowel_quality_loss,91,0.004358655044
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20878,207,vowel_quality_addition,79,0.003783887346
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20878,207,vowel_quality_substitution,36,0.001724303094
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20878,207,d_stroke_loss_or_change,1,0.000047897308
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20878,207,mixed_or_other,0,0.000000000000

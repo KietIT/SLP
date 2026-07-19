@@ -1,0 +1,22 @@
+{
+  "aggregate_version": "paper_v2_final_lora_aggregate_v1",
+  "decision_lock_sha256": "ccaeadc332fb38449fc6063143b190b1498e49dd2d6e39dd471a2174ab5aca8d",
+  "final_benchmark_lock_sha256": "b34d7b25c320752b8d857a2f7749ad12ffafdf58cdd4a19efd76fdb8985d382d",
+  "final_manifest_sha256": "89712f4873a6de7fb84f912d2380419fc48f56c7499ebed5f62528c749a2a146",
+  "method_lock_sha256": "0e20238c9b027d75937e4c65644394452990422ceab5f922a57be87c21f9007d",
+  "metric_version": "aligned_v1",
+  "noise_split_lock_sha256": "5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9",
+  "prediction_sha256_by_role": {
+    "locked_control": "b2e70f3a5d6294f622ed8eca1f7eb50b4afad9c1638e320c38ec46c9abf84636",
+    "ordinary_baseline": "7e946a83a65c621d5440aa46923cd6526cb0126fa74e86bebe030b94b39d3e88",
+    "selected_method": "65f0e0fbc62aee74c35e2a5e224feef155dc9cc6422b34f33ab5744db9dfde9c"
+  },
+  "result_sha256": "efb42081856c78094741cb5669f4bd40cf5bfb8f448c913cd6fe525076af0b1b",
+  "roles": [
+    "ordinary_baseline",
+    "selected_method",
+    "locked_control"
+  ],
+  "row_count": 30,
+  "runtime_config_sha256": "9e10805b14701040bc5535772296d713e65b5909eaf83071ee29e74532e04e3f"
+}

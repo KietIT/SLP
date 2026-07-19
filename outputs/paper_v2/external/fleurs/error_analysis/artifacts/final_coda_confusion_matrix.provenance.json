@@ -1,0 +1,68 @@
+{
+  "bundle_name": "final_coda_confusion_matrix",
+  "bundle_version": "error_artifacts_aligned_v1_bundle_v1",
+  "data_outputs": [
+    {
+      "bytes": 23777,
+      "key": "csv",
+      "path": "final_coda_confusion_matrix.csv",
+      "sha256": "3d65aafb0e1b2c3f59824a36c84102d255bae89b42817cb138b451f42723a8d5"
+    },
+    {
+      "bytes": 506536,
+      "key": "png",
+      "path": "final_coda_confusion_matrix.png",
+      "sha256": "1f7de3733551e33ce481d96f203c95fe582fb01b72b89ccb11e6245a79773ed1"
+    }
+  ],
+  "inputs": [
+    {
+      "bytes": 48933568,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/error_events.csv",
+      "sha256": "cbb4edfce0278a2aab43de51be2cb41b6afaa7d793ed7dcac433d4f1e3c8daac"
+    }
+  ],
+  "parameters": {
+    "artifact": "final_coda_confusion_matrix",
+    "event_rows": 82112,
+    "focus_runs": [
+      {
+        "label": "ordinary_lora:0",
+        "run_key": [
+          "fleurs",
+          "phowhisper",
+          "base",
+          "ordinary_lora",
+          "0",
+          "42"
+        ]
+      },
+      {
+        "label": "tone_aware_lora:0.05",
+        "run_key": [
+          "fleurs",
+          "phowhisper",
+          "base",
+          "tone_aware_lora",
+          "0.05",
+          "42"
+        ]
+      },
+      {
+        "label": "tone_aware_lora:0.1",
+        "run_key": [
+          "fleurs",
+          "phowhisper",
+          "base",
+          "tone_aware_lora",
+          "0.1",
+          "42"
+        ]
+      }
+    ],
+    "low_snrs": [],
+    "matrix_rows": 243,
+    "metric_version": "aligned_v1"
+  },
+  "provenance_version": "analysis_artifact_provenance_v1"
+}

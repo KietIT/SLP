@@ -1,0 +1,56 @@
+{
+  "dataset": "fleurs",
+  "decision_lock": "outputs/paper_v2/protocol/best_lambda_decision.json",
+  "decision_lock_sha256": "ccaeadc332fb38449fc6063143b190b1498e49dd2d6e39dd471a2174ab5aca8d",
+  "decoding": {
+    "do_sample": false,
+    "language": "vi",
+    "max_chunk_seconds": 30.0,
+    "max_new_tokens": 440,
+    "num_beams": 1,
+    "sample_rate": 16000,
+    "task": "transcribe"
+  },
+  "evaluation_domain": "legacy_exposed_external_replication",
+  "expected_rows": 857,
+  "external_evidence_status": "legacy_exposed_replication",
+  "fleurs_audio_inventory_sha256": "55853379d3b16a69a1fd697f4aaa9f9c1b5963d68e9242c79e1c1c8901578c99",
+  "fleurs_audit_sha256": "c92d0c4d713ec20b01aab4b4adcd9f98cc83ccc8919ae073af1014ad51305eec",
+  "fleurs_dataset_config": "vi_vn",
+  "fleurs_dataset_repository": "google/fleurs",
+  "fleurs_dataset_revision": "70bb2e84b976b7e960aa89f1c648e09c59f894dd",
+  "fleurs_dataset_split": "test",
+  "fleurs_preparation_identity_sha256": "4c2aa1248c6cb0bc691e82afa27822785db8ebfc6f4119bb25e6c999d9965ba9",
+  "fleurs_preparation_lock": "outputs/paper_v2/protocol/fleurs_test_lock.json",
+  "fleurs_preparation_lock_sha256": "19bca9ae70b19c7bf74dc8fdc1439d58142b5ebb9166590f4dbf92d8f5ee161e",
+  "fleurs_preparation_lock_version": "paper_v2_fleurs_preparation_v1",
+  "identity_sha256": "395f9fa856ce190945693ae492dd79e1fb3ad014202a14171072373c28dcd83f",
+  "manifest": "data/manifests/fleurs/paper_v2/test.jsonl",
+  "manifest_sha256": "91e6256c34faf7d26ed459844bd6a3dc390337716d67801f0eca80dcc72bcede",
+  "method_identity_sha256": "e16ff2a045e35ee29ddbd50db9844fca3a610496dc349be6b90d5067f7be70a7",
+  "method_lock_sha256": "0e20238c9b027d75937e4c65644394452990422ceab5f922a57be87c21f9007d",
+  "path_mode": "repository_relative_v1",
+  "registry_version": "paper_v2_fleurs_run_registry_v3",
+  "runs": [
+    {
+      "checkpoint_path": "outputs/paper_v2/checkpoints/ckpt_lora_ordinary_lambda0/best",
+      "config_path": "configs/phat/lambda_0.yaml",
+      "config_sha256": "8b1c49e874f7b0ebe9bd1c17539fbe3917fc34623669ebec91260214008af223",
+      "configuration_id": "phowhisper_base_lora_lambda_0"
+    },
+    {
+      "checkpoint_path": "outputs/paper_v2/checkpoints/ckpt_tone_lora_lambda_005/best",
+      "config_path": "configs/phat/lambda_005.yaml",
+      "config_sha256": "71f518bc2b80cd49220546d3575d6ca6695577120ce038aebda0745c3d9992bb",
+      "configuration_id": "phowhisper_base_tone_lora_lambda_005"
+    },
+    {
+      "checkpoint_path": "outputs/paper_v2/checkpoints/ckpt_tone_lora_lambda_01/best",
+      "config_path": "configs/phat/lambda_01.yaml",
+      "config_sha256": "e4efdae26c59948e0a57ebfc350fd5e149f9f7bcefe61cb007b92f79ab9de17c",
+      "configuration_id": "phowhisper_base_tone_lora_lambda_01"
+    }
+  ],
+  "split_lock": "outputs/paper_v2/protocol/split_lock.json",
+  "split_lock_sha256": "a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2"
+}

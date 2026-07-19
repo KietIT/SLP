@@ -1,0 +1,13 @@
+metric_version,dataset,model,model_size,train_type,lambda,seed,tone_eligible,tone_errors,category,count,rate
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20790,333,word_deletion,99,0.004761904762
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20790,333,tone_loss,41,0.001972101972
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20790,333,tone_addition,35,0.001683501684
+aligned_v1,vivos,phowhisper,base,ordinary_lora,0,42,20790,333,tone_substitution,158,0.007599807600
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20805,349,word_deletion,102,0.004902667628
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20805,349,tone_loss,41,0.001970680125
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20805,349,tone_addition,40,0.001922614756
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.05,42,20805,349,tone_substitution,166,0.007978851238
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20765,350,word_deletion,97,0.004671321936
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20765,350,tone_loss,43,0.002070792198
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20765,350,tone_addition,41,0.001974476282
+aligned_v1,vivos,phowhisper,base,tone_aware_lora,0.1,42,20765,350,tone_substitution,169,0.008138694919

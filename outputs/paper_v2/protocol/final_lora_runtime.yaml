@@ -1,0 +1,26 @@
+suite_version: paper_v2_final_lora_suite_v1
+protocol:
+  formal: true
+  final_test_unlocked: true
+  split_lock: outputs/paper_v2/protocol/split_lock.json
+  expected_split_lock_sha256: a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2
+  decision_lock: outputs/paper_v2/protocol/best_lambda_decision.json
+  expected_decision_lock_sha256: ccaeadc332fb38449fc6063143b190b1498e49dd2d6e39dd471a2174ab5aca8d
+  method_lock: outputs/paper_v2/protocol/method_lock.json
+  expected_method_lock_sha256: 0e20238c9b027d75937e4c65644394452990422ceab5f922a57be87c21f9007d
+  method_config: configs/phat/lambda_0.yaml
+  noise_split_lock: outputs/paper_v2/protocol/noise_split_lock.json
+  expected_noise_split_lock_sha256: 5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9
+  final_benchmark_lock: outputs/paper_v2/protocol/final_benchmark_lock.json
+  expected_final_benchmark_lock_sha256: b34d7b25c320752b8d857a2f7749ad12ffafdf58cdd4a19efd76fdb8985d382d
+benchmark:
+  manifest: outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl
+  expected_manifest_sha256: 89712f4873a6de7fb84f912d2380419fc48f56c7499ebed5f62528c749a2a146
+  expected_rows: 2300
+  verify_audio_sha256: true
+runtime:
+  device: auto
+  verify_method_audio_sha256: false
+output:
+  directory: outputs/paper_v2/final_predictions
+  aggregate_filename: final_lora_results.csv

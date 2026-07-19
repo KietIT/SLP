@@ -1,0 +1,4 @@
+metric_version,dataset,model,model_size,train_type,lambda,seed,n_utterances,n_ref_tokens,n_hyp_tokens,matches,substitutions,deletions,insertions,word_errors,substitution_rate,deletion_rate,insertion_rate,wer
+aligned_v1,fleurs,phowhisper,base,ordinary_lora,0,42,857,25958,27221,22997,2834,127,1390,4351,0.109176361815,0.004892518684,0.053548039140,0.167616919639
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.05,42,857,25958,27260,23002,2840,116,1418,4374,0.109407504430,0.004468757223,0.054626704677,0.168502966330
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.1,42,857,25958,27279,22995,2854,109,1430,4393,0.109946837199,0.004199090839,0.055088989907,0.169234917944

@@ -1,0 +1,10 @@
+metric_version,dataset,model,model_size,train_type,lambda,seed,category,count,definition,overlap_policy
+aligned_v1,fleurs,phowhisper,base,ordinary_lora,0,42,missing_diacritic,83,"tone, vowel-quality, or d-stroke mark present in ref but absent in hyp",nonexclusive_feature_diagnostic
+aligned_v1,fleurs,phowhisper,base,ordinary_lora,0,42,wrong_tone_mark,125,tone addition or tone substitution; tone loss is counted as missing_diacritic,nonexclusive_feature_diagnostic
+aligned_v1,fleurs,phowhisper,base,ordinary_lora,0,42,wrong_vowel_mark,76,vowel-quality addition or substitution; vowel loss is counted as missing_diacritic,nonexclusive_feature_diagnostic
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.05,42,missing_diacritic,71,"tone, vowel-quality, or d-stroke mark present in ref but absent in hyp",nonexclusive_feature_diagnostic
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.05,42,wrong_tone_mark,126,tone addition or tone substitution; tone loss is counted as missing_diacritic,nonexclusive_feature_diagnostic
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.05,42,wrong_vowel_mark,72,vowel-quality addition or substitution; vowel loss is counted as missing_diacritic,nonexclusive_feature_diagnostic
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.1,42,missing_diacritic,72,"tone, vowel-quality, or d-stroke mark present in ref but absent in hyp",nonexclusive_feature_diagnostic
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.1,42,wrong_tone_mark,122,tone addition or tone substitution; tone loss is counted as missing_diacritic,nonexclusive_feature_diagnostic
+aligned_v1,fleurs,phowhisper,base,tone_aware_lora,0.1,42,wrong_vowel_mark,73,vowel-quality addition or substitution; vowel loss is counted as missing_diacritic,nonexclusive_feature_diagnostic
