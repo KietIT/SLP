@@ -1,0 +1,63 @@
+{
+  "bundle_name": "short_word_deletion_examples",
+  "bundle_version": "error_artifacts_aligned_v1_bundle_v1",
+  "data_outputs": [
+    {
+      "bytes": 21125,
+      "key": "csv",
+      "path": "short_word_deletion_examples.csv",
+      "sha256": "4197cd0543a5894fd8fc9763d33b4f408db077d9d20c6c30185754648143a8f5"
+    }
+  ],
+  "inputs": [
+    {
+      "bytes": 48933568,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/error_events.csv",
+      "sha256": "cbb4edfce0278a2aab43de51be2cb41b6afaa7d793ed7dcac433d4f1e3c8daac"
+    }
+  ],
+  "parameters": {
+    "artifact": "short_word_deletion_examples",
+    "context_window": 3,
+    "event_rows": 82112,
+    "example_rows": 32,
+    "focus_runs": [
+      {
+        "label": "ordinary_lora:0",
+        "run_key": [
+          "fleurs",
+          "phowhisper",
+          "base",
+          "ordinary_lora",
+          "0",
+          "42"
+        ]
+      },
+      {
+        "label": "tone_aware_lora:0.05",
+        "run_key": [
+          "fleurs",
+          "phowhisper",
+          "base",
+          "tone_aware_lora",
+          "0.05",
+          "42"
+        ]
+      },
+      {
+        "label": "tone_aware_lora:0.1",
+        "run_key": [
+          "fleurs",
+          "phowhisper",
+          "base",
+          "tone_aware_lora",
+          "0.1",
+          "42"
+        ]
+      }
+    ],
+    "low_snrs": [],
+    "metric_version": "aligned_v1"
+  },
+  "provenance_version": "analysis_artifact_provenance_v1"
+}

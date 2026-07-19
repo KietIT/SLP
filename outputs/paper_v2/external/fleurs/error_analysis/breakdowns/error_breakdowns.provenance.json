@@ -1,0 +1,50 @@
+{
+  "bundle_name": "error_breakdowns",
+  "bundle_version": "error_breakdowns_aligned_v1_bundle_v1",
+  "data_outputs": [
+    {
+      "bytes": 679,
+      "key": "output_00",
+      "path": "wer_decomposition.csv",
+      "sha256": "d82344219189758f3b05d87891fda2fa875fa26f1a728c035831e143b413ebca"
+    },
+    {
+      "bytes": 1288,
+      "key": "output_01",
+      "path": "ter_breakdown.csv",
+      "sha256": "8afc1466a5329118dd4f2a98ab85eae614474f966be3ef6536d0cb4109db4464"
+    },
+    {
+      "bytes": 1697,
+      "key": "output_02",
+      "path": "der_breakdown.csv",
+      "sha256": "422c7659cb6b2d2f1d03b201985151523bda6f38cad43192a0d11ac469af4767"
+    },
+    {
+      "bytes": 1781,
+      "key": "output_03",
+      "path": "orthographic_breakdown.csv",
+      "sha256": "4160db74ed3528791607e9567c73ed0991e3c3e497f19b04e1e3dfa83e9e8120"
+    },
+    {
+      "bytes": 662459,
+      "key": "output_04",
+      "path": "diacritic_error_events.csv",
+      "sha256": "ca111859fe380bbd38fa2133efa51a5ec3300421296a8270f9c18e599a58bdc8"
+    }
+  ],
+  "inputs": [
+    {
+      "bytes": 48933568,
+      "path": "outputs/paper_v2/external/fleurs/error_analysis/error_events.csv",
+      "sha256": "cbb4edfce0278a2aab43de51be2cb41b6afaa7d793ed7dcac433d4f1e3c8daac"
+    }
+  ],
+  "parameters": {
+    "diacritic_event_rows": 1087,
+    "input_event_rows": 82112,
+    "metric_version": "aligned_v1",
+    "run_count": 3
+  },
+  "provenance_version": "analysis_artifact_provenance_v1"
+}
