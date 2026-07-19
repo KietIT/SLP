@@ -1,0 +1,56 @@
+{
+  "benchmark": {
+    "bytes": 2715822,
+    "format": "jsonl",
+    "path": "outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl",
+    "sha256": "89712f4873a6de7fb84f912d2380419fc48f56c7499ebed5f62528c749a2a146"
+  },
+  "bundle_version": "aggregate_results_bundle_v2",
+  "data_outputs": [
+    {
+      "bytes": 10504,
+      "name": "results_by_noise_type.csv",
+      "sha256": "ed580b2e2b0675285359bc2b8c7a8947703cfeffa7f1e6c8928ae3f9921d61e2"
+    },
+    {
+      "bytes": 18135,
+      "name": "results_by_snr.csv",
+      "sha256": "35d3b2ac9e93ab620cc4f9d2eb788273e80887a6ccec1cbbd108ddad47351d81"
+    }
+  ],
+  "formal_protocol": null,
+  "inputs": [
+    {
+      "bytes": 426766,
+      "path": "outputs/paper_v2/predictions/zero_shot/pred_phowhisper_base.csv",
+      "sha256": "50c9573886aa391fdaea91679c45ac4449671e14c7095f4d0f8df41dc28f59e9"
+    },
+    {
+      "bytes": 427618,
+      "path": "outputs/paper_v2/predictions/zero_shot/pred_phowhisper_small.csv",
+      "sha256": "5fe13634e06e4add0cbf8766aea23dadc9c04ea280c3106a83de8d1c72992f7c"
+    },
+    {
+      "bytes": 427902,
+      "path": "outputs/paper_v2/predictions/zero_shot/pred_phowhisper_tiny.csv",
+      "sha256": "e167ebf7d5cdea12cc706cf95280b9334c17a6596cd38f0fcd64001413c1795d"
+    },
+    {
+      "bytes": 422884,
+      "path": "outputs/paper_v2/predictions/zero_shot/pred_whisper_base.csv",
+      "sha256": "f84cc1be099226c6e0a5e7a32e23e66748a4f797114a1e75dbda6124eae6f45a"
+    },
+    {
+      "bytes": 420864,
+      "path": "outputs/paper_v2/predictions/zero_shot/pred_whisper_small.csv",
+      "sha256": "eef4a0ca75df1afd37ed0fb45c7c072ef25fd7a09b49766b670a7810211ce1bc"
+    },
+    {
+      "bytes": 439101,
+      "path": "outputs/paper_v2/predictions/zero_shot/pred_whisper_tiny.csv",
+      "sha256": "0883e8db144bb0a0b1e7c1635c8a1aff5c11eb4f42b2d014bb6abc3fcc5ede42"
+    }
+  ],
+  "metric_version": "aligned_v1",
+  "provenance_version": "aggregate_results_provenance_v1"
+}

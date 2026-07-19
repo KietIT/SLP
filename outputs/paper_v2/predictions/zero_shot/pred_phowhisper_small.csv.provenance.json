@@ -1,0 +1,123 @@
+{
+  "audio_dir": "data/derived/paper_v2/final_benchmark",
+  "audio_hashes_verified": true,
+  "audio_inventory_sha256": "23cdcd4824c8d39b752912fd9a05bfb4ecc837269c25aa33f735fc427d1bb805",
+  "audit_sha256": "ed9454f405cf1c102cb774c3607f8dcb142a60bc5d14d1bc93cc3aa4853cd84d",
+  "benchmark_lock": "outputs/paper_v2/protocol/final_benchmark_lock.json",
+  "benchmark_lock_protocol_version": "paper_v2_final_benchmark_v2",
+  "benchmark_lock_sha256": "b34d7b25c320752b8d857a2f7749ad12ffafdf58cdd4a19efd76fdb8985d382d",
+  "decoding": {
+    "deterministic_algorithms": true,
+    "do_sample": false,
+    "implementation": "whisper_generate_greedy_paper_v2_v1",
+    "language": "vi",
+    "max_audio_seconds": 15.0,
+    "max_new_tokens": 128,
+    "num_beams": 1,
+    "sample_rate": 16000,
+    "task": "transcribe"
+  },
+  "evaluation_scope": "full_manifest",
+  "evaluation_split": "test",
+  "lambda": "",
+  "manifest": "outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl",
+  "manifest_num_rows": 2300,
+  "manifest_sha256": "89712f4873a6de7fb84f912d2380419fc48f56c7499ebed5f62528c749a2a146",
+  "metric_version": "aligned_v1",
+  "model": "phowhisper",
+  "model_fingerprint_sha256": "87b3e7f0d31a3b8bc6259dc1ae8fda9de0b2a4cbc3698fdcb197a20576719c42",
+  "model_key": "phowhisper_small",
+  "model_repo_id": "vinai/PhoWhisper-small",
+  "model_revision": "a86b604c346caf7148c37512eafe783a16420adb",
+  "model_size": "small",
+  "num_rows": 2300,
+  "prediction": "outputs/paper_v2/predictions/zero_shot/pred_phowhisper_small.csv",
+  "prediction_sha256": "5fe13634e06e4add0cbf8766aea23dadc9c04ea280c3106a83de8d1c72992f7c",
+  "processor_fingerprint_sha256": "d97d4ef2c2756b4da9e2e3fd88083b8cc855ca641af2e72e652557e1d79eb131",
+  "provenance_version": "paper_v2_zero_shot_prediction_v2",
+  "run_contract": {
+    "benchmark": {
+      "dataset": "vivos",
+      "expected_lock_sha256": "b34d7b25c320752b8d857a2f7749ad12ffafdf58cdd4a19efd76fdb8985d382d",
+      "expected_manifest_sha256": "89712f4873a6de7fb84f912d2380419fc48f56c7499ebed5f62528c749a2a146",
+      "expected_rows": 2300,
+      "lock": "outputs/paper_v2/protocol/final_benchmark_lock.json",
+      "lock_protocol_version": "paper_v2_final_benchmark_v2",
+      "manifest": "outputs/paper_v2/benchmark/final_benchmark_manifest.jsonl",
+      "verify_audio_sha256": true
+    },
+    "contract_version": "paper_v2_zero_shot_run_v2",
+    "decoding": {
+      "do_sample": false,
+      "language": "vi",
+      "max_audio_seconds": 15.0,
+      "max_new_tokens": 128,
+      "num_beams": 1,
+      "sample_rate": 16000,
+      "task": "transcribe"
+    },
+    "model": {
+      "filename": "pred_phowhisper_small.csv",
+      "key": "phowhisper_small",
+      "model": "phowhisper",
+      "model_size": "small",
+      "repo_id": "vinai/PhoWhisper-small",
+      "revision": "a86b604c346caf7148c37512eafe783a16420adb"
+    },
+    "protocol": {
+      "formal": true
+    },
+    "runtime": {
+      "batch_size": 1,
+      "device": "auto",
+      "local_files_only": true,
+      "precision": "fp16"
+    },
+    "schema": [
+      "utt_id",
+      "dataset",
+      "model",
+      "model_size",
+      "train_type",
+      "lambda",
+      "seed",
+      "snr",
+      "noise_type",
+      "ref",
+      "hyp"
+    ],
+    "seed": 42,
+    "suite_config_sha256": "99b1385cb2abb50b0546e53f1cfc6be47b28f0db037dc0243201e001922e9cb1"
+  },
+  "run_contract_sha256": "c017afa3578efe14f9b6cd0b7e5488a21ccfaf6f0e93a98505dd665954ba6ed9",
+  "runtime_environment": {
+    "batch_size": 1,
+    "cublas_workspace_config": ":4096:8",
+    "cuda_version": "13.0",
+    "deterministic_algorithms": true,
+    "device_type": "cuda",
+    "dtype": "torch.float16",
+    "snapshot_file_count": 13,
+    "snapshot_total_bytes": 970701816,
+    "torch_version": "2.12.1+cu130"
+  },
+  "schema": [
+    "utt_id",
+    "dataset",
+    "model",
+    "model_size",
+    "train_type",
+    "lambda",
+    "seed",
+    "snr",
+    "noise_type",
+    "ref",
+    "hyp"
+  ],
+  "seed": 42,
+  "selected_rows_sha256": "eed5f37b83e7d299f7fd6c9a93087c56d62c526ebb790fb872df12e80d100633",
+  "snapshot_sha256": "1b1a857667f8c8e7286089457023153f488ce8924d3cc6dd151e8ad6684aaa8c",
+  "suite_config": "outputs/paper_v2/protocol/runtime/paper_v2_zero_shot.locked.yaml",
+  "suite_config_sha256": "99b1385cb2abb50b0546e53f1cfc6be47b28f0db037dc0243201e001922e9cb1",
+  "train_type": "zero_shot"
+}
