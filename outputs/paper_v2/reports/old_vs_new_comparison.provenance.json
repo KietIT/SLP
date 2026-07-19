@@ -1,0 +1,113 @@
+{
+  "artifacts": {
+    "decision_lock": {
+      "sha256": "ccaeadc332fb38449fc6063143b190b1498e49dd2d6e39dd471a2174ab5aca8d",
+      "status": "present"
+    },
+    "environment_lock": {
+      "sha256": "7d7ffb0b09168d2ec32c325385d5359ea7134b1bc61de5f9b52c0224a25b8a4d",
+      "status": "present"
+    },
+    "final_benchmark_lock": {
+      "sha256": "b34d7b25c320752b8d857a2f7749ad12ffafdf58cdd4a19efd76fdb8985d382d",
+      "status": "present"
+    },
+    "fleurs_manifest": {
+      "row_count": 857,
+      "sha256": "91e6256c34faf7d26ed459844bd6a3dc390337716d67801f0eca80dcc72bcede",
+      "status": "present"
+    },
+    "fleurs_preparation_lock": {
+      "sha256": "19bca9ae70b19c7bf74dc8fdc1439d58142b5ebb9166590f4dbf92d8f5ee161e",
+      "status": "present"
+    },
+    "method_lock": {
+      "sha256": "0e20238c9b027d75937e4c65644394452990422ceab5f922a57be87c21f9007d",
+      "status": "present"
+    },
+    "new_benchmark_manifest": {
+      "row_count": 2300,
+      "sha256": "89712f4873a6de7fb84f912d2380419fc48f56c7499ebed5f62528c749a2a146",
+      "status": "present"
+    },
+    "new_by_noise_type": {
+      "row_count": 36,
+      "sha256": "65f1bc32cc0acf2139e031da38881a641be0b043c975ce9d0303ca3ec1ca582c",
+      "status": "present"
+    },
+    "new_by_snr": {
+      "row_count": 63,
+      "sha256": "ee80853e084822daeb9f38871c5d2a5992df205f920e689547e71b7858542010",
+      "status": "present"
+    },
+    "new_final_bootstrap": {
+      "row_count": 12,
+      "sha256": "92d6e436bb19148900cf54f3613e57c16903ab51b7a433e54038b988cc8b9d7e",
+      "status": "present"
+    },
+    "new_fleurs_bootstrap": {
+      "row_count": 12,
+      "sha256": "4118ad56506737c3bc71dc83879c2894240bf9f99388e3fa08f65529d57ccc54",
+      "status": "present"
+    },
+    "new_fleurs_provenance": {
+      "sha256": "bc3a83bf76b297233fbc3537c5d64f638a95ab83d619f610c85fa68b1f529a68",
+      "status": "present"
+    },
+    "new_fleurs_results": {
+      "row_count": 3,
+      "sha256": "44bd50a5ffc33eb15707b0eeb25df9deee642d0d8f7e936876d7f3beb7a98c31",
+      "status": "present"
+    },
+    "noise_split_lock": {
+      "sha256": "5ebb46494c5613e586b9c9f93cffb8afbcbd4cdec21d198d02f198a1ee764cc9",
+      "status": "present"
+    },
+    "noisy_dev_lock": {
+      "sha256": "db263c9dc565a498261a1f912d7389ad4c947015d1b03f12befb89618417cda7",
+      "status": "present"
+    },
+    "old_benchmark_manifest": {
+      "row_count": 1500,
+      "sha256": "a70139c89cbd123b8d0646588b4c7e3dc8c26abf0559cdac6772337d6d1bcfa6",
+      "status": "present"
+    },
+    "old_by_noise_type": {
+      "row_count": 44,
+      "sha256": "8eb56fe7be9e58e0816414d7340608453f4b6cad4f732e9e523a95b2bf9c85c5",
+      "status": "present"
+    },
+    "old_by_snr": {
+      "row_count": 77,
+      "sha256": "a2f50bae2bdd2e09b1828b1fe6c1aacda860db8b596cb07fa47b088a4938bf73",
+      "status": "present"
+    },
+    "old_fleurs_bootstrap": {
+      "row_count": 12,
+      "sha256": "d22c815cf5e5279683c03e14b4e182586f56ef20ec74aacdb68a92f50846df31",
+      "status": "present"
+    },
+    "old_fleurs_results": {
+      "row_count": 3,
+      "sha256": "1b39c2d0134a93d68fa1a38fdb96b58bd193c100b0923279108e7f5a649b0a10",
+      "status": "present"
+    },
+    "split_lock": {
+      "sha256": "a2b186e8f2b4d65bfa4ce5ac3511e23a9e000296e242dd12962c6fcfffc20de2",
+      "status": "present"
+    }
+  },
+  "comparison_csv": "outputs/paper_v2/reports/old_vs_new_comparison.csv",
+  "comparison_csv_sha256": "babe0676c34117fc55488e111256412acb9ca9a24cc7789af0deec5955aa9746",
+  "comparison_markdown": "outputs/paper_v2/reports/old_vs_new_comparison.md",
+  "comparison_markdown_sha256": "331458ec41d5a36d4de47d0424dbba45dd3471952c7dfece7c0c45e9d6272f83",
+  "comparison_version": "paper_v2_old_new_comparison_v1",
+  "decision_lock_sha256": "ccaeadc332fb38449fc6063143b190b1498e49dd2d6e39dd471a2174ab5aca8d",
+  "fleurs_row_identity_verified": true,
+  "input_set_sha256": "ad138022b4b1a20565a708fffa8bc9b808cf463fb1743da3629220e6c3e84459",
+  "locked_control_lambda": "0.1",
+  "mode": "formal_fail_closed",
+  "row_count": 797,
+  "selected_lambda": "0.05",
+  "valid_delta_row_count": 54
+}
