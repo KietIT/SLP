@@ -2,7 +2,37 @@
 
 Tài liệu này là runbook chung cho Trung, Phúc và Phát sau khi source paper-v2 đã được đẩy lên Git. Mục tiêu là tạo lại toàn bộ bằng chứng từ checkpoint mới mà không dùng official test để train, chọn checkpoint hoặc chọn lambda.
 
-Trong cửa sổ online khoảng ba giờ hiện tại, chỉ chốt source/test/config/tài liệu và kiểm kê bundle local. Tạm gác các job dài: train năm lambda, full noisy-dev inference, sáu zero-shot, ba final LoRA và FLEURS 857. Không tạo formal environment/method lock trước khi source đã được Trung review, commit và checkout sạch trên máy chạy; các lệnh dưới đây dành cho đợt compute sau.
+Source, checkpoint, benchmark và decision lock hiện đã được bàn giao; các job inference cuối có thể chạy trên máy Trung theo protocol inference chéo máy bên dưới. Không sửa hoặc tái tạo `environment_lock.json`/`method_lock.json` của Phát: chúng tiếp tục là provenance bất biến của quá trình train.
+
+## Cập nhật ưu tiên — formal inference chéo máy
+
+Mục này **thay thế mọi câu cũ ở phần dưới yêu cầu final LoRA/FLEURS phải chạy trên đúng GPU hoặc exact package environment đã train của Phát**. Ranh giới mới tách hai provenance độc lập:
+
+- `environment_lock.json` và `method_lock.json` chứng minh checkpoint được train bằng môi trường/source đã khóa của Phát; máy Trung không được giả vờ khớp môi trường train.
+- `inference_runtime_lock.json` chứng minh final LoRA và FLEURS được infer trên môi trường hiện tại của Trung. Lock này hash đúng ba source bắt buộc: module runtime và hai wrapper final/FLEURS.
+- Final LoRA phải ghi `inference_runtime_verified=true` và `training_runtime_verified_as_current=false` trong execution receipt. Giá trị `false` thứ hai là đúng vì Trung không chạy đúng runtime train của Phát.
+- Provenance gốc của FLEURS tiếp tục ghi trung thực `method_runtime_verified=false`. Không sửa cờ này. Mỗi prediction/result có thêm sidecar `*.inference_runtime.json`, và `fleurs_execution_receipt.json` mới là bằng chứng runtime inference hiện tại.
+- Phân tích FLEURS downstream chạy ở non-formal mode vì verifier formal cũ đòi cờ runtime train nói trên. Receipt bàn giao cuối xác minh cả hai execution receipt theo runtime hiện tại rồi bind SHA-256 của từng artifact downstream; vì vậy đây không phải là bỏ provenance.
+- VietSpeech tạm bỏ theo scope hiện tại.
+
+Sau khi source của ba file inference-runtime đã chốt, capture lock đúng **một lần** trên máy Trung rồi verify ngay. Nếu lock đã tồn tại thì chỉ chạy lệnh `--verify-existing`, không overwrite/recapture để hợp thức hóa source hoặc runtime đã đổi:
+
+```powershell
+$Python = (Get-Command python).Source
+$env:CUBLAS_WORKSPACE_CONFIG = ':4096:8'
+$env:HF_HUB_OFFLINE = '1'
+$env:TRANSFORMERS_OFFLINE = '1'
+if (-not (Test-Path outputs/paper_v2/protocol/inference_runtime_lock.json)) {
+  & $Python scripts/capture_inference_runtime.py `
+    --training-environment outputs/paper_v2/protocol/environment_lock.json `
+    --output outputs/paper_v2/protocol/inference_runtime_lock.json
+}
+& $Python scripts/capture_inference_runtime.py `
+  --output outputs/paper_v2/protocol/inference_runtime_lock.json `
+  --verify-existing
+```
+
+Nếu source wrapper, Python/package, CUDA hoặc GPU thay đổi sau capture thì verifier phải dừng; review thay đổi, hủy output inference chưa bàn giao và tạo một transaction lock mới có chủ đích. Không thay đổi training lock của Phát.
 
 ## 1. Ranh giới khoa học bắt buộc
 
@@ -71,13 +101,13 @@ foreach ($Item in $Expected.GetEnumerator()) {
 | Build và publish final benchmark đúng một lần | Phúc | self-contained 2.300-WAV bundle + manifest/lock/audit/handoff SHA | VIVOS locked split + MUSAN test lock; **không phụ thuộc model/lambda** |
 | Sáu zero-shot | Phúc, ngay sau khi benchmark được khóa | 6 prediction + provenance | Cùng final benchmark bundle v2 |
 | Chọn method và khóa decision | Trung review/approve; Phát chạy lệnh trên reference machine | report + `best_lambda_decision.json` | Full five-lambda results + exact method environment + checkpoints; không dùng final prediction/metric |
-| Ba LoRA role trên final | Phát chạy trên reference/exact-lock runtime; Trung nhận artifact | 3 prediction + provenance/results | Decision + final benchmark + 3 checkpoint |
-| FLEURS 857 | Phát trên reference environment/hardware đã khóa | 3 prediction + result/provenance | Decision + method/environment lock + 3 checkpoint + portable FLEURS bundle |
+| Ba LoRA role trên final | Trung trên inference runtime đã khóa riêng | 3 prediction + provenance/results + execution receipt | Decision + final benchmark + 3 checkpoint + inference runtime lock |
+| FLEURS 857 | Trung trên cùng inference runtime đã khóa riêng | 3 prediction + result/provenance/runtime sidecar + execution receipt | Decision + method/training provenance + inference runtime lock + 3 checkpoint + portable FLEURS bundle |
 | Aggregate, error analysis, confusion và bootstrap | Trung | CSV/PNG/report cuối | Tất cả prediction cần thiết |
 
 Nguyên tắc tốt nhất là một máy chuẩn train cả năm lambda. Như vậy GPU, package, thứ tự dữ liệu, preprocessing và runtime giống nhau; lambda là biến khác biệt duy nhất. Phúc build/publish benchmark data-only trước và chạy sáu zero-shot; cùng lúc Phát train/evaluate năm lambda và chọn best chỉ trên noisy-dev. Sau decision lock, Phát pull đúng bundle byte-identical rồi chạy ba final LoRA role. Không rebuild benchmark trên máy Phát.
 
-Nếu máy Trung không khớp exact formal environment/GPU đã khóa trên máy Phát thì final LoRA và FLEURS formal phải chạy trong reference environment/hardware đó; Trung chỉ nhận artifact đã verify SHA để phân tích. Chạy FLEURS trên máy khác environment/hardware chỉ là diagnostic, không được thay cho endpoint paper.
+Máy Trung không cần giả lập exact GPU/package runtime đã train của Phát. Final LoRA/FLEURS được chấp nhận khi training provenance cũ vẫn byte-identical, checkpoint/decision/benchmark được verify transitively, inference runtime riêng của Trung khớp lock hiện tại và hai execution receipt PASS. Không trộn quy tắc này với fallback chia **training** giữa nhiều máy bên dưới.
 
 ### Fallback nếu buộc phải chia lambda cho nhiều máy
 
@@ -382,7 +412,7 @@ job đã hoàn tất, chỉ bàn giao CSV + `.csv.provenance.json`; resume/recov
 sidecar phải không còn. `lambda_ablation_results.csv` chỉ được reuse khi nội
 dung đúng bằng aggregate tái tính từ đủ năm prediction đã verify.
 
-Sau khi Trung xem đủ năm lambda và approve bảng selection, Phát chạy lệnh khóa selected method và locked control trên chính reference machine. Lệnh này xác minh exact formal environment, method/audio lock và checkpoint identities; không chuyển bước execution sang máy Trung:
+Sau khi Trung xem đủ năm lambda và approve bảng selection, Phát chạy lệnh khóa selected method và locked control trên chính reference machine. Riêng bước **selection** này xác minh exact formal environment, method/audio lock và checkpoint identities nên không chuyển sang máy Trung; sau khi decision đã `LOCKED`, final inference mới được chuyển sang protocol inference riêng ở đầu tài liệu:
 
 ```powershell
 & $Python scripts/select_best_lambda.py `
@@ -542,7 +572,7 @@ Output đủ phải là sáu file `outputs/paper_v2/predictions/zero_shot/pred_*
 
 Phần này dùng runner final-LoRA fail-closed. Runner không nhận lambda trên CLI; nó chỉ resolve đúng `ordinary_baseline`, `selected_method`, `locked_control` từ decision v3. Không tự đổi các config dev thành test và không hard-code lambda.
 
-Phát chỉ bắt đầu bước này sau khi đã khóa decision từ noisy-dev. Phát pull bundle benchmark do Phúc publish, verify handoff SHA/LFS và dùng nguyên lock/manifest/audio đó; decision được verifier đối chiếu với source-test identity trong benchmark nhưng không làm thay đổi hoặc rebuild benchmark.
+Chỉ bắt đầu bước này sau khi decision đã được khóa từ noisy-dev. Máy Trung dùng nguyên checkpoint của Phát và bundle benchmark do Phúc publish, verify handoff SHA/LFS rồi chạy bằng inference runtime đã khóa riêng; decision được verifier đối chiếu với source-test identity trong benchmark nhưng không làm thay đổi hoặc rebuild benchmark.
 
 Sau decision v3 và final-benchmark lock, materialize runtime config tự động. Bước này pin SHA của split/noise/method/decision/final lock và final manifest, nhưng chưa mở final manifest/audio/model:
 
@@ -554,11 +584,15 @@ Sau decision v3 và final-benchmark lock, materialize runtime config tự độn
 
 Không sửa immutable template vì template cũng nằm trong method source lock. Không dùng `--overwrite` trừ khi một lock đã được thay đổi có chủ đích và toàn bộ downstream output cũ đã bị hủy theo review. Runtime mặc định dùng `device: auto`; trên máy chính phải kiểm tra nó resolve CUDA. Nếu muốn preflight mạnh nhất, đặt `verify_method_audio_sha256: true` trong runtime YAML vừa sinh trước lần chạy đầu và bàn giao chính runtime YAML theo SHA. Runner ghi exact runtime-YAML path/SHA-256 vào provenance của từng role và aggregate; method lock đồng thời bao phủ template, builder, evaluator và các runner/analysis source của paper-v2.
 
-Chạy ba role:
+Trước khi chạy, lệnh verify runtime phải PASS trên đúng terminal hiện tại. Sau đó chạy ba role bằng wrapper chéo máy; wrapper vẫn verify transitive method/checkpoint/config/decision/benchmark của Phát nhưng không tuyên bố runtime train đang là runtime hiện tại:
 
 ```powershell
-& $Python scripts/run_final_lora.py `
-  --config outputs/paper_v2/protocol/final_lora_runtime.yaml
+& $Python scripts/capture_inference_runtime.py `
+  --output outputs/paper_v2/protocol/inference_runtime_lock.json `
+  --verify-existing
+& $Python scripts/run_final_lora_inference_runtime.py `
+  --config outputs/paper_v2/protocol/final_lora_runtime.yaml `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json
 ```
 
 Nếu bị ngắt, chạy lại đúng runtime YAML với `--resume`. Runner reuse role đã
@@ -566,8 +600,9 @@ hoàn tất và tiếp tục role đang dở từ **batch kế tiếp**, không 
 dòng từ đầu:
 
 ```powershell
-& $Python scripts/run_final_lora.py `
+& $Python scripts/run_final_lora_inference_runtime.py `
   --config outputs/paper_v2/protocol/final_lora_runtime.yaml `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json `
   --resume
 ```
 
@@ -593,17 +628,26 @@ outputs/paper_v2/final_predictions/locked_control/predictions.csv
 outputs/paper_v2/final_predictions/locked_control/provenance.json
 outputs/paper_v2/final_predictions/aggregate/final_lora_results.csv
 outputs/paper_v2/final_predictions/aggregate/provenance.json
+outputs/paper_v2/protocol/inference_runtime_lock.json
+outputs/paper_v2/protocol/final_lora_execution_receipt.json
 ```
 
-Output bắt buộc là ba prediction canonical 2.300 dòng, ba provenance sidecar và aggregate 30 dòng cho đúng các role trong decision lock. Checkpoint/configuration ID phải khớp byte-for-byte với `locked_configurations`; không được thay bằng `final/` nếu decision khóa `best/`. Khi hoàn tất, runner tự xóa thư mục `.partial`; không bàn giao partial/state/recovery như kết quả cuối.
+Output bắt buộc là ba prediction canonical 2.300 dòng, ba provenance sidecar và aggregate 30 dòng cho đúng các role trong decision lock. Checkpoint/configuration ID phải khớp byte-for-byte với `locked_configurations`; không được thay bằng `final/` nếu decision khóa `best/`. Khi hoàn tất, runner tự xóa thư mục `.partial`; không bàn giao partial/state/recovery như kết quả cuối. Xác minh lại toàn bộ receipt và current runtime mà không infer:
+
+```powershell
+& $Python scripts/run_final_lora_inference_runtime.py `
+  --config outputs/paper_v2/protocol/final_lora_runtime.yaml `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json `
+  --verify-only
+```
 
 ## 11. FLEURS Vietnamese 857 câu
 
 Formal preparation dùng exact cached Hugging Face dataset revision `70bb2e84b976b7e960aa89f1c648e09c59f894dd`; dataset card tại revision đó khai báo `CC-BY-4.0`. Manifest mới dùng repo-relative path, ghi SHA-256 từng WAV và có preparation lock/audit nên có thể bàn giao sang root khác nếu bundle byte-identical.
 
-Ba role FLEURS formal phải chạy trên chính reference environment/hardware đã ghi trong `environment_lock.json`. Runner xác minh transitive method/environment/source lock trước khi mở checkpoint, manifest hoặc audio; máy không khớp exact lock phải dừng. Bundle portable cho phép chuyển byte an toàn, không nới lỏng yêu cầu runtime formal.
+Ba role FLEURS chạy trên cùng inference runtime riêng đã khóa ở máy Trung. Wrapper mới xác minh transitive method artifact, source/config/checkpoint/decision của Phát mà không yêu cầu GPU/package hiện tại phải giả làm môi trường train; sau đó nó xác minh `inference_runtime_lock.json` trước khi mở model/audio và tạo execution receipt bất biến.
 
-`verify_current_method=True` là mặc định và là điều kiện bắt buộc của inference formal: cả ba config trong registry đều phải khớp method lock, source tree và exact environment hiện tại trước khi FLEURS được mở. `verify_current_method=False` chỉ dành cho verifier provenance hậu kiểm trên máy phân tích: nó vẫn kiểm tra formal method artifact, ba config, source/dependency hash và method identity, nhưng không cấp quyền inference. Runner sẽ fail closed nếu authorization hậu kiểm bị dùng để chạy model.
+Authorization nền giữ `verify_current_method=False`, vì exact runtime train không phải runtime hiện tại. Wrapper bù lại bằng verifier inference-runtime độc lập. Do đó provenance gốc phải giữ `method_runtime_verified=false`; chỉ sidecar `*.inference_runtime.json` và receipt mới được ghi `inference_runtime_verified=true`. Hai cờ nói về hai câu hỏi khác nhau và không được sửa tay để giống nhau.
 
 Không dùng `data/manifests/fleurs/test.jsonl`: đó là manifest lịch sử chứa absolute path và không có per-audio hash. Formal FLEURS chỉ nhận bundle `data/manifests/fleurs/paper_v2/` được khóa dưới đây.
 
@@ -657,25 +701,36 @@ $ControlConfig = $ConfigByLambda[(Get-LambdaKey ([double] $Decision.locked_contr
 if (-not $SelectedConfig -or -not $ControlConfig) { throw 'Decision lambda has no registered config' }
 ```
 
-Tạo registry đúng ba role động:
+Registry là artifact bất biến. Nếu `outputs/paper_v2/protocol/fleurs_run_registry.json` đã có thì không tạo lại; wrapper sẽ verify nó khi chạy. Trên Windows, tạo mới bằng API với các path POSIX bên dưới để tránh `Path` CLI đổi `/` thành `\` trước portable-path verifier:
 
 ```powershell
-& $Python scripts/run_external_fleurs.py `
-  --create-registry `
-  --fleurs-preparation-lock $FleursPreparationLock `
-  --split-lock outputs/paper_v2/protocol/split_lock.json `
-  --decision-lock outputs/paper_v2/protocol/best_lambda_decision.json `
-  --role-config ordinary_baseline=configs/phat/lambda_0.yaml `
-  --role-config "selected_method=$SelectedConfig" `
-  --role-config "locked_control=$ControlConfig"
+if (-not (Test-Path outputs/paper_v2/protocol/fleurs_run_registry.json)) {
+  $CreateFleursRegistry = @"
+from scripts.run_external_fleurs import create_run_registry
+create_run_registry(
+    'outputs/paper_v2/protocol/fleurs_run_registry.json',
+    preparation_lock_path='outputs/paper_v2/protocol/fleurs_test_lock.json',
+    split_lock_path='outputs/paper_v2/protocol/split_lock.json',
+    decision_lock_path='outputs/paper_v2/protocol/best_lambda_decision.json',
+    config_paths_by_role={
+        'ordinary_baseline': 'configs/phat/lambda_0.yaml',
+        'selected_method': '$SelectedConfig',
+        'locked_control': '$ControlConfig',
+    },
+)
+"@
+  & $Python -c $CreateFleursRegistry
+}
 ```
 
-Smoke riêng năm câu:
+Smoke riêng năm câu, dùng output và receipt riêng để không chiếm canonical path:
 
 ```powershell
-& $Python scripts/run_external_fleurs.py `
+& $Python scripts/run_external_fleurs_inference_runtime.py `
   --run-registry outputs/paper_v2/protocol/fleurs_run_registry.json `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json `
   --output-dir outputs/paper_v2/smoke/fleurs `
+  --receipt outputs/paper_v2/smoke/fleurs_execution_receipt.json `
   --limit 5 `
   --device auto
 ```
@@ -683,21 +738,23 @@ Smoke riêng năm câu:
 Chạy đủ 857 câu:
 
 ```powershell
-& $Python scripts/run_external_fleurs.py `
+& $Python scripts/run_external_fleurs_inference_runtime.py `
   --run-registry outputs/paper_v2/protocol/fleurs_run_registry.json `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json `
   --device auto
 ```
 
 Resume an toàn:
 
 ```powershell
-& $Python scripts/run_external_fleurs.py `
+& $Python scripts/run_external_fleurs_inference_runtime.py `
   --run-registry outputs/paper_v2/protocol/fleurs_run_registry.json `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json `
   --device auto `
   --resume
 ```
 
-Nếu reference machine bị ngắt và cần restore từ backup, giữ nguyên relative path của registry, runtime locks, checkpoint, FLEURS bundle và từng `pred_*.csv`; copy kèm `.csv.resume.json` và `.csv.recovery.json` nếu receipt tồn tại. Chỉ chạy `--resume` trên cùng exact formal environment/hardware. Khi role đã hoàn tất, resume/recovery sidecar phải biến mất và bundle bàn giao chỉ giữ prediction + provenance.
+Nếu máy inference bị ngắt và cần restore từ backup, giữ nguyên relative path của registry, inference/training locks, checkpoint, FLEURS bundle và từng `pred_*.csv`; copy kèm `.csv.resume.json` và `.csv.recovery.json` nếu receipt tồn tại. Chỉ chạy `--resume` khi current runtime vẫn khớp `inference_runtime_lock.json`. Khi role đã hoàn tất, resume/recovery sidecar phải biến mất.
 
 Output:
 
@@ -705,11 +762,21 @@ Output:
 outputs/paper_v2/protocol/fleurs_run_registry.json
 outputs/paper_v2/external/fleurs/predictions/pred_<configuration_id>.csv
 outputs/paper_v2/external/fleurs/predictions/pred_<configuration_id>.csv.provenance.json
+outputs/paper_v2/external/fleurs/predictions/pred_<configuration_id>.csv.inference_runtime.json
 outputs/paper_v2/external/fleurs/external_fleurs_results.csv
 outputs/paper_v2/external/fleurs/external_fleurs_results.csv.provenance.json
+outputs/paper_v2/external/fleurs/external_fleurs_results.csv.inference_runtime.json
+outputs/paper_v2/protocol/fleurs_execution_receipt.json
 ```
 
-Ba prediction phải có đúng 857 dòng, cùng thứ tự `utt_id/ref`; result có đúng ba dòng role và đủ `WER/CER/TER/DER/FCER/SWDR` với `metric_version=aligned_v1`. Sau prefix scalar cũ, CSV còn ghi `*_numerator`, `*_denominator` cho cả sáu metric và `ter_coverage/der_coverage/fcer_coverage`; result sidecar phải có `provenance_version=paper_v2_fleurs_results_v4`. Prediction/result provenance phải ghi `method_runtime_verified=true` cùng `method_environment_identity_sha256` và `method_source_tree_sha256` khớp method lock.
+Ba prediction phải có đúng 857 dòng, cùng thứ tự `utt_id/ref`; result có đúng ba dòng role và đủ `WER/CER/TER/DER/FCER/SWDR` với `metric_version=aligned_v1`. Sau prefix scalar cũ, CSV còn ghi `*_numerator`, `*_denominator` cho cả sáu metric và `ter_coverage/der_coverage/fcer_coverage`; result sidecar phải có `provenance_version=paper_v2_fleurs_results_v4`. Base provenance giữ `method_runtime_verified=false` nhưng vẫn bind method environment/source identity; extension sidecar và receipt phải bind SHA-256 của base artifact/provenance và current inference-runtime identity. Verify lại receipt mà không infer:
+
+```powershell
+& $Python scripts/run_external_fleurs_inference_runtime.py `
+  --run-registry outputs/paper_v2/protocol/fleurs_run_registry.json `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json `
+  --verify-receipt-only
+```
 
 Khi viết paper, CER `aligned_v1` có tính khoảng trắng sau normalize.
 TER/DER/FCER là conditional diagnostic, còn SWDR chỉ bao phủ năm từ
@@ -878,32 +945,23 @@ artifacts/short_word_deletion_examples.provenance.json
 artifacts/short_word_deletion_examples.bundle.commit.json
 ```
 
-FLEURS error analysis là replication phụ. Chạy cùng pipeline vào directory riêng và thêm `--overall-only` cho ba artifact vì FLEURS chỉ clean:
+FLEURS error analysis là replication phụ. Vì base provenance cố ý giữ `method_runtime_verified=false`, chạy downstream này ở non-formal mode; tính toàn vẹn formal của inference sẽ do FLEURS execution receipt và receipt bàn giao cuối xác minh. Dùng directory riêng và thêm `--overall-only` cho ba artifact vì FLEURS chỉ clean:
 
 ```powershell
 & $Python scripts/error_analysis.py `
   --pred-glob 'outputs/paper_v2/external/fleurs/predictions/pred_*.csv' `
-  --formal-paper-v2 `
   --benchmark-manifest data/manifests/fleurs/paper_v2/test.jsonl `
-  --split-lock outputs/paper_v2/protocol/split_lock.json `
-  --decision-lock outputs/paper_v2/protocol/best_lambda_decision.json `
   --out-dir outputs/paper_v2/external/fleurs/error_analysis
 & $Python scripts/build_error_breakdowns.py `
   --events outputs/paper_v2/external/fleurs/error_analysis/error_events.csv `
-  --formal-paper-v2 `
   --benchmark-manifest data/manifests/fleurs/paper_v2/test.jsonl `
-  --split-lock outputs/paper_v2/protocol/split_lock.json `
-  --decision-lock outputs/paper_v2/protocol/best_lambda_decision.json `
   --out-dir outputs/paper_v2/external/fleurs/error_analysis/breakdowns
-$FormalFleurs = @(
-  '--formal-paper-v2',
-  '--benchmark-manifest', 'data/manifests/fleurs/paper_v2/test.jsonl',
-  '--split-lock', 'outputs/paper_v2/protocol/split_lock.json',
-  '--decision-lock', 'outputs/paper_v2/protocol/best_lambda_decision.json'
+$FleursAnalysis = @(
+  '--benchmark-manifest', 'data/manifests/fleurs/paper_v2/test.jsonl'
 )
-& $Python scripts/build_error_artifacts.py --artifact tone --events outputs/paper_v2/external/fleurs/error_analysis/error_events.csv @Focus @FormalFleurs --overall-only --out-dir outputs/paper_v2/external/fleurs/error_analysis/artifacts
-& $Python scripts/build_error_artifacts.py --artifact coda --events outputs/paper_v2/external/fleurs/error_analysis/error_events.csv @Focus @FormalFleurs --overall-only --out-dir outputs/paper_v2/external/fleurs/error_analysis/artifacts
-& $Python scripts/build_error_artifacts.py --artifact short-word --events outputs/paper_v2/external/fleurs/error_analysis/error_events.csv @Focus @FormalFleurs --overall-only --out-dir outputs/paper_v2/external/fleurs/error_analysis/artifacts
+& $Python scripts/build_error_artifacts.py --artifact tone --events outputs/paper_v2/external/fleurs/error_analysis/error_events.csv @Focus @FleursAnalysis --overall-only --out-dir outputs/paper_v2/external/fleurs/error_analysis/artifacts
+& $Python scripts/build_error_artifacts.py --artifact coda --events outputs/paper_v2/external/fleurs/error_analysis/error_events.csv @Focus @FleursAnalysis --overall-only --out-dir outputs/paper_v2/external/fleurs/error_analysis/artifacts
+& $Python scripts/build_error_artifacts.py --artifact short-word --events outputs/paper_v2/external/fleurs/error_analysis/error_events.csv @Focus @FleursAnalysis --overall-only --out-dir outputs/paper_v2/external/fleurs/error_analysis/artifacts
 ```
 
 ## 14. Paired bootstrap 1.000 lần
@@ -947,14 +1005,12 @@ outputs/paper_v2/statistics/bootstrap_ci_final.csv.provenance.json
 outputs/paper_v2/statistics/cluster_bootstrap.bundle.commit.json
 ```
 
-FLEURS có một quan sát độc lập trên mỗi utt, nên dùng singleton cluster:
+FLEURS có một quan sát độc lập trên mỗi utt, nên dùng singleton cluster. Chạy bootstrap FLEURS ở non-formal mode vì base provenance giữ cờ runtime train trung thực; receipt bàn giao cuối sẽ bind output này với FLEURS execution receipt đã xác minh:
 
 ```powershell
 & $Python scripts/cluster_bootstrap_ci.py `
   --decision-lock outputs/paper_v2/protocol/best_lambda_decision.json `
   --benchmark-manifest data/manifests/fleurs/paper_v2/test.jsonl `
-  --formal-paper-v2 `
-  --split-lock outputs/paper_v2/protocol/split_lock.json `
   --prediction "$OrdinaryId=outputs/paper_v2/external/fleurs/predictions/pred_$OrdinaryId.csv" `
   --prediction "$SelectedId=outputs/paper_v2/external/fleurs/predictions/pred_$SelectedId.csv" `
   --prediction "$ControlId=outputs/paper_v2/external/fleurs/predictions/pred_$ControlId.csv" `
@@ -973,14 +1029,14 @@ outputs/paper_v2/external/fleurs/bootstrap_ci_results.csv.provenance.json
 outputs/paper_v2/external/fleurs/cluster_bootstrap.bundle.commit.json
 ```
 
-Nếu process bị ngắt trong transaction, chạy lại **toàn bộ exact command** của final hoặc FLEURS với thêm `--resume` sau `--output`, ví dụ phần cuối:
+Nếu final robustness bootstrap formal bị ngắt trong transaction, chạy lại **toàn bộ exact command** với thêm `--resume` sau `--output`, ví dụ phần cuối:
 
 ```powershell
   --output outputs/paper_v2/statistics/bootstrap_ci_final.csv `
   --resume
 ```
 
-`--resume` chỉ hợp lệ cho formal paper-v2 và loại trừ `--overwrite`. Nó chỉ phục hồi khi decision, benchmark, ba prediction + sidecar, cluster unit và toàn bộ tham số bootstrap khớp SHA-256; canonical/stage/marker bị sửa phải fail closed.
+`--resume` chỉ hợp lệ cho formal paper-v2 và loại trừ `--overwrite`. Nó chỉ phục hồi khi decision, benchmark, ba prediction + sidecar, cluster unit và toàn bộ tham số bootstrap khớp SHA-256; canonical/stage/marker bị sửa phải fail closed. FLEURS bootstrap hiện chạy non-formal nên không dùng `--resume`; nếu bị ngắt, kiểm tra transaction chưa tạo canonical bundle rồi chạy lại từ đầu vào output sạch.
 
 Mỗi output có 3 pair × 4 metric (`ΔWER`, `ΔCER`, `ΔTER`, `ΔDER`) = 12 dòng. Quy ước delta là role B trừ role A; đọc dấu delta cùng CI, không chỉ đọc `ci_excludes_zero`.
 
@@ -1121,7 +1177,7 @@ $Handoff = @(Import-Csv outputs/paper_v2/protocol/final_benchmark_handoff_sha256
 if ($Handoff.Count -ne 2303) { throw "Expected 2303 handoff entries, got $($Handoff.Count)" }
 ```
 
-Bundle FLEURS chuyển sang reference inference environment/hardware phải gồm cả WAV, manifest, lock và audit:
+Bundle FLEURS chuyển sang máy inference của Trung phải gồm cả WAV, manifest, lock và audit; checkpoint/training locks vẫn giữ nguyên provenance của Phát:
 
 ```powershell
 New-HandoffManifest `
@@ -1166,7 +1222,8 @@ Dừng pipeline và báo Trung nếu gặp một trong các trường hợp sau:
 - Final benchmark v2 không data-only, không self-contained đủ 2.300 WAV, bị rebuild khác hash hoặc không chỉ dùng MUSAN test.
 - Phát dùng bất kỳ final prediction/metric nào để chọn lambda thay vì chỉ dùng noisy-dev.
 - Zero-shot config còn placeholder/floating revision hoặc prediction thiếu provenance.
-- FLEURS formal không verify được exact current method environment/source cho cả ba config, hoặc provenance không ghi `method_runtime_verified=true`.
+- Inference runtime hiện tại không khớp `inference_runtime_lock.json`, hoặc final/FLEURS execution receipt không verify được toàn bộ artifact/transitive training provenance.
+- Base provenance FLEURS bị sửa thành `method_runtime_verified=true`, thiếu `*.inference_runtime.json`, hoặc extension/receipt không ghi và verify `inference_runtime_verified=true`.
 - Final/FLEURS ba role khác decision lock, checkpoint SHA khác hoặc ref/utt_id không paired.
 - Aggregate không cho 63/36 dòng khi đủ chín final runs.
 - Error operations không reconcile hoặc bootstrap không có đúng 12 dòng/full pairing.
@@ -1221,6 +1278,54 @@ Quy tắc diễn giải ba block:
 
 Ghi rõ checkpoint cũ được train trước tone-alignment/protocol fix. Không diễn giải việc metric thay đổi là do riêng tone loss khi data split, noise partition, checkpoint và protocol đều đã đổi.
 
+### Receipt bàn giao cuối trên máy Trung
+
+Chỉ tạo receipt này sau khi hai wrapper `--verify-only`/`--verify-receipt-only` đã PASS và toàn bộ aggregate, error artifacts, bootstrap cùng old-vs-new đã hoàn tất. Lệnh dưới đây liệt kê deterministic mọi file trong đúng các output roots canonical, loại trừ state tạm, rồi truyền từng path bằng `--artifact`; không dùng glob bên trong verifier:
+
+```powershell
+$DeliveryRoots = @(
+  'outputs/paper_v2/analysis/final',
+  'outputs/paper_v2/error_analysis/final',
+  'outputs/paper_v2/statistics',
+  'outputs/paper_v2/external/fleurs/error_analysis',
+  'outputs/paper_v2/external/fleurs/bootstrap_ci_results.csv',
+  'outputs/paper_v2/external/fleurs/bootstrap_ci_results.csv.provenance.json',
+  'outputs/paper_v2/external/fleurs/cluster_bootstrap.bundle.commit.json',
+  'outputs/paper_v2/reports/old_vs_new_comparison.csv',
+  'outputs/paper_v2/reports/old_vs_new_comparison.md',
+  'outputs/paper_v2/reports/old_vs_new_comparison.provenance.json',
+  'outputs/paper_v2/reports/old_vs_new_comparison.bundle.commit.json'
+)
+$Repo = (Resolve-Path .).Path.TrimEnd('\')
+$DeliveryFiles = foreach ($Root in $DeliveryRoots) {
+  if (-not (Test-Path -LiteralPath $Root)) { throw "Missing delivery root/artifact: $Root" }
+  Get-Item -LiteralPath $Root | ForEach-Object {
+    if ($_.PSIsContainer) { Get-ChildItem -LiteralPath $_.FullName -Recurse -File } else { $_ }
+  }
+}
+$DeliveryFiles = @($DeliveryFiles | Where-Object {
+  $_.Name -notmatch '\.(tmp|resume\.json|recovery\.json)$' -and
+  $_.FullName -notmatch '[\\/]\.[^\\/]+\.partial[\\/]'
+} | Sort-Object FullName -Unique)
+$DeliveryArgs = foreach ($File in $DeliveryFiles) {
+  '--artifact'
+  $File.FullName.Substring($Repo.Length + 1).Replace('\', '/')
+}
+& $Python scripts/verify_paper_v2_inference_delivery.py @DeliveryArgs `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json `
+  --final-lora-receipt outputs/paper_v2/protocol/final_lora_execution_receipt.json `
+  --fleurs-receipt outputs/paper_v2/protocol/fleurs_execution_receipt.json `
+  --output outputs/paper_v2/protocol/trung_delivery_receipt.json
+& $Python scripts/verify_paper_v2_inference_delivery.py @DeliveryArgs `
+  --inference-runtime-lock outputs/paper_v2/protocol/inference_runtime_lock.json `
+  --final-lora-receipt outputs/paper_v2/protocol/final_lora_execution_receipt.json `
+  --fleurs-receipt outputs/paper_v2/protocol/fleurs_execution_receipt.json `
+  --output outputs/paper_v2/protocol/trung_delivery_receipt.json `
+  --verify-existing
+```
+
+Receipt cuối phải trả `status=VERIFIED`. Bất kỳ artifact nào thay đổi byte, bị thiếu hoặc current inference runtime lệch lock đều làm lần verify sau dừng; khi đó không sửa receipt thủ công.
+
 ## 18. Không commit các file sau
 
 - Raw VIVOS, MUSAN, FLEURS audio và derived noisy-dev. Ngoại lệ duy nhất là self-contained final-benchmark WAV đã được Trung duyệt, allow-list đúng path và track bằng Git LFS theo mục 15.
@@ -1242,9 +1347,11 @@ Phê duyệt ngày 2026-07-18 chỉ cho phép commit và push đúng năm bundle
 - [ ] Năm lambda được train lại và evaluate đủ trên noisy-dev.
 - [ ] Final benchmark v2 self-contained 2.300 WAV được Phúc build đúng một lần, handoff SHA PASS và publish qua kênh đã duyệt.
 - [ ] Decision khóa selected lambda và locked control chỉ từ noisy-dev; final prediction/metric không tham gia selection.
-- [ ] Sáu zero-shot và ba final LoRA predictions hoàn chỉnh.
-- [ ] FLEURS 857 được chạy lại và ghi đúng nhãn legacy-exposed replication.
+- [ ] Inference runtime của máy Trung được capture riêng, `--verify-existing` PASS; training environment của Phát không bị sửa.
+- [ ] Sáu zero-shot và ba final LoRA predictions hoàn chỉnh; final execution receipt PASS với inference=true/training-current=false.
+- [ ] FLEURS 857 được chạy lại, ghi đúng nhãn legacy-exposed replication, base runtime flag=false và inference extensions/receipt PASS.
 - [ ] Aggregate, error artifacts, WER/DER breakdown và hai bootstrap hoàn chỉnh.
+- [ ] FLEURS downstream chạy non-formal và receipt bàn giao cuối bind đủ SHA-256 của artifact canonical.
 - [ ] Handoff SHA của mọi artifact lớn PASS trên máy Trung.
 - [ ] Bảng old-vs-new formal được tạo từ output canonical, provenance PASS và nêu rõ protocol/sample/checkpoint thay đổi.
 - [ ] Chỉ sau review mới git add theo từng logical commit.
