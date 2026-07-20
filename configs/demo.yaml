@@ -1,0 +1,62 @@
+schema_version: vitonesr_demo_v1
+
+app:
+  title: "ViToneSR — Vietnamese ASR under noise"
+  sample_rate: 16000
+  max_audio_seconds: 15.0
+  seed: 42
+  language: vi
+  task: transcribe
+
+audio:
+  sample_rate: 16000
+  max_audio_seconds: 15.0
+
+model:
+  name_or_path: vinai/PhoWhisper-base
+  revision: 7ebdb9e88f5cc5271fb88f4d642c82ff9388650e
+
+decoding:
+  max_new_tokens: 128
+  num_beams: 1
+  do_sample: false
+
+runtime:
+  device: auto
+  precision: fp16
+  local_files_only: true
+  seed: 42
+
+roles:
+  - id: ordinary_baseline
+    label: Ordinary LoRA
+    train_type: ordinary_lora
+    lambda: 0.0
+    checkpoint: outputs/paper_v2/checkpoints/ckpt_lora_ordinary_lambda0/best
+  - id: selected_method
+    label: Tone-aware LoRA (lambda=0.05)
+    train_type: tone_aware_lora
+    lambda: 0.05
+    checkpoint: outputs/paper_v2/checkpoints/ckpt_tone_lora_lambda_005/best
+  - id: locked_control
+    label: Tone-aware LoRA (lambda=0.1)
+    train_type: tone_aware_lora
+    lambda: 0.1
+    checkpoint: outputs/paper_v2/checkpoints/ckpt_tone_lora_lambda_01/best
+
+noise:
+  source: deterministic_synthetic_demo
+  manifest: null
+  types: [none, fan, traffic, cafe]
+  snr_db: [20, 10, 5, 0]
+  seed: 42
+
+metrics:
+  version: aligned_v1
+  names: [wer, cer, ter, der, fcer, swdr]
+  error_counts: [substitution, deletion, insertion, tone, diacritic, final_consonant]
+
+output:
+  mode: in_memory
+  filename_prefix: vitonesr_demo
+  formal_artifacts_immutable: true
